@@ -12,3 +12,5 @@ There are two different sources I'm using to get the effect I want.
 https://user-images.githubusercontent.com/39994403/145275142-13aea925-e823-4704-b74f-b180859ea6bf.mov
 
 *This content is from https://cognitivemedium.com/dac-notes
+
+The user facing results are actually pretty good, edititing the code though is a pain as for number heavy paragraphs you need to include many tags and components. Also currently sidenotes are inline so very much break up the reading of the document when editing.
