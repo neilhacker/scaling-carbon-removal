@@ -48,8 +48,6 @@
   }
 </script>
 
-  
-
   </head>
 
   <body>
@@ -79,8 +77,9 @@
           of DAC, just as baselines to keep in mind. I’ll discuss how realistic (or unrealistic) 
           they are below.
           <br><br>   
-          
-          <!-- margin note BEGIN -->
+                
+          <!-- margin note BEGIN totalcapturecost-->
+          <span>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote-reactive" id="one">
@@ -101,6 +100,7 @@
                bind="totalcapturecost"></r-display> billion
      
             </span> 
+          </span>
           <!-- margin note END -->
 
           As of 2014, the United States emits about 
@@ -116,52 +116,58 @@
           billion. (<r-action :click="{co2tonnes:6,costperton:100}">reset defaults</r-action>) 
           
           <br><br>
-          <!-- margin note BEGIN -->
-          <label for="mn-demo" class="margin-toggle">&#8853;</label>
-          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-          <span class="marginnote-reactive" id="military">
-            <b>Total DAC cost vs military spending</b> <br>
-            Total cost = 
-            $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
-            bind="totalcapturecost"></r-display>           
-            <br>
-            
-            Military spending = 
-            $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
-            bind="usMilitaryBudget"></r-display> billion, 
-      
-            <br>
+
+          <!-- margin note BEGIN capturecostVsMilitary-->
+          <span>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="military">
+              <b>Total DAC cost vs military spending</b> <br>
+              Total cost = 
+              $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+              bind="totalcapturecost"></r-display>           
+              <br>
+              
+              Military spending = 
+              $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
+              bind="usMilitaryBudget"></r-display> billion, 
         
-            Percentage = (Total cost / Military spending) * 100 <br>
-             =           
-             <r-display class="capturecostVsMilitary" onmouseover="hoverByClass('capturecostVsMilitary','#E0EEF2')" 
-             bind="capturecostVsMilitary"></r-display>% 
-      
-          </span> 
-        <!-- margin note END -->
-         <!-- margin note BEGIN -->
-         <label for="mn-demo" class="margin-toggle">&#8853;</label>
-         <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-         <span class="marginnote-reactive" id="energy">
-           <b>Total DAC cost vs US energy spending</b> <br>
-           Total cost = 
-           $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
-           bind="totalcapturecost"></r-display>           
-           <br>
-           
-           Energy spending = 
-           $<r-display class="usEnergySpending" onmouseover="hoverByClass('usEnergySpending','#E0EEF2')" 
-           bind="usEnergySpending"></r-display> billion, 
-     
-           <br>
-       
-           Percentage = (Total cost / Energy spending) * 100 <br>
-            =           
-            <r-display class="capturecostVsEnergy" onmouseover="hoverByClass('capturecostVsEnergy','#E0EEF2')" 
-            bind="capturecostVsEnergy"></r-display>% 
-     
-         </span> 
-       <!-- margin note END -->
+              <br>
+          
+              Percentage = (Total cost / Military spending) * 100 <br>
+              =           
+              <r-display class="capturecostVsMilitary" onmouseover="hoverByClass('capturecostVsMilitary','#E0EEF2')" 
+              bind="capturecostVsMilitary"></r-display>% 
+        
+            </span> 
+          </span>
+          <!-- margin note END -->
+
+          <!-- margin note BEGIN capturecostVsEnergy-->
+          <span>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="energy">
+              <b>Total DAC cost vs US energy spending</b> <br>
+              Total cost = 
+              $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+              bind="totalcapturecost"></r-display>           
+              <br>
+              
+              Energy spending = 
+              $<r-display class="usEnergySpending" onmouseover="hoverByClass('usEnergySpending','#E0EEF2')" 
+              bind="usEnergySpending"></r-display> billion, 
+        
+              <br>
+          
+              Percentage = (Total cost / Energy spending) * 100 <br>
+                =           
+                <r-display class="capturecostVsEnergy" onmouseover="hoverByClass('capturecostVsEnergy','#E0EEF2')" 
+                bind="capturecostVsEnergy"></r-display>% 
+        
+            </span> 
+          </span>
+          <!-- margin note END -->
 
           How does this compare to other spending? As of 2019, the US military budget was about 
           $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
@@ -181,26 +187,28 @@
           bind="usEnergySpending"></r-display> billion, in 2017).
           <br><br>
 
-          <!-- margin note BEGIN -->
-          <label for="mn-demo" class="margin-toggle">&#8853;</label>
-          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-          <span class="marginnote-reactive" id="two">
-            <b>Calculations for "total cost when the CPT=$10"</b> <br>
-            # of tonnes =           
-            <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
-            bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
-            <br>
-            
-            Cost per tonne = $10     
-            <br>
-        
-            Total cost = # of tonnes * $10 <br>
-             =           
-             $<r-display class="totalcapturecost$10" onmouseover="hoverByClass('totalcapturecost$10','#E0EEF2')" 
-             bind="totalcapturecost$10"></r-display> billion
-   
-          </span> 
-        <!-- margin note END -->
+          <!-- margin note BEGIN totalcapturecost$10-->
+          <span>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="two">
+              <b>Calculations for "total cost when the CPT=$10"</b> <br>
+              # of tonnes =           
+              <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
+              bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
+              <br>
+              
+              Cost per tonne = $10     
+              <br>
+          
+              Total cost = # of tonnes * $10 <br>
+              =           
+              $<r-display class="totalcapturecost$10" onmouseover="hoverByClass('totalcapturecost$10','#E0EEF2')" 
+              bind="totalcapturecost$10"></r-display> billion
+    
+            </span> 
+          </span>
+          <!-- margin note END -->
 
           Suppose instead that direct air capture cost 
           <r-action :click="{costperton:10}">10 dollars per tonne</r-action>
@@ -208,7 +216,7 @@
           cost to capture all the US’s CO2 emissions would be about 
           $<r-display class="totalcapturecost$10" onmouseover="hoverByClass('totalcapturecost$10','#E0EEF2')" 
           bind="totalcapturecost$10" onclick="sidebar('two')"></r-display> 
-           billion per year.
+          billion per year.
           <br><br>
           That’s still a lot of money, but it’s starting to look like the cost of a lot of things 
           humans already do, in government, in commerce, and even in philanthropy.
@@ -216,17 +224,6 @@
           A particularly striking cost comparison is to the amount we already spend on cleaning up or 
           preventing air pollution. In 2011 the US Environmental Protection Agency estimated that 
           compliance with the Clean Air Act cost about 65.5 billion dollars in 2010.
-          
-                    <!-- margin note BEGIN -->
-          <label for="mn-demo" class="margin-toggle">&#8853;</label>
-          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-          <span class="marginnote" id="one">
-            Calculations for "interset". <br>
-            historical interst rate          
-          </span> 
-          <!-- margin note END -->
-          
-          Nunc tempus mauris eget tincidunt laoreet. Duis molestie dictum sapien, ac volutpat sem laoreet nec.
           <br>
       </p>
       </section>
