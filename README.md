@@ -9,4 +9,6 @@ There are two different sources I'm using to get the effect I want.
 - tuffte css (https://github.com/edwardtufte/tufte-css) is being used to get the calculations to show up to the side of the text.
 
 ## Result
-![test](example.png)
+https://user-images.githubusercontent.com/39994403/145275142-13aea925-e823-4704-b74f-b180859ea6bf.mov
+
+*This content is from https://cognitivemedium.com/dac-notes
