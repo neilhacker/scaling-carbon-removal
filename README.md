@@ -9,4 +9,4 @@ There are two different sources I'm using to get the effect I want.
 - tuffte css (https://github.com/edwardtufte/tufte-css) is being used to get the calculations to show up to the side of the text.
 
 ## Result
-![test](img/example.png)
+![test](example.png)
