@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Tufte CSS</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <link rel="stylesheet" href="latex.css"/>
+    <link rel="stylesheet" href="curvenote.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+
+    <script>
+      /*function to hide/show sidebar*/
+        function sidebar(idTag) {
+          var elms=document.getElementsByClassName("marginnote-reactive");
+          for (let i = 0; i < elms.length; i++) {
+            // console.log(elms[i].id)
+            if(elms[i].id==idTag){
+              if (elms[i].style.display === "block") {
+                elms[i].style.display = "none";
+              } else {
+                elms[i].style.display = "block";
+              }
+            } else {
+              elms[i].style.display = "none";
+            }
+          }
+        }
+    </script>
+
+<script>
+  /*function to highlight all elements of same class on hover*/
+  function hoverByClass(classname,colorover,colorout="transparent"){
+    var elms=document.getElementsByClassName(classname);
+    for(var i=0;i<elms.length;i++){
+        elms[i].onmouseover = function(){
+            for(var k=0;k<elms.length;k++){
+                elms[k].style.backgroundColor=colorover;
+            }
+        };
+        elms[i].onmouseout = function(){
+            for(var k=0;k<elms.length;k++){
+                elms[k].style.backgroundColor=colorout;
+            }
+        };
+    }
+  }
+</script>
+
+  
+
+  </head>
+
+  <body>
+    <article>
+      <h1 id="tufte-css">Notes on DAC</h1>
+      <r-var name="co2tonnes" value="6" format=".4"></r-var>
+      <r-var name="costperton" value="100" format=".5">%</r-var>
+      <r-var name="usMilitaryBudget" value="700" format=".5"></r-var>
+      <r-var name="usEnergySpending" value="1100" format=".5"></r-var>
+  
+      <r-var name="totalcapturecost" :value="co2tonnes * costperton" format=".0f"></r-var>
+      <r-var name="totalcapturecost$10" :value="co2tonnes * 10" format=".0f"></r-var>
+      <r-var name="capturecostVsMilitary" :value="(totalcapturecost/usMilitaryBudget) * 100" format=".0f"></r-var>
+      <r-var name="capturecostVsEnergy" :value="(totalcapturecost/usEnergySpending) * 100" format=".0f"></r-var>
+
+      <section>
+      
+        <p>
+          In these notes I explore one set of ideas for helping address climate change: 
+          direct air capture (DAC) of carbon dioxide – basically, using clever chemical 
+          reactions to pull CO2 out of the atmosphere, so it can be stored or re-used.
+          <br><br>        
+          It’s tempting (and fun) to begin by diving into all the many possible approaches 
+          to DAC. But before getting into any such details, it’s helpful to think about the 
+          scale of the problem to be confronted. How much will DAC need to cost if it’s to 
+          significantly reduce climate change? Let’s look quickly at two scenarios for the cost 
+          of DAC, just as baselines to keep in mind. I’ll discuss how realistic (or unrealistic) 
+          they are below.
+          <br><br>   
+          
+          <!-- margin note BEGIN -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="one">
+              <b>Calculations for "total cost"</b> <br>
+              # of tonnes =           
+              <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
+              bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
+              <br>
+              
+              Cost per tonne =      
+              <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+              bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
+              <br>
+          
+              Total cost = # of tonnes * Cost per tonne <br>
+               = $          
+               <r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+               bind="totalcapturecost"></r-display> billion
+     
+            </span> 
+          <!-- margin note END -->
+
+          As of 2014, the United States emits about 
+          <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
+          bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
+          of CO2 each year. Suppose it cost about 
+          <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+          bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
+          of CO2 to do direct air capture. To capture the entire annual CO2 production from 
+          the US would cost about     
+          $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+          bind="totalcapturecost" onclick="sidebar('one')"></r-display> 
+          billion. (<r-action :click="{co2tonnes:6,costperton:100}">reset defaults</r-action>) 
+          
+          <br><br>
+          <!-- margin note BEGIN -->
+          <label for="mn-demo" class="margin-toggle">&#8853;</label>
+          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+          <span class="marginnote-reactive" id="military">
+            <b>Total DAC cost vs military spending</b> <br>
+            Total cost = 
+            $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+            bind="totalcapturecost"></r-display>           
+            <br>
+            
+            Military spending = 
+            $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
+            bind="usMilitaryBudget"></r-display> billion, 
+      
+            <br>
+        
+            Percentage = (Total cost / Military spending) * 100 <br>
+             =           
+             <r-display class="capturecostVsMilitary" onmouseover="hoverByClass('capturecostVsMilitary','#E0EEF2')" 
+             bind="capturecostVsMilitary"></r-display>% 
+      
+          </span> 
+        <!-- margin note END -->
+         <!-- margin note BEGIN -->
+         <label for="mn-demo" class="margin-toggle">&#8853;</label>
+         <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+         <span class="marginnote-reactive" id="energy">
+           <b>Total DAC cost vs US energy spending</b> <br>
+           Total cost = 
+           $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+           bind="totalcapturecost"></r-display>           
+           <br>
+           
+           Energy spending = 
+           $<r-display class="usEnergySpending" onmouseover="hoverByClass('usEnergySpending','#E0EEF2')" 
+           bind="usEnergySpending"></r-display> billion, 
+     
+           <br>
+       
+           Percentage = (Total cost / Energy spending) * 100 <br>
+            =           
+            <r-display class="capturecostVsEnergy" onmouseover="hoverByClass('capturecostVsEnergy','#E0EEF2')" 
+            bind="capturecostVsEnergy"></r-display>% 
+     
+         </span> 
+       <!-- margin note END -->
+
+          How does this compare to other spending? As of 2019, the US military budget was about 
+          $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
+          bind="usMilitaryBudget"></r-display> billion, 
+          so at 
+          <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+          bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
+
+          the cost of DAC would be 
+          <r-display class="capturecostVsMilitary" onmouseover="hoverByClass('capturecostVsMilitary','#E0EEF2')" 
+          bind="capturecostVsMilitary" onclick="sidebar('military')"></r-display>% 
+          of the military budget. 
+          And it would be 
+          <r-display class="capturecostVsEnergy" onmouseover="hoverByClass('capturecostVsEnergy','#E0EEF2')" 
+          bind="capturecostVsEnergy" onclick="sidebar('energy')"></r-display>% of total energy spending in the US (about 
+          $<r-display class="usEnergySpending" onmouseover="hoverByClass('usEnergySpending','#E0EEF2')" 
+          bind="usEnergySpending"></r-display> billion, in 2017).
+          <br><br>
+
+          <!-- margin note BEGIN -->
+          <label for="mn-demo" class="margin-toggle">&#8853;</label>
+          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+          <span class="marginnote-reactive" id="two">
+            <b>Calculations for "total cost when the CPT=$10"</b> <br>
+            # of tonnes =           
+            <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
+            bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
+            <br>
+            
+            Cost per tonne = $10     
+            <br>
+        
+            Total cost = # of tonnes * $10 <br>
+             =           
+             $<r-display class="totalcapturecost$10" onmouseover="hoverByClass('totalcapturecost$10','#E0EEF2')" 
+             bind="totalcapturecost$10"></r-display> billion
+   
+          </span> 
+        <!-- margin note END -->
+
+          Suppose instead that direct air capture cost 
+          <r-action :click="{costperton:10}">10 dollars per tonne</r-action>
+          . In this scenario the 
+          cost to capture all the US’s CO2 emissions would be about 
+          $<r-display class="totalcapturecost$10" onmouseover="hoverByClass('totalcapturecost$10','#E0EEF2')" 
+          bind="totalcapturecost$10" onclick="sidebar('two')"></r-display> 
+           billion per year.
+          <br><br>
+          That’s still a lot of money, but it’s starting to look like the cost of a lot of things 
+          humans already do, in government, in commerce, and even in philanthropy.
+          <br><br>
+          A particularly striking cost comparison is to the amount we already spend on cleaning up or 
+          preventing air pollution. In 2011 the US Environmental Protection Agency estimated that 
+          compliance with the Clean Air Act cost about 65.5 billion dollars in 2010.
+          
+                    <!-- margin note BEGIN -->
+          <label for="mn-demo" class="margin-toggle">&#8853;</label>
+          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+          <span class="marginnote" id="one">
+            Calculations for "interset". <br>
+            historical interst rate          
+          </span> 
+          <!-- margin note END -->
+          
+          Nunc tempus mauris eget tincidunt laoreet. Duis molestie dictum sapien, ac volutpat sem laoreet nec.
+          <br>
+      </p>
+      </section>
+
+     
+    </article>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+r-var {
+    display: block;
+    color: #d46485;
+    border: 1px solid #d4d4d4;
+    border-radius: 2px;
+    background-color: #efefef;
+    width: fit-content;
+    padding: 5px;
+    user-select: none;
+  }
+  
+  r-dynamic {
+    color: #66D268;
+    font-weight: bold;
+    border-bottom: 1px dashed var(--mdc-theme-secondary, #46f);
+  }
+  r-dynamic:hover {
+    background-color: #E4FFED;
+  }
+  r-display {
+    color: #7BBEF7;
+    font-weight: bold;
+  }
+  r-display:hover {
+    background-color: #E0EEF2;
+    cursor: pointer;
+  }
+  
+  r-action {
+    cursor: pointer;
+    color: #d16a92;
+    font-weight: bold;
+    border-bottom: 1px solid var(--mdc-theme-secondary, #46f);
+  }
+  
+  r-action.noclick {
+    cursor: unset;
+    border-bottom: unset;
+  }
+  
+  .cursor-move {
+    cursor: move;
+  }
+  
+  .cursor-col-resize {
+    cursor: col-resize;
+  }
+  
+  
+  r-var {
+    display: none;
+  }
+  
+  /*# sourceMappingURL=curvenote.css.map */
