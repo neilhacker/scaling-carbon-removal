@@ -196,6 +196,7 @@ section > p,
 section > footer,
 section > table {
     /* width: 55%; */
+    /* changes width of main text and sidenotes */
     width: 50%;
 }
 
@@ -301,20 +302,19 @@ img {
     position: relative;
 }
 .marginnote-reactive {
+    /* background-color: green; */
     float: right;
     clear: right;
-    /* margin-right: -60%; */
-    margin-right: -55%;
-    width: 50%;
+    margin-right: -60%;  /* higher this is more to the right sidenote edge is */
+    width: 55%;
     margin-top: 0.3rem;
     margin-bottom: 0;
-    font-size: 1.3rem;
+    font-size: 1rem;
     line-height: 1.2;
     vertical-align: baseline;
     position: relative;
     display:none;
 }
-
 
 .sidenote-number {
     counter-increment: sidenote-counter;

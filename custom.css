@@ -1,0 +1,43 @@
+.sidebar {
+    height: 100%;
+    width: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding-top: 40px;
+    position:fixed
+}
+
+.sidebar div {
+    padding: 8px;
+    font-size: 20px;
+    display: block;
+}
+    
+.box {
+    float: left;
+    height: 15px;
+    width: 15px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    /* border: 1px solid black; */
+    clear: both;
+  }
+  
+  .red {
+    background-color: #d46485;
+  }
+  
+  .green {
+    background-color: #66D268;
+  }
+  
+  .blue {
+    background-color: #7BBEF7;
+  }
+
+  /* <div><div class='box green'></div>= Dynamic inputs</div>
+  <br>
+  <div><div class='box blue'></div>= Dynamic results</div>
+  <br>
+  <div><div class='box red'></div>= Constant values</div> */

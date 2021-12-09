@@ -2,7 +2,9 @@
 
 /*function to hide/show sidebar*/
 function sidebar(idTag) {
+    console.log(idTag)
     var elms=document.getElementsByClassName("marginnote-reactive");
+    console.log(elms)
     for (let i = 0; i < elms.length; i++) {
     // console.log(elms[i].id)
     if(elms[i].id==idTag){
@@ -23,12 +25,20 @@ function hoverByClass(classname,colorover,colorout="transparent"){
     for(var i=0;i<elms.length;i++){
         elms[i].onmouseover = function(){
             for(var k=0;k<elms.length;k++){
-                elms[k].style.backgroundColor=colorover;
+                if(elms[k].tagName=="VAL-IN-WORDS"){
+                    elms[k].style.backgroundColor="#5F9AB6";
+                } else {
+                    elms[k].style.backgroundColor=colorover;
+                }
             }
         };
         elms[i].onmouseout = function(){
             for(var k=0;k<elms.length;k++){
-                elms[k].style.backgroundColor=colorout;
+                if(elms[k].tagName=="VAL-IN-WORDS"){
+                    elms[k].style.backgroundColor="#91B9CC";
+                } else {
+                    elms[k].style.backgroundColor=colorout;
+                }
             }
         };
     }
