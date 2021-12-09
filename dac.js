@@ -1,3 +1,5 @@
+
+
 /*function to hide/show sidebar*/
 function sidebar(idTag) {
     var elms=document.getElementsByClassName("marginnote-reactive");
