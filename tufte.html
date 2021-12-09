@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <title>Tufte CSS</title>
     <link rel="stylesheet" href="tufte.css"/>
-    <link rel="stylesheet" href="latex.css"/>
+    <!-- <link rel="stylesheet" href="latex.css"/> -->
     <link rel="stylesheet" href="curvenote.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,30 +29,38 @@
         }
     </script>
 
-<script>
-  /*function to highlight all elements of same class on hover*/
-  function hoverByClass(classname,colorover,colorout="transparent"){
-    var elms=document.getElementsByClassName(classname);
-    for(var i=0;i<elms.length;i++){
-        elms[i].onmouseover = function(){
-            for(var k=0;k<elms.length;k++){
-                elms[k].style.backgroundColor=colorover;
-            }
-        };
-        elms[i].onmouseout = function(){
-            for(var k=0;k<elms.length;k++){
-                elms[k].style.backgroundColor=colorout;
-            }
-        };
-    }
-  }
-</script>
+    <script>
+      /*function to highlight all elements of same class on hover*/
+      function hoverByClass(classname,colorover,colorout="transparent"){
+        var elms=document.getElementsByClassName(classname);
+        for(var i=0;i<elms.length;i++){
+            elms[i].onmouseover = function(){
+                for(var k=0;k<elms.length;k++){
+                    elms[k].style.backgroundColor=colorover;
+                }
+            };
+            elms[i].onmouseout = function(){
+                for(var k=0;k<elms.length;k++){
+                    elms[k].style.backgroundColor=colorout;
+                }
+            };
+        }
+      }
+    </script>
 
   </head>
 
   <body>
+    <div class="sidebar">
+      <div>
+        <a href="#top"><p>Notes on DAC</p></a>
+        <a href="#top"><p>Menu Item 1</p></a>
+        <a href="#top"><p>Menu Item 1</p></a>
+      </div>
+    </div>
+      
     <article>
-      <h1 id="tufte-css">Notes on DAC</h1>
+      <h1 id="top">Notes on DAC</h1>
       <r-var name="co2tonnes" value="6" format=".4"></r-var>
       <r-var name="costperton" value="100" format=".5">%</r-var>
       <r-var name="usMilitaryBudget" value="700" format=".5"></r-var>
@@ -69,7 +77,7 @@
           In these notes I explore one set of ideas for helping address climate change: 
           direct air capture (DAC) of carbon dioxide – basically, using clever chemical 
           reactions to pull CO2 out of the atmosphere, so it can be stored or re-used.
-          <br><br>        
+          <br><br>     
           It’s tempting (and fun) to begin by diving into all the many possible approaches 
           to DAC. But before getting into any such details, it’s helpful to think about the 
           scale of the problem to be confronted. How much will DAC need to cost if it’s to 
@@ -230,5 +238,6 @@
 
      
     </article>
+    <div></div>
   </body>
 </html>
