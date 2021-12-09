@@ -10,11 +10,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script async src="https://unpkg.com/@curvenote/article"></script>
     <script type="text/javascript" src="dac.js"></script>
+    <script type="text/javascript" src="elements.js"></script>
 
   </head>
 
   <body>    
-
+  <one-dialog></one-dialog>
     <div class="sidebar">
       <div>
         <a href="#top"><p>Notes on DAC</p></a>
@@ -61,19 +62,12 @@
           <!-- margin note BEGIN totalcapturecost-->
           <span w3-include-html="./sidenotes/totalcapturecost.html"><script>
           includeHTML()</script></span> 
-          <!-- margin note END -->
 
-          As of 2014, the United States emits about 
-          <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
-          bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
-          of CO2 each year. Suppose it cost about 
-          <span w3-include-html="./comp/costperton.html">
-          <script>includeHTML()</script></span> 
+          As of 2014, the United States emits about <co2-tonnes></co2-tonnes>
+          of CO2 each year. Suppose it cost about <cost-per-ton></cost-per-ton>
           of CO2 to do direct air capture. To capture the entire annual CO2 production from 
-          the US would cost about     
-          $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
-          bind="totalcapturecost" onclick="sidebar('one')"></r-display> 
-          billion. (<r-action :click="{co2tonnes:6,costperton:100}">reset defaults</r-action>) 
+          the US would cost about <total-cost></total-cost> billion. 
+          (<r-action :click="{co2tonnes:6,costperton:100}">reset defaults</r-action>) 
           
           <br><br>
 
@@ -86,9 +80,7 @@
             includeHTML()</script></span> 
 
           How does this compare to other spending? As of 2019, the US military budget was about 
-          $<r-display class="usMilitaryBudget" onmouseover="hoverByClass('usMilitaryBudget','#E0EEF2')" 
-          bind="usMilitaryBudget"></r-display> billion, 
-          so at 
+          <us-mil></us-mil> billion, so at 
           <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
           bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
 
