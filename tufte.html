@@ -48,32 +48,72 @@
       }
     </script>
 
+<script>
+  function includeHTML() {
+    var z, i, elmnt, file, xhttp;
+    /*loop through a collection of all HTML elements:*/
+    z = document.getElementsByTagName("*");
+    for (i = 0; i < z.length; i++) {
+      elmnt = z[i];
+      /*search for elements with a certain atrribute:*/
+      file = elmnt.getAttribute("w3-include-html");
+      if (file) {
+        /*make an HTTP request using the attribute value as the file name:*/
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if (this.readyState == 4) {
+            if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+            if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+            /*remove the attribute, and call this function once more:*/
+            elmnt.removeAttribute("w3-include-html");
+            includeHTML();
+          }
+        }      
+        xhttp.open("GET", file, true);
+        xhttp.send();
+        /*exit the function:*/
+        return;
+      }
+    }
+  };
+  </script>
+
   </head>
 
-  <body>
+  <body>    
     <div class="sidebar">
       <div>
         <a href="#top"><p>Notes on DAC</p></a>
-        <a href="#top"><p>Menu Item 1</p></a>
-        <a href="#top"><p>Menu Item 1</p></a>
+        <a href="#costCurve"><p>Cost curves</p></a>
       </div>
     </div>
-      
+
+   
     <article>
       <h1 id="top">Notes on DAC</h1>
       <r-var name="co2tonnes" value="6" format=".4"></r-var>
-      <r-var name="costperton" value="100" format=".5">%</r-var>
+      <r-var name="costperton" value="200" format=".5">%</r-var>
+      <r-var name="costpertonHundredDollars" value="100" format=".5">%</r-var>
+      <r-var name="costpertonTenDollars" value="10" format=".5">%</r-var>
+
       <r-var name="usMilitaryBudget" value="700" format=".5"></r-var>
       <r-var name="usEnergySpending" value="1100" format=".5"></r-var>
+
+      <r-var name="dacLearningCurve" value="30" format=".5"></r-var>
   
       <r-var name="totalcapturecost" :value="co2tonnes * costperton" format=".0f"></r-var>
       <r-var name="totalcapturecost$10" :value="co2tonnes * 10" format=".0f"></r-var>
       <r-var name="capturecostVsMilitary" :value="(totalcapturecost/usMilitaryBudget) * 100" format=".0f"></r-var>
       <r-var name="capturecostVsEnergy" :value="(totalcapturecost/usEnergySpending) * 100" format=".0f"></r-var>
 
+      <r-var name="yearsToHundredDollars" :value="Math.log(100/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
+      <r-var name="yearsToTenDollars" :value="Math.log(10/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
+
       <section>
-      
+        
+                
         <p>
+
           In these notes I explore one set of ideas for helping address climate change: 
           direct air capture (DAC) of carbon dioxide – basically, using clever chemical 
           reactions to pull CO2 out of the atmosphere, so it can be stored or re-used.
@@ -87,7 +127,7 @@
           <br><br>   
                 
           <!-- margin note BEGIN totalcapturecost-->
-          <span>
+          <!-- <span>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote-reactive" id="one">
@@ -108,7 +148,9 @@
                bind="totalcapturecost"></r-display> billion
      
             </span> 
-          </span>
+          </span> -->
+          <span w3-include-html="content.html"><script>
+          includeHTML()</script></span> 
           <!-- margin note END -->
 
           As of 2014, the United States emits about 
@@ -233,6 +275,85 @@
           preventing air pollution. In 2011 the US Environmental Protection Agency estimated that 
           compliance with the Clean Air Act cost about 65.5 billion dollars in 2010.
           <br>
+
+          </p>
+          
+          <h2 id="costCurve">Cost curves</h2>
+
+          <p>
+
+          Learning rates are used to describe how much cheaper a technology gets every year or after a set 
+          amount of cumulative ouptut. They are helpful when thinking about the tragectory the price of a 
+          technology may take over time as it benefits from economies of scale & also from greater experience
+          in making the technology.
+          <br><br>
+
+          We can typically describe the learning curve of a technology by the % amount cheaper it gets to produce 
+          each year. So for example if a technology cost 1000 dollars today and had a learning rate of 20%, then this means
+          that every year we might expect the technology to get 20% cheaper. So after 1 year with this learning rate
+          we might expect the technology to cost 800 dollars, after 2 years, 640 dollars, and after 10 years 107 dollars.
+          
+          </p>
+          <p style="text-align: center;">
+            <r-svg-chart xlabel="Time" ylabel="Unit Price" xlim="[0,10]" :ylim="[0, costperton]" width="700" height="400" x-axis-location="origin" y-axis-location="origin">
+              <r-svg-eqn eqn="costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{dacLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
+            </r-svg-chart>
+            DAC learning curve rate:
+            <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
+            bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
+          </p>
+
+          <p>
+          <!-- margin note BEGIN years to $100-->
+          <span>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="yearsUntilHundredDollars">
+              <b>Calculations for years until CPT=$100</b> <br>
+              DAC learning rate =           
+              <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
+              bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
+              <br><br>
+              
+              Cost per tonne = 
+              $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+              bind="costperton" min="0" max="1000"></r-dynamic> 
+              <br><br>
+          
+              % cost decrease [%cd] per year<br>
+              = 1-(<r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
+              bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> /100)
+              <br><br>
+              Years = log(%cd, (<r-display class="costpertonHundredDollars" onmouseover="hoverByClass('costpertonHundredDollars','#E0EEF2')" 
+              bind="costpertonHundredDollars"></r-display>/<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+              bind="costperton" min="0" max="1000"></r-dynamic>)) <br>
+              = <r-display class="yearsToHundredDollars" onmouseover="hoverByClass('yearsToHundredDollars','#E0EEF2')" 
+              bind="yearsToHundredDollars" onclick="sidebar('yearsUntilHundredDollars')"></r-display>          
+              
+    
+            </span> 
+          </span>
+          <!-- margin note END -->
+
+          If we assume the average cost per tonne today is 
+          $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+          bind="costperton" min="0" max="1000"></r-dynamic> 
+          then if the learning rate was 
+          <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
+            bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
+          it would then it would take
+          <r-display class="yearsToHundredDollars" onmouseover="hoverByClass('yearsToHundredDollars','#E0EEF2')" 
+          bind="yearsToHundredDollars" onclick="sidebar('yearsUntilHundredDollars')"></r-display> 
+          years for the price of a tonne of DAC to fall to 
+          $<r-display class="costpertonHundredDollars" onmouseover="hoverByClass('costpertonHundredDollars','#E0EEF2')" 
+          bind="costpertonHundredDollars"></r-display>
+          & 
+          <r-display class="yearsToTenDollars" onmouseover="hoverByClass('yearsToTenDollars','#E0EEF2')" 
+          bind="yearsToTenDollars"></r-display> 
+          years for the price of a tonne of DAC to fall to 
+          $<r-display class="costpertonTenDollars" onmouseover="hoverByClass('costpertonTenDollars','#E0EEF2')" 
+          bind="costpertonTenDollars"></r-display>
+        </p>
       </p>
       </section>
 

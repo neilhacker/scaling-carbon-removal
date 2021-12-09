@@ -1,0 +1,22 @@
+<span>
+    <label for="mn-demo" class="margin-toggle">&#8853;</label>
+    <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+    <span class="marginnote-reactive" id="one">
+      <b>Calculations for "total cost"</b> <br>
+      # of tonnes =           
+      <r-dynamic class="co2tonnes" onmouseover="hoverByClass('co2tonnes','#E4FFED')" 
+      bind="co2tonnes" after=" billion tonnes" min="0" max="20"></r-dynamic> 
+      <br>
+      
+      Cost per tonne =      
+      <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+      bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
+      <br>
+  
+      Total cost = # of tonnes * Cost per tonne <br>
+       = $          
+       <r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+       bind="totalcapturecost"></r-display> billion
+
+    </span> 
+  </span>
