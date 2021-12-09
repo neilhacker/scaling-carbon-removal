@@ -1,0 +1,23 @@
+<span>
+    <label for="mn-demo" class="margin-toggle">&#8853;</label>
+    <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+    <span class="marginnote-reactive" id="energy">
+      <b>Total DAC cost vs US energy spending</b> <br>
+      Total cost = 
+      $<r-display class="totalcapturecost" onmouseover="hoverByClass('totalcapturecost','#E0EEF2')" 
+      bind="totalcapturecost"></r-display>           
+      <br>
+      
+      Energy spending = 
+      $<r-display class="usEnergySpending" onmouseover="hoverByClass('usEnergySpending','#E0EEF2')" 
+      bind="usEnergySpending"></r-display> billion, 
+
+      <br>
+  
+      Percentage = (Total cost / Energy spending) * 100 <br>
+        =           
+        <r-display class="capturecostVsEnergy" onmouseover="hoverByClass('capturecostVsEnergy','#E0EEF2')" 
+        bind="capturecostVsEnergy"></r-display>% 
+
+    </span> 
+  </span>
