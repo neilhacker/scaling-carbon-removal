@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="curvenote.css">
     <link rel="stylesheet" href="custom.css">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <script async src="https://unpkg.com/@curvenote/article"></script>
+
     <script type="text/javascript" src="dac.js"></script>
     <script type="text/javascript" src="elements.js"></script>
     <script type="text/javascript" src="sidenote.js"></script>
@@ -23,7 +24,6 @@
       <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
       <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
       <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>        
-    
     </div>  
 
     <div class="wrapper">
@@ -58,10 +58,20 @@
           and the calculation used to compute them will show up to the side.
         </p>
 
-        <h2 id="problem">The problem</h2>
-        <!-- <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>
-        <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe> -->
-        <!-- <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>         -->
+        <h2 id="measurements">Measurements</h2>
+        <p>
+        <label for="mn-demo" class="margin-toggle">&#8853;</label>
+        <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+        <span class="marginnote" id="yearsUntilTenDollars">
+        <sup>1</sup>This is average consumption based emissions per capita 
+        Consumption-based carbon dioxide (CO₂) emissions are national or regional emissions which have been adjusted for trade
+        </span>
+
+        The average person in the USA is responsible for 17
+          
+          <sup>1</sup>tonnes of CO₂ every year. 
+        </p>
+
         <h2 id="scale">Scale</h2>
         <p>
           Currently it costs between 1000 and 100 to remove a ton of carbon from the atmosphere. Let's suppose that 
@@ -130,6 +140,47 @@
           years for the price of a tonne of DAC to fall to 
           <ten-dollars></ten-dollars>
         </p>
+
+        <h2 id="support">Support</h2>
+        <p>
+          While not everyone will be able to get directly involved in this work there are 
+          still things anyone can do to help out to varying degrees. 
+          <br><br>
+          Firstly, carbon removal has had a history of being a somewhat controversial topic 
+          and so hopefully what you've learnt here will help to pursuade you of the undeniable need now for 
+          it to be part of any climate solution. 
+          <br><br>
+          Secondly, if you want to get more supportive you could consider donating to 
+          <a href="https://ourworldindata.org/donate">Our World in Data</a>
+           or <a href="https://stripe.com/gb/climate/contribute">Stripe Climate</a>. While Our World 
+          in Data does not specifically focus on carbon removal it is an absolutly essential 
+          effort to help make the worlds data, including energy and emissions data, as widely
+          visible as possible and so is a hugly beneficial resource for researchers, the media, 
+          and everyone else. Stripe Climate helps carbon removal companies by being their 
+          <a href="https://www.worksinprogress.co/issue/buyers-of-first-resort/">buyer of first resort</a>,
+          allowing them survive at their high current cost of production until
+          they have moved down their cost curves to a more competitive and sustainable level.
+          You can donate as an <a href="https://stripe.com/gb/climate/contribute">individual</a> or, 
+          if you are an online business, you can <a href="https://stripe.com/gb/climate/contribute">directly contribute a percentage</a> 
+           of your revenue to the programme. 
+        </p>
+
+        <h2 id="acknowledgements">Acknowledgements</h2>
+        <p>
+          The design of this site was hugely inspired by Bret Victor's 
+          <a href="http://worrydream.com/ClimateChange/#media-debate">What can a 
+          technologist do about climate change? (a personal view)</a>. The content
+          of Bret's piece is amazing but he also introduces a version of reactive
+          documents which I have tried to replicate here. His thinking, and mine,
+          is that by allowing people to play around with certain values and see them
+          in the context of calculations they can hopefully build a better intuition
+          of what these values mean, what they predict, and also force the writer to 
+          be more open about how they reach some of their own conclusions. 
+          <br><br>
+          Also a huge thank you to <a href="https://ourworldindata.org/co2-and-other-greenhouse-gas-emissions">Our World in Data</a>
+          who have collected the most amazing trove of climate data and formatted it
+          so everyone can get access to, and interact with, it. 
+        </p>
       
       </section>
     </article>
@@ -138,9 +189,11 @@
     <div class="sidebar">
       <div >
         <a href="#top"><p>Notes on DAC</p></a>
-        <a href="#problem"><p>The problem</p></a>
+        <a href="#measurements"><p>Measurements</p></a>
         <a href="#scale"><p>Scale</p></a>
         <a href="#costCurve"><p>Cost curves</p></a>
+        <a href="#support"><p>Support</p></a>
+        <a href="#acknowledgements"><p>Acknowledgements</p></a>
       </div>
     </div>
     
