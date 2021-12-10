@@ -32,7 +32,11 @@
       <r-var name="reactiveValExample" value="10" format=".5"></r-var>
       <r-var name="calculatedValExample" :value="reactiveValExample*10" format=".5"></r-var>
 
-      <r-var name="costperton" value="200" format=".5">%</r-var>
+      <r-var name="costperton" value="200" format=".5"></r-var>
+      <r-var name="quantityofco2" value="5600" format=".6"></r-var>
+      <r-var name="totalRemovalCost" :value="costperton * quantityofco2" format=".9"></r-var>
+      <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
+      <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
 
       <r-var name="HundredDollars" value="100" format=".5">%</r-var>
       <r-var name="TenDollars" value="10" format=".5">%</r-var>
@@ -48,7 +52,11 @@
         <h2 id="problem">Reactive document</h2>
         <p>
           <calculated-example-sidenote></calculated-example-sidenote>
-          This is a reactive document. As such there are three types of quantities.
+          This docurment has a number of different kind of values. There are <b style="color:#874dea;">data</b>
+          values like this this value for the USA CO₂ emissions in 2019 of        
+          <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"> <usa-emissions></usa-emissions></a>
+          tonnes.
+          Thes values are all links that will take you to the source of the data.
           There are <b style="color:#66D268;">reactive</b> values like this <reactive-val-example></reactive-val-example>
           which you can change by clicking the value and dragging your cursor left & right.
           There are also <b style="color:#db437d;">constant</b> values like this <constant-example-ten></constant-example-ten>. 
@@ -60,23 +68,50 @@
 
         <h2 id="measurements">Measurements</h2>
         <p>
-        <label for="mn-demo" class="margin-toggle">&#8853;</label>
-        <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-        <span class="marginnote" id="yearsUntilTenDollars">
-        <sup>1</sup>This is the average consumption based emissions per capita. These are emissions which have 
-        been adjusted for trade (territorial/production emissions minus emissions embedded in exports, plus 
-        emissions embedded in imports) <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita">(source)</a>
-        </span>
-
-        The average person in the USA is responsible for 17
-          
-          <sup>1</sup>tonnes of CO₂ every year. 
+            The total emissions<sup>1</sup> 
+                <label for="mn-demo" class="margin-toggle">&#8853;</label>
+                <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+                <span class="marginnote" id="yearsUntilTenDollars">
+                <sup>1</sup>All emissions here are consumption based emissions. These are emissions which have 
+                been adjusted for trade "territorial/production emissions minus emissions embedded in exports, plus 
+                emissions embedded in imports". 
+                </span>
+            for the USA in 2019 were 
+            <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"> <usa-emissions></usa-emissions></a>
+            tonnes of CO₂, so the per capita emissions were
+            <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"><usa-per-capita-emissions></usa-per-capita-emissions></a>
+            tonnes per pereson. 
         </p>
 
         <h2 id="scale">Scale</h2>
         <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="yearsUntilTenDollars">
+                <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
+                    <r-svg-node :x="837" y="837" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="837" y="837" text="US military"></r-svg-text>
+                    <r-svg-path :data="[[837, 0],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, 837],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="256" y="256" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="256" y="256" text="Clean Air Act"></r-svg-text>
+                    <r-svg-path :data="[[256, 0],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, 256],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" :listen="totalRemovalCost" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" text="Carbon removal"></r-svg-text>
+                    <r-svg-path :data="[[sqrtTotalRemovalCost, 0],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, sqrtTotalRemovalCost],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    
+                </r-svg-chart>
+            </span>
           Currently it costs between 1000 and 100 to remove a ton of carbon from the atmosphere. Let's suppose that 
-          on average it cost $200 per tonne of carbon removed. To put this in perspective it might be useful to think
+          on average it cost <cost-per-ton></cost-per-ton> to remove carbon. If we assume we are going to try to remove
+          <quantity-of-co2></quantity-of-co2> billion tonnes then the total cost of this would be <total-removal-cost></total-removal-cost>
+          million.
+
+          <!-- To put this in perspective it might be useful to think
           about how much it would cost to remove:
           <br>
           10 gigatons of carbon. 
@@ -88,11 +123,30 @@
           what is the current amount of carbon removal
           what does it need to get to
           by when
-          how does this compare to per capita
+          how does this compare to per capita -->
         </p>
 
-        <h2 id="costCurve">Cost curves</h2>
+        <!-- <p style="text-align: center;">
+            <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
+              <r-svg-node :x="837" y="837" fill="#ff7f0e"></r-svg-node>
+              <r-svg-text :x="837" y="837" text="US military"></r-svg-text>
+              <r-svg-path :data="[[837, 0],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-path :data="[[0, 837],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
 
+              <r-svg-node :x="256" y="256" fill="#ff7f0e"></r-svg-node>
+              <r-svg-text :x="256" y="256" text="Clean Air Act"></r-svg-text>
+              <r-svg-path :data="[[256, 0],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-path :data="[[0, 256],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+              <r-svg-node :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" :listen="totalRemovalCost" fill="#ff7f0e"></r-svg-node>
+              <r-svg-text :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" text="Carbon removal"></r-svg-text>
+              <r-svg-path :data="[[sqrtTotalRemovalCost, 0],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-path :data="[[0, sqrtTotalRemovalCost],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              
+            </r-svg-chart>
+          </p> -->
+
+        <h2 id="costCurve">Cost curves</h2>
         <p>
           Learning rates are used to describe how much cheaper a technology gets every year or after a set 
           amount of cumulative ouptut. They are helpful when thinking about the tragectory the price of a 

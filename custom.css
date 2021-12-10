@@ -15,28 +15,6 @@
 
 .fulldisplay {
   margin-bottom: 20px;
+  /* color: #e2d8f1 */
 }
 
-    
-.box {
-    float: left;
-    height: 15px;
-    width: 15px;
-    margin-bottom: 5px;
-    margin-right: 5px;
-    border: 1px solid black;
-    clear: both;
-  }
-  
-  .red {
-    background-color: #d46485;
-  }
-  
-  .green {
-    background-color: #66D268;
-  }
-  
-  .blue {
-    background-color: #7BBEF7;
-  }
- 

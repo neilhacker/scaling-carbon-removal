@@ -96,6 +96,51 @@ class CostPerTonText extends HTMLElement {
 }
 customElements.define('cost-per-ton-text', CostPerTonText);
 
+// ####################### QuantityOfCO2 #######################
+class QuantityOfCO2 extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="quantityofco2" onmouseover="hoverByClass('quantityofco2','#E4FFED')" 
+    bind="quantityofco2" min="0" max="35000"></r-dynamic> 
+    `;
+  }
+}
+customElements.define('quantity-of-co2', QuantityOfCO2);
+
+class QuantityOfCO2Text extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Quantity of CO₂" width=${width} class="quantityofco2" 
+  onmouseover="hoverByClass('quantityofco2','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('quantity-of-co2-text', QuantityOfCO2Text);
+
+// ####################### TotalRemovalCost #######################
+class TotalRemovalCost extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-display class="totalRemovalCost" onmouseover="hoverByClass('totalRemovalCost','#E4FFED')" 
+    bind="totalRemovalCost" after=" tonnes"  onclick=""></r-display> 
+    `;
+  }
+}
+customElements.define('total-removal-cost', TotalRemovalCost);
+
+class TotalRemovalCostText extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Total cost" width=${width} class="totalRemovalCost" 
+  onmouseover="hoverByClass('totalRemovalCost','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('total-removal-cost-text', TotalRemovalCostText);
 
 // ####################### DAC Learning Rate #######################
 class DACLearningCurveRate extends HTMLElement {
@@ -228,4 +273,37 @@ class HundredDollars extends HTMLElement {
 customElements.define('hundred-dollars', HundredDollars);
 
 
+// ####################### DATA VALUES #######################
+
+class DataVal extends HTMLElement {
+  connectedCallback() {
+      var thing = this.attributes.constval.value
+    this.innerHTML = /*html*/`
+    ${thing}
+`;
+  this.style.color = "#874dea";
+  this.style.fontWeight = "bold";
+  }
+}
+customElements.define('data-val', DataVal);
+
+class USAEmissions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <data-val constval="5.63 billion" class="USAEmissions" onmouseover="hoverByClass('USAEmissions','#e2d8f1')" 
+        ></data-val>
+`;
+  }
+}
+customElements.define('usa-emissions', USAEmissions);
+
+class USAPerCapitaEmissions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <data-val constval="17" class="USAPerCapitaEmissions" onmouseover="hoverByClass('USAPerCapitaEmissions','#e2d8f1')" 
+        ></data-val>
+`;
+  }
+}
+customElements.define('usa-per-capita-emissions', USAPerCapitaEmissions);
 
