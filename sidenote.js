@@ -15,13 +15,13 @@ class YearsToHundredDollarsSideNote extends HTMLElement {
             <perc-cost-decr-text width="40%"></perc-cost-decr-text> = 1-(<dac-learning-rate-text width="30%"></dac-learning-rate-text> /100)
             <br><br>
             <cost-per-ton-text width="30%"></cost-per-ton-text> * <perc-cost-decr-text width="30%"></perc-cost-decr-text> ^ 
-            <years-to-ten-dollars-text width="15%"></years-to-ten-dollars-text> = <hundred-dollars></hundred-dollars>
+            <years-to-hundred-dollars-text width="15%"></years-to-hundred-dollars-text> = <hundred-dollars></hundred-dollars>
             <br><br>
-            <years-to-ten-dollars-text width="30%"></years-to-ten-dollars-text>
+            <years-to-hundred-dollars-text width="30%"></years-to-hundred-dollars-text>
             <br>
             = log(<perc-cost-decr-text width="30%"></perc-cost-decr-text>, (<hundred-dollars></hundred-dollars> 
             / <cost-per-ton-text width="30%"></cost-per-ton-text>)) <br>
-            = <years-to-ten-dollars></years-to-ten-dollars>        
+            = <years-to-hundred-dollars></years-to-hundred-dollars>        
         </span> 
     </span>
   `;
@@ -59,3 +59,4 @@ class YearsToTenDollarsSideNote extends HTMLElement {
   }
 }
 customElements.define('years-to-ten-dollars-sidenote', YearsToTenDollarsSideNote);
+

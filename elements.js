@@ -108,7 +108,7 @@ class YearsToHundredDollarsText extends HTMLElement {
     `;
   }
 }
-customElements.define('years-to-ten-hundred-text', YearsToHundredDollarsText);
+customElements.define('years-to-hundred-dollars-text', YearsToHundredDollarsText);
 
 // ####################### YearsToTenDollars #######################
 class YearsToTenDollars extends HTMLElement {

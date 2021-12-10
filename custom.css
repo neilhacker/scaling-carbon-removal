@@ -5,14 +5,16 @@
     right: 0;
     top: 0;
     padding-top: 40px;
-    position:fixed
+    position:fixed;
+    /* background-color: red; */
 }
 
-.sidebar div {
+/* .sidebar div {
     padding: 8px;
     font-size: 20px;
     display: block;
-}
+    background-color: red;
+} */
     
 .box {
     float: left;
