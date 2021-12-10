@@ -1,20 +1,22 @@
-.sidebar {
-    height: 100%;
-    width: 300px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding-top: 40px;
-    position:fixed;
-    /* background-color: red; */
+.wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
-/* .sidebar div {
-    padding: 8px;
-    font-size: 20px;
-    display: block;
-    background-color: red;
-} */
+.sidebar {
+  padding: 15px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  /* width: 70%; */
+  width: 65%;
+  height: 25vh;
+}
+
+.fulldisplay {
+  margin-bottom: 20px;
+}
+
     
 .box {
     float: left;
@@ -22,7 +24,7 @@
     width: 15px;
     margin-bottom: 5px;
     margin-right: 5px;
-    /* border: 1px solid black; */
+    border: 1px solid black;
     clear: both;
   }
   
@@ -37,9 +39,4 @@
   .blue {
     background-color: #7BBEF7;
   }
-
-  /* <div><div class='box green'></div>= Dynamic inputs</div>
-  <br>
-  <div><div class='box blue'></div>= Dynamic results</div>
-  <br>
-  <div><div class='box red'></div>= Constant values</div> */
+ 

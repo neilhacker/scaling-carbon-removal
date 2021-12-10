@@ -6,16 +6,15 @@ function sidebar(idTag) {
     var elms=document.getElementsByClassName("marginnote-reactive");
     console.log(elms)
     for (let i = 0; i < elms.length; i++) {
-    // console.log(elms[i].id)
-    if(elms[i].id==idTag){
-        if (elms[i].style.display === "block") {
-        elms[i].style.display = "none";
+        if(elms[i].id==idTag){
+            if (elms[i].style.display === "block") {
+                elms[i].style.display = "none";
+            } else {
+                elms[i].style.display = "block";
+            }
         } else {
-        elms[i].style.display = "block";
+            elms[i].style.display = "none";
         }
-    } else {
-        elms[i].style.display = "none";
-    }
     }
 }
 

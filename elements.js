@@ -26,6 +26,53 @@ class ValInWords extends HTMLElement {
 }
 customElements.define('val-in-words', ValInWords);
 
+// ####################### reativeValTen #######################
+class ReactiveValExample extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="reactiveValExample" onmouseover="hoverByClass('reactiveValExample','#E4FFED')" 
+    bind="reactiveValExample" min="0" max="100"></r-dynamic> 
+    `;
+  }
+}
+customElements.define('reactive-val-example', ReactiveValExample);
+
+class ReactiveValExampleText extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Reactive value" width=${width} class="reactiveValExample" 
+  onmouseover="hoverByClass('reactiveValExample','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('reactive-val-example-text', ReactiveValExampleText);
+
+// ####################### CalculatedValExample #######################
+class CalculatedValExample extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-display class="calculatedValExample" onmouseover="hoverByClass('calculatedValExample','#E4FFED')" 
+    bind="calculatedValExample" onclick="sidebar('calculatedValExample')"></r-dynamic> 
+    `;
+  }
+}
+customElements.define('calculated-val-example', CalculatedValExample);
+
+class CalculatedValExampleText extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Calculated value" width=${width} class="calculatedValExample" 
+  onmouseover="hoverByClass('calculatedValExample','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('calculated-val-example-text', CalculatedValExampleText);
+
+
 // ####################### CostPerTon #######################
 class CostPerTon extends HTMLElement {
     connectedCallback() {
@@ -147,6 +194,17 @@ class ConstantVal extends HTMLElement {
     }
   }
 customElements.define('constant-val', ConstantVal);
+
+class ConstantExampleTen extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    
+    <constant-val constval="10" class="ConstantExampleTen" onmouseover="hoverByClass('ConstantExampleTen','#f0c5d6')" 
+        ></constant-val>
+`;
+  }
+}
+customElements.define('constant-example-ten', ConstantExampleTen);
 
 class TenDollars extends HTMLElement {
     connectedCallback() {

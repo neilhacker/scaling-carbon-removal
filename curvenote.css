@@ -25,7 +25,7 @@ r-var {
     background-color: #E0EEF2;
     cursor: pointer;
   }
-  
+    
   r-action {
     cursor: pointer;
     color: #d16a92;
@@ -45,7 +45,6 @@ r-var {
   .cursor-col-resize {
     cursor: col-resize;
   }
-  
   
   r-var {
     display: none;

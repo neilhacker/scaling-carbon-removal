@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Tufte CSS</title>
+    <title>Notes on DAC</title>
     <link rel="stylesheet" href="tufte.css"/>
     <!-- <link rel="stylesheet" href="latex.css"/> -->
     <link rel="stylesheet" href="curvenote.css">
@@ -17,22 +17,21 @@
   </head>
 
   <body>    
-    <!-- <h1 id="top">Notes on DAC</h1> -->
 
-    <!-- <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
-    <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
-    <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>         -->
+    <div class="fulldisplay">
+      <h1>Notes on DAC </h1>
+      <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
+      <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
+      <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>        
+    
+    </div>  
 
-    <div class="sidebar">
-      <div >
-        <a href="#top"><p>Notes on DAC</p></a>
-        <a href="#problem"><p>The problem</p></a>
-        <a href="#scale"><p>Scale</p></a>
-        <a href="#costCurve"><p>Cost curves</p></a>
-      </div>
-    </div>
+    <div class="wrapper">
 
     <article>
+      <r-var name="reactiveValExample" value="10" format=".5"></r-var>
+      <r-var name="calculatedValExample" :value="reactiveValExample*10" format=".5"></r-var>
+
       <r-var name="costperton" value="200" format=".5">%</r-var>
 
       <r-var name="HundredDollars" value="100" format=".5">%</r-var>
@@ -46,10 +45,22 @@
       <r-var name="yearsToTenDollars" :value="Math.log(10/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
 
       <section>
-        <h1>Notes on DAC</h1>
+        <h2 id="problem">Reactive document</h2>
+        <p>
+          <calculated-example-sidenote></calculated-example-sidenote>
+          This is a reactive document. As such there are three types of quantities.
+          There are <b style="color:#66D268;">reactive</b> values like this <reactive-val-example></reactive-val-example>
+          which you can change by clicking the value and dragging your cursor left & right.
+          There are also <b style="color:#db437d;">constant</b> values like this <constant-example-ten></constant-example-ten>. 
+          These values can't be changed and are, well, constant. Lastly there are <b style="color:#7BBEF7;">calculated</b>
+          values like this <calculated-val-example></calculated-val-example> which are the result of 
+          some calculation. You can also click on any of the <b style="color:#7BBEF7;">calculated</b> values
+          and the calculation used to compute them will show up to the side.
+        </p>
+
         <h2 id="problem">The problem</h2>
-        <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>
-        <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>
+        <!-- <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>
+        <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe> -->
         <!-- <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 38%; height: 500px; border: 0px none;"></iframe>         -->
         <h2 id="scale">Scale</h2>
         <p>
@@ -122,5 +133,17 @@
       
       </section>
     </article>
+
+    <!-- ##################### sidebar #####################-->
+    <div class="sidebar">
+      <div >
+        <a href="#top"><p>Notes on DAC</p></a>
+        <a href="#problem"><p>The problem</p></a>
+        <a href="#scale"><p>Scale</p></a>
+        <a href="#costCurve"><p>Cost curves</p></a>
+      </div>
+    </div>
+    
+  </div>  <!-- end of wrapper div -->
   </body>
 </html>

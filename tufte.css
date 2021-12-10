@@ -64,7 +64,6 @@ body {
     width: 87.5%;
     margin-left: auto;
     margin-right: auto;
-    /* padding-left: 12.5%; */
     padding-left: 5%;
     font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
     background-color: #fffff8;
@@ -130,11 +129,13 @@ p.subtitle {
 }
 
 article {
-    padding: 5rem 0rem;
+    /* padding: 5rem 0rem; */
+    max-width: 80%;
+    border: none;
 }
 
 section {
-    padding-top: 1rem;
+    /* padding-top: 1rem; */
     padding-bottom: 1rem;
 }
 
@@ -197,7 +198,7 @@ section > footer,
 section > table {
     /* width: 55%; */
     /* changes width of main text and sidenotes */
-    width: 50%;
+    width: 60%;
 }
 
 /* 50 + 5 == 55, to be the same width as paragraph */
