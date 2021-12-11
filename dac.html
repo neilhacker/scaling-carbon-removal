@@ -32,19 +32,31 @@
       <r-var name="reactiveValExample" value="10" format=".5"></r-var>
       <r-var name="calculatedValExample" :value="reactiveValExample*10" format=".5"></r-var>
 
+      <!-- scale of emissions comparison graph values -->
+      <r-var name="usaEmissions" value="5.6" format=".5"></r-var>
+      <r-var name="chinaEmissions" value="9.4" format=".5"></r-var>
+      <r-var name="worldCoalEmissions" value="14.6" format=".5"></r-var>
+      <r-var name="worldEmissions" value="37.7" format=".5"></r-var>
+      <r-var name="tenGigatons" value="10" format=".5"></r-var>
+      <r-var name="forestSink" value="7.6" format=".5"></r-var>
+      <r-var name="currentDacCapture" value="0.00001" format=".7"></r-var>
+      <r-var name="emissionComparisonScale" value="0.01" format=".5"></r-var>
+
       <r-var name="costperton" value="200" format=".5"></r-var>
       <r-var name="quantityofco2" value="5600" format=".6"></r-var>
       <r-var name="totalRemovalCost" :value="costperton * quantityofco2" format=".9"></r-var>
+      <r-var name="totalRemovalCostBillions" :value="totalRemovalCost/1000" format=".9"></r-var>
+
       <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
       <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
+
+      <r-var name="oilDemandCost2019" :value="64.3 * 36.4" format=".9"></r-var>
 
       <r-var name="HundredDollars" value="100" format=".5">%</r-var>
       <r-var name="TenDollars" value="10" format=".5">%</r-var>
 
       <r-var name="dacLearningCurve" value="30" format=".5"></r-var>
   
-      <r-var name="totalcapturecost" :value="co2tonnes * costperton" format=".0f"></r-var>
-
       <r-var name="yearsToHundredDollars" :value="Math.log(100/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
       <r-var name="yearsToTenDollars" :value="Math.log(10/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
 
@@ -68,23 +80,107 @@
 
         <h2 id="measurements">Measurements</h2>
         <p>
-            The total emissions<sup>1</sup> 
+            Country emission values are <b>consumption</b>
+                <sup>1</sup>
                 <label for="mn-demo" class="margin-toggle">&#8853;</label>
                 <input type="checkbox" id="mn-demo" class="margin-toggle"/>
                 <span class="marginnote" id="yearsUntilTenDollars">
-                <sup>1</sup>All emissions here are consumption based emissions. These are emissions which have 
-                been adjusted for trade "territorial/production emissions minus emissions embedded in exports, plus 
-                emissions embedded in imports". 
+                <sup>1</sup> These are emissions which have been adjusted for trade. "Territorial / production 
+                emissions minus emissions embedded in exports, plus emissions embedded in imports". 
                 </span>
-            for the USA in 2019 were 
-            <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"> <usa-emissions></usa-emissions></a>
-            tonnes of CO₂, so the per capita emissions were
-            <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"><usa-per-capita-emissions></usa-per-capita-emissions></a>
-            tonnes per pereson. 
+            based emissions. By clicking on the value you will be able to have a look at other types of measurements
+            for that particular country. It is also useful to have some idea of the scale of metrics used so just 
+            know that: 
+            <br>
+            1000 kg is 1 tonne.
+            <br>
+            1 Megaton (Mt) is 1,000,000 tonnes.
+            <br>
+            1 Gigatonne (Gt) is 1,000 Megatons or 1,000,000,000 tonnes.
+                <sup>2</sup>
+                <label for="mn-demo" class="margin-toggle">&#8853;</label>
+                <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+                <span class="marginnote" id="yearsUntilTenDollars">
+                <sup>2</sup> One gigatonne is roughly 2x the weight of all humans. 
+                </span>            
+            <br><br>
         </p>
 
         <h2 id="scale">Scale</h2>
+        <h3>Scale of emissions</h3>
         <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="emissionsComparison">
+            <r-svg-chart xlabel="" ylabel="" :xlim="[0,emissionComparisonScale]" :ylim="[0, emissionComparisonScale]" :listen="emissionComparisonScale" width="650" height="600" x-axis-location="origin" y-axis-location="origin">
+                <r-svg-node :x="Math.sqrt(usaEmissions)" :y="Math.sqrt(usaEmissions)" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(usaEmissions)" :y="Math.sqrt(usaEmissions)" text="USA"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(usaEmissions), 0],[Math.sqrt(usaEmissions), Math.sqrt(usaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(usaEmissions)],[Math.sqrt(usaEmissions), Math.sqrt(usaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                <r-svg-node :x="Math.sqrt(chinaEmissions)" :y="Math.sqrt(chinaEmissions)/2" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(chinaEmissions)" :y="Math.sqrt(chinaEmissions)/2" text="China"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(chinaEmissions), 0],[Math.sqrt(chinaEmissions), Math.sqrt(chinaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(chinaEmissions)],[Math.sqrt(chinaEmissions), Math.sqrt(chinaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                <r-svg-node :x="Math.sqrt(forestSink)/2" :y="Math.sqrt(forestSink)" fill="#66D268"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(forestSink)/2" :y="Math.sqrt(forestSink)" text="Forest"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(forestSink), 0],[Math.sqrt(forestSink), Math.sqrt(forestSink)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(forestSink)],[Math.sqrt(forestSink), Math.sqrt(forestSink)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                <r-svg-node :x="Math.sqrt(worldCoalEmissions)" :y="Math.sqrt(worldCoalEmissions)" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(worldCoalEmissions)" :y="Math.sqrt(worldCoalEmissions)" text="Coal"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(worldCoalEmissions), 0],[Math.sqrt(worldCoalEmissions), Math.sqrt(worldCoalEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(worldCoalEmissions)],[Math.sqrt(worldCoalEmissions), Math.sqrt(worldCoalEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                <r-svg-node :x="Math.sqrt(worldEmissions)" :y="Math.sqrt(worldEmissions)" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(worldEmissions)" :y="Math.sqrt(worldEmissions)" text="World"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(worldEmissions), 0],[Math.sqrt(worldEmissions), Math.sqrt(worldEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(worldEmissions)],[Math.sqrt(worldEmissions), Math.sqrt(worldEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                <r-svg-node :x="Math.sqrt(tenGigatons)" :y="Math.sqrt(tenGigatons)" fill="#db437d"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(tenGigatons)" :y="Math.sqrt(tenGigatons)" text="Ten gigatons"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(tenGigatons), 0],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(tenGigatons)],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            
+                <r-svg-node :x="Math.sqrt(currentDacCapture)" :y="Math.sqrt(currentDacCapture)" fill="#66D268"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(currentDacCapture)/2" :y="Math.sqrt(currentDacCapture)" text="DAC"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(currentDacCapture), 0],[Math.sqrt(currentDacCapture), Math.sqrt(currentDacCapture)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(currentDacCapture)],[Math.sqrt(currentDacCapture), Math.sqrt(currentDacCapture)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            </r-svg-chart>
+            Adjust the axis to zoom in/out:
+            <r-dynamic class="emissionComparisonScale" onmouseover="hoverByClass('emissionComparisonScale','#E4FFED')" 
+            bind="emissionComparisonScale" min="0" max="7" step="0.001"></r-dynamic> <br><br>
+            Most values are much bigger than DAC so try moving the scale to around 3.5 to see more.
+            </span> 
+
+            Just how much carbon is there to remove? To get a sense of some scale the following 
+            might be useful guide points: 
+            <br>
+            - The USA's emissions in 2019 were <usa-emissions></usa-emissions> tonnes.
+            <br>
+            - China's 2019 emissions were <china-emissions></china-emissions> tonnes.
+            <br>
+            - Worldwide 2019 CO₂ emissions from coal were <world-coal-emissions></world-coal-emissions>.
+            <br>
+            - The worlds 2019 emissions were <world-emissions></world-emissions> tonnes. 
+            <br>
+            - Forests were a net carbon sink to the tune of <forest-sink></forest-sink> tonnes in 2019.
+            <br>
+            - The IPCC report has suggested we will need carbon removal on the scale of 10 gigatons of 
+            carbon a year by 2050 which is <ten-gigatons></ten-gigatons> tonnes.
+            <br>
+            - While not the only carbon removal technology to give a sense of where we are as per a 2021 IEA report
+            the world is currently capturing around <current-dac-capture></current-dac-capture> tonnes (1000 tonnes) 
+            of CO₂ per year.
+            <br>
+            
+        </p>
+
+        <h3>Scale of cost</h3>
+        <p>
+            <oil-demand-cost-2019-sidenote></oil-demand-cost-2019-sidenote>
+
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="yearsUntilTenDollars">
@@ -106,45 +202,29 @@
                     
                 </r-svg-chart>
             </span>
-          Currently it costs between 1000 and 100 to remove a ton of carbon from the atmosphere. Let's suppose that 
-          on average it cost <cost-per-ton></cost-per-ton> to remove carbon. If we assume we are going to try to remove
-          <quantity-of-co2></quantity-of-co2> billion tonnes then the total cost of this would be <total-removal-cost></total-removal-cost>
-          million.
 
-          <!-- To put this in perspective it might be useful to think
-          about how much it would cost to remove:
-          <br>
-          10 gigatons of carbon. 
-          <br>
-          The annual emmisions of the USA. 
-          <br>
-          The per capital emmisions of the USA. 
-          <br><br>
-          what is the current amount of carbon removal
-          what does it need to get to
-          by when
-          how does this compare to per capita -->
+            How much will it cost to remove carbon from the atmosphere? Again it might be useful
+            to give some base rates as to how much other things cost to give us some perspective.
+            For example:
+            <br>
+            - The total cost of oil demand in 2019 was <oil-demand-cost-2019></oil-demand-cost-2019> billion
+            <br>
+            - The USA military budget was $.....
+            <br>
+            - Spending on the USA clean airs act was $.....
+            <br>
+            - Total USA subsidies to renewable energy are $.....
+            <br>
+            Currently it costs between 1000 and 100 to remove a ton of carbon from the atmosphere. Let's suppose that 
+            on average it cost <cost-per-ton></cost-per-ton> to remove carbon. 
+            
+            <total-removal-cost-sidenote></total-removal-cost-sidenote>
+
+            If we assume we are going to try to remove
+            <quantity-of-co2></quantity-of-co2> million tonnes then the total cost of this would be <total-removal-cost></total-removal-cost>
+            million (<total-removal-cost-billions></total-removal-cost-billions> billion).
         </p>
 
-        <!-- <p style="text-align: center;">
-            <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
-              <r-svg-node :x="837" y="837" fill="#ff7f0e"></r-svg-node>
-              <r-svg-text :x="837" y="837" text="US military"></r-svg-text>
-              <r-svg-path :data="[[837, 0],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-path :data="[[0, 837],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-              <r-svg-node :x="256" y="256" fill="#ff7f0e"></r-svg-node>
-              <r-svg-text :x="256" y="256" text="Clean Air Act"></r-svg-text>
-              <r-svg-path :data="[[256, 0],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-path :data="[[0, 256],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-              <r-svg-node :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" :listen="totalRemovalCost" fill="#ff7f0e"></r-svg-node>
-              <r-svg-text :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" text="Carbon removal"></r-svg-text>
-              <r-svg-path :data="[[sqrtTotalRemovalCost, 0],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-path :data="[[0, sqrtTotalRemovalCost],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              
-            </r-svg-chart>
-          </p> -->
 
         <h2 id="costCurve">Cost curves</h2>
         <p>

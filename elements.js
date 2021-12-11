@@ -26,6 +26,10 @@ class ValInWords extends HTMLElement {
 }
 customElements.define('val-in-words', ValInWords);
 
+// ###################################################################################################################
+// ############################################## Reactive VALUES ##################################################
+// ###################################################################################################################
+
 // ####################### reativeValTen #######################
 class ReactiveValExample extends HTMLElement {
   connectedCallback() {
@@ -48,29 +52,6 @@ connectedCallback() {
 }
 }
 customElements.define('reactive-val-example-text', ReactiveValExampleText);
-
-// ####################### CalculatedValExample #######################
-class CalculatedValExample extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = /*html*/`
-    <r-display class="calculatedValExample" onmouseover="hoverByClass('calculatedValExample','#E4FFED')" 
-    bind="calculatedValExample" onclick="sidebar('calculatedValExample')"></r-dynamic> 
-    `;
-  }
-}
-customElements.define('calculated-val-example', CalculatedValExample);
-
-class CalculatedValExampleText extends HTMLElement {
-connectedCallback() {
-  var width = this.attributes.width.value
-
-  this.innerHTML = /*html*/`
-  <val-in-words title="Calculated value" width=${width} class="calculatedValExample" 
-  onmouseover="hoverByClass('calculatedValExample','#E4FFED')"></val-in-words> 
-  `;
-}
-}
-customElements.define('calculated-val-example-text', CalculatedValExampleText);
 
 
 // ####################### CostPerTon #######################
@@ -119,29 +100,6 @@ connectedCallback() {
 }
 customElements.define('quantity-of-co2-text', QuantityOfCO2Text);
 
-// ####################### TotalRemovalCost #######################
-class TotalRemovalCost extends HTMLElement {
-  connectedCallback() {
-    this.innerHTML = /*html*/`
-    $<r-display class="totalRemovalCost" onmouseover="hoverByClass('totalRemovalCost','#E4FFED')" 
-    bind="totalRemovalCost" after=" tonnes"  onclick=""></r-display> 
-    `;
-  }
-}
-customElements.define('total-removal-cost', TotalRemovalCost);
-
-class TotalRemovalCostText extends HTMLElement {
-connectedCallback() {
-  var width = this.attributes.width.value
-
-  this.innerHTML = /*html*/`
-  <val-in-words title="Total cost" width=${width} class="totalRemovalCost" 
-  onmouseover="hoverByClass('totalRemovalCost','#E4FFED')"></val-in-words> 
-  `;
-}
-}
-customElements.define('total-removal-cost-text', TotalRemovalCostText);
-
 // ####################### DAC Learning Rate #######################
 class DACLearningCurveRate extends HTMLElement {
     connectedCallback() {
@@ -178,6 +136,92 @@ class PercCostDecrText extends HTMLElement {
 }
 customElements.define('perc-cost-decr-text', PercCostDecrText);
 
+
+// ###################################################################################################################
+// ############################################## Calculated VALUES ##################################################
+// ###################################################################################################################
+
+// ####################### CalculatedValExample #######################
+class CalculatedValExample extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-display class="calculatedValExample" onmouseover="hoverByClass('calculatedValExample','#E4FFED')" 
+    bind="calculatedValExample" onclick="sidebar('calculatedValExample')"></r-dynamic> 
+    `;
+  }
+}
+customElements.define('calculated-val-example', CalculatedValExample);
+
+class CalculatedValExampleText extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Calculated value" width=${width} class="calculatedValExample" 
+  onmouseover="hoverByClass('calculatedValExample','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('calculated-val-example-text', CalculatedValExampleText);
+
+// ####################### TotalRemovalCost #######################
+class TotalRemovalCost extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-display class="totalRemovalCost" onmouseover="hoverByClass('totalRemovalCost','#E4FFED')" 
+    bind="totalRemovalCost"  onclick="sidebar('totalRemovalCostSideNote')"></r-display> 
+    `;
+  }
+}
+customElements.define('total-removal-cost', TotalRemovalCost);
+
+class TotalRemovalCostText extends HTMLElement {
+connectedCallback() {
+  var width = this.attributes.width.value
+
+  this.innerHTML = /*html*/`
+  <val-in-words title="Total cost" width=${width} class="totalRemovalCost" 
+  onmouseover="hoverByClass('totalRemovalCost','#E4FFED')"></val-in-words> 
+  `;
+}
+}
+customElements.define('total-removal-cost-text', TotalRemovalCostText);
+
+// ####################### OilDemandCost2019 #######################
+class OilDemandCost2019 extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-display class="oilDemandCost2019" onmouseover="hoverByClass('oilDemandCost2019','#E4FFED')" 
+    bind="oilDemandCost2019"  onclick="sidebar('oilDemandCost2019SideNote')"></r-display> 
+    `;
+  }
+}
+customElements.define('oil-demand-cost-2019', OilDemandCost2019);
+
+class OilDemandCost2019Text extends HTMLElement {
+  connectedCallback() {
+    var width = this.attributes.width.value
+
+    this.innerHTML = /*html*/`
+    <val-in-words title="Oil demand cost" width=${width} class="oilDemandCost2019" 
+    onmouseover="hoverByClass('oilDemandCost2019','#E4FFED')"></val-in-words>
+    `;
+  }
+}
+customElements.define('oil-demand-cost-2019-text', OilDemandCost2019Text);
+
+
+
+// ####################### TotalRemovalCostBillions #######################
+class TotalRemovalCostBillions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
+    bind="totalRemovalCostBillions"  onclick="sidebar('totalRemovalCostSideNote')"></r-display> 
+    `;
+  }
+}
+customElements.define('total-removal-cost-billions', TotalRemovalCostBillions);
 
 // ####################### YearsToHundredDollars #######################
 class YearsToHundredDollars extends HTMLElement {
@@ -226,8 +270,10 @@ class YearsToTenDollarsText extends HTMLElement {
 customElements.define('years-to-ten-dollars-text', YearsToTenDollarsText);
 
 
-// ####################### CONSTANT VALUES #######################
 
+// ###################################################################################################################
+// ################################################ CONSTANT VALUES ##################################################
+// ###################################################################################################################
 class ConstantVal extends HTMLElement {
     connectedCallback() {
         var thing = this.attributes.constval.value
@@ -272,8 +318,20 @@ class HundredDollars extends HTMLElement {
   }
 customElements.define('hundred-dollars', HundredDollars);
 
+class TenGigatons extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+      <constant-val constval="10 billion" class="TenGigatons" onmouseover="hoverByClass('TenGigatons','#f0c5d6')" 
+      ></constant-val>
+`;
+  }
+}
+customElements.define('ten-gigatons', TenGigatons);
 
-// ####################### DATA VALUES #######################
+
+// ###################################################################################################################
+// #################################################### Data VALUES ##################################################
+// ###################################################################################################################
 
 class DataVal extends HTMLElement {
   connectedCallback() {
@@ -287,12 +345,39 @@ class DataVal extends HTMLElement {
 }
 customElements.define('data-val', DataVal);
 
+
+class WorldEmissions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://ourworldindata.org/explorers/co2?facet=none&country=USA~OWID_WRL~CHN&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+country">
+    <data-val constval="37.7 billion" class="WorldEmissions" onmouseover="hoverByClass('WorldEmissions','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('world-emissions', WorldEmissions);
+
+class ChinaEmissions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://ourworldindata.org/explorers/co2?facet=none&country=USA~OWID_WRL~CHN&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+country">
+    <data-val constval="9.4 billion" class="ChinaEmissions" onmouseover="hoverByClass('ChinaEmissions','#e2d8f1')" >
+    </data-val>
+    </a>
+    `;
+  }
+}
+customElements.define('china-emissions', ChinaEmissions);
+
 class USAEmissions extends HTMLElement {
   connectedCallback() {
     this.innerHTML = /*html*/`
-    <data-val constval="5.63 billion" class="USAEmissions" onmouseover="hoverByClass('USAEmissions','#e2d8f1')" 
-        ></data-val>
-`;
+    <a href="https://ourworldindata.org/explorers/co2?facet=none&country=USA~OWID_WRL~CHN&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+country">
+    <data-val constval="5.6 billion" class="USAEmissions" onmouseover="hoverByClass('USAEmissions','#e2d8f1')" >
+    </data-val>
+    </a>
+    `;
   }
 }
 customElements.define('usa-emissions', USAEmissions);
@@ -300,10 +385,95 @@ customElements.define('usa-emissions', USAEmissions);
 class USAPerCapitaEmissions extends HTMLElement {
   connectedCallback() {
     this.innerHTML = /*html*/`
-    <data-val constval="17" class="USAPerCapitaEmissions" onmouseover="hoverByClass('USAPerCapitaEmissions','#e2d8f1')" 
-        ></data-val>
+    <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita">
+    <data-val constval="17" class="USAPerCapitaEmissions" onmouseover="hoverByClass('USAPerCapitaEmissions','#e2d8f1')" >
+    </data-val>
+    </a>
 `;
   }
 }
 customElements.define('usa-per-capita-emissions', USAPerCapitaEmissions);
 
+class WorldCoalEmissions extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://ourworldindata.org/grapher/co2-by-source">
+    <data-val constval="14.6 billion" class="WorldCoalEmissions" onmouseover="hoverByClass('WorldCoalEmissions','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('world-coal-emissions', WorldCoalEmissions);
+
+class ForestSink extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.wri.org/insights/forests-absorb-twice-much-carbon-they-emit-each-year">
+    <data-val constval="7.6 billion" class="ForestSink" onmouseover="hoverByClass('ForestSink','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('forest-sink', ForestSink);
+
+class CurentDACCapture extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.iea.org/reports/direct-air-capture">
+    <data-val constval="0.00001 billion" class="CurentDACCapture" onmouseover="hoverByClass('CurentDACCapture','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('current-dac-capture', CurentDACCapture);
+
+class Average2019OilPrice extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.statista.com/statistics/262860/uk-brent-crude-oil-price-changes-since-1976/">
+    <data-val constval="$64.3 per barrel" class="Average2019OilPrice" onmouseover="hoverByClass('Average2019OilPrice','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('avge-2019-oil-price', Average2019OilPrice);
+
+class Average2019OilPriceText extends HTMLElement {
+  connectedCallback() {
+    var width = this.attributes.width.value
+
+    this.innerHTML = /*html*/`
+    <val-in-words title="Avge oil price" width=${width} class="Average2019OilPrice" 
+    onmouseover="hoverByClass('Average2019OilPrice','#E4FFED')"></val-in-words>
+    `;
+  }
+}
+customElements.define('avge-2019-oil-price-text', Average2019OilPriceText);
+
+class OilBarrelDemand2019 extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.statista.com/statistics/271823/daily-global-crude-oil-demand-since-2006//">
+    <data-val constval="36.4 billion barrels" class="OilBarrelDemand2019" onmouseover="hoverByClass('OilBarrelDemand2019','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('oil-barrel-demand-2019', OilBarrelDemand2019);
+
+class OilBarrelDemand2019Text extends HTMLElement {
+  connectedCallback() {
+    var width = this.attributes.width.value
+
+    this.innerHTML = /*html*/`
+    <val-in-words title="Oil demand" width=${width} class="OilBarrelDemand2019" 
+    onmouseover="hoverByClass('OilBarrelDemand2019','#E4FFED')"></val-in-words>
+    `;
+  }
+}
+customElements.define('oil-barrel-demand-2019-text', OilBarrelDemand2019Text);

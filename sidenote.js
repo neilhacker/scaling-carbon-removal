@@ -22,6 +22,54 @@ class CalculatedExampleSideNote extends HTMLElement {
 }
 customElements.define('calculated-example-sidenote', CalculatedExampleSideNote);
 
+class TotalRemovalCostSideNote extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <span>
+      <label for="mn-demo" class="margin-toggle">&#8853;</label>
+      <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+      <span class="marginnote-reactive" id="totalRemovalCostSideNote">
+          <b>Calculations for total removal cost</b> <br>
+          <cost-per-ton-text width="40%"></cost-per-ton-text> = <cost-per-ton></cost-per-ton>
+          <br><br>
+          <quantity-of-co2-text width="40%"></quantity-of-co2-text> = <quantity-of-co2></quantity-of-co2> million tonnes
+          <br><br>
+          <total-removal-cost-text width="20%"></total-removal-cost-text> 
+          = <cost-per-ton-text width="30%"></cost-per-ton-text> * <quantity-of-co2-text width="30%"></quantity-of-co2-text>
+          <br>
+          = <total-removal-cost></total-removal-cost> million      
+      </span> 
+  </span>
+`;
+  }
+}
+customElements.define('total-removal-cost-sidenote', TotalRemovalCostSideNote);
+
+class OilDemandCost2019SideNote extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <span>
+      <label for="mn-demo" class="margin-toggle">&#8853;</label>
+      <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+      <span class="marginnote-reactive" id="oilDemandCost2019SideNote">
+          <b>Calculations for total cost of oil demand</b> <br>
+          <avge-2019-oil-price-text width="30%"></avge-2019-oil-price-text> = <avge-2019-oil-price></avge-2019-oil-price>
+          <br><br>
+          <oil-barrel-demand-2019-text width="30%"></oil-barrel-demand-2019-text> = <oil-barrel-demand-2019></oil-barrel-demand-2019>
+          <br><br>
+          <oil-demand-cost-2019-text width="30%"></oil-demand-cost-2019-text> 
+          =<avge-2019-oil-price-text width="28%"></avge-2019-oil-price-text>* <oil-barrel-demand-2019-text width="23%"></oil-barrel-demand-2019-text>
+          <br>
+          = <oil-demand-cost-2019></oil-demand-cost-2019> billion
+      </span> 
+  </span>
+`;
+  }
+}
+customElements.define('oil-demand-cost-2019-sidenote', OilDemandCost2019SideNote);
+
+
+
 class YearsToHundredDollarsSideNote extends HTMLElement {
     connectedCallback() {
       this.innerHTML = /*html*/`
