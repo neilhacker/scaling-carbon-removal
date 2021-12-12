@@ -20,7 +20,7 @@
   <body>    
 
     <div class="fulldisplay">
-      <h1>Notes on DAC </h1>
+      <h1>Scaling carbon removal </h1>
       <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
       <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
       <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>        
@@ -38,6 +38,7 @@
       <r-var name="worldCoalEmissions" value="14.6" format=".5"></r-var>
       <r-var name="worldEmissions" value="37.7" format=".5"></r-var>
       <r-var name="tenGigatons" value="10" format=".5"></r-var>
+      <r-var name="oneGigaton" value="1" format=".5"></r-var>
       <r-var name="forestSink" value="7.6" format=".5"></r-var>
       <r-var name="currentDacCapture" value="0.00001" format=".7"></r-var>
       <r-var name="emissionComparisonScale" value="0.01" format=".5"></r-var>
@@ -47,10 +48,16 @@
       <r-var name="totalRemovalCost" :value="costperton * quantityofco2" format=".9"></r-var>
       <r-var name="totalRemovalCostBillions" :value="totalRemovalCost/1000" format=".9"></r-var>
 
+      <!-- cost of removal comparison graph values (in millions) -->
+      <r-var name="usaMilitarySpending" :value="734000" format=".9"></r-var>
       <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
+      <r-var name="oilDemandCost2019" :value="64.3 * 36400" format=".9"></r-var>
+      <r-var name="apolloMissions" :value="280000" format=".9"></r-var>
+      <r-var name="cleanAirAct" :value="65000" format=".9"></r-var>
+      <r-var name="fossilFuelSubsidies" :value="3100000" format=".9"></r-var>
+      <r-var name="renewableSubsidies" :value="160000" format=".9"></r-var>
       <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
 
-      <r-var name="oilDemandCost2019" :value="64.3 * 36.4" format=".9"></r-var>
 
       <r-var name="HundredDollars" value="100" format=".5">%</r-var>
       <r-var name="TenDollars" value="10" format=".5">%</r-var>
@@ -143,6 +150,11 @@
                 <r-svg-path :data="[[Math.sqrt(tenGigatons), 0],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
                 <r-svg-path :data="[[0, Math.sqrt(tenGigatons)],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
             
+                <r-svg-node :x="Math.sqrt(oneGigaton)" :y="Math.sqrt(oneGigaton)" fill="#db437d"></r-svg-node>
+                <r-svg-text :x="Math.sqrt(oneGigaton)" :y="Math.sqrt(oneGigaton)" text="One gigaton"></r-svg-text>
+                <r-svg-path :data="[[Math.sqrt(oneGigaton), 0],[Math.sqrt(oneGigaton), Math.sqrt(oneGigaton)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[0, Math.sqrt(oneGigaton)],[Math.sqrt(oneGigaton), Math.sqrt(oneGigaton)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
                 <r-svg-node :x="Math.sqrt(currentDacCapture)" :y="Math.sqrt(currentDacCapture)" fill="#66D268"></r-svg-node>
                 <r-svg-text :x="Math.sqrt(currentDacCapture)/2" :y="Math.sqrt(currentDacCapture)" text="DAC"></r-svg-text>
                 <r-svg-path :data="[[Math.sqrt(currentDacCapture), 0],[Math.sqrt(currentDacCapture), Math.sqrt(currentDacCapture)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
@@ -170,7 +182,7 @@
             - The IPCC report has suggested we will need carbon removal on the scale of 10 gigatons of 
             carbon a year by 2050 which is <ten-gigatons></ten-gigatons> tonnes.
             <br>
-            - While not the only carbon removal technology to give a sense of where we are as per a 2021 IEA report
+            While not the only carbon removal technology to give a sense of where we are as per a 2021 IEA report
             the world is currently capturing around <current-dac-capture></current-dac-capture> tonnes (1000 tonnes) 
             of CO₂ per year.
             <br>
@@ -185,22 +197,43 @@
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="yearsUntilTenDollars">
                 <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
-                    <r-svg-node :x="837" y="837" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="837" y="837" text="US military"></r-svg-text>
-                    <r-svg-path :data="[[837, 0],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, 837],[837, 837]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-node :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" text="US military"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(usaMilitarySpending), 0],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(usaMilitarySpending)],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
     
-                    <r-svg-node :x="256" y="256" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="256" y="256" text="Clean Air Act"></r-svg-text>
-                    <r-svg-path :data="[[256, 0],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, 256],[256, 256]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-node :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" text="Oil"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(oilDemandCost2019), 0],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(oilDemandCost2019)],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" text="Apollo"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(apolloMissions), 0],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(apolloMissions)],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" text="Fossil Subsidies"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(fossilFuelSubsidies), 0],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(fossilFuelSubsidies)],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" text="Renewable Subsidies"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(renewableSubsidies), 0],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(renewableSubsidies)],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" text="Clean Air Act"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(cleanAirAct), 0],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(cleanAirAct)],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
     
                     <r-svg-node :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" :listen="totalRemovalCost" fill="#ff7f0e"></r-svg-node>
                     <r-svg-text :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" text="Carbon removal"></r-svg-text>
                     <r-svg-path :data="[[sqrtTotalRemovalCost, 0],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
                     <r-svg-path :data="[[0, sqrtTotalRemovalCost],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    
                 </r-svg-chart>
+                Try changing the cost per tonne for carbon removal &or the number of tonnes and see how the total cost
+                changes in relation to the other base line values.
             </span>
 
             How much will it cost to remove carbon from the atmosphere? Again it might be useful
@@ -209,12 +242,16 @@
             <br>
             - The total cost of oil demand in 2019 was <oil-demand-cost-2019></oil-demand-cost-2019> billion
             <br>
-            - The USA military budget was $.....
+            - The 2019 USA military budget was <usa-military-spending></usa-military-spending>
             <br>
-            - Spending on the USA clean airs act was $.....
+            - 2011 compliance costs for the Clean Air Act were <clean-air-act></clean-air-act>
             <br>
-            - Total USA subsidies to renewable energy are $.....
+            - 2017 direct fossil fuel subsidies were <fossil-fuel-subsidies></fossil-fuel-subsidies>
             <br>
+            - 2017 renewable subsidies were <renewable-subsidies></renewable-subsidies>
+            <br>
+            - The cost of the Apollo moon missions (adjusted for inflation) was <apollo-mission-cost></apollo-mission-cost>
+            <br><br>
             Currently it costs between 1000 and 100 to remove a ton of carbon from the atmosphere. Let's suppose that 
             on average it cost <cost-per-ton></cost-per-ton> to remove carbon. 
             
@@ -323,7 +360,7 @@
     <!-- ##################### sidebar #####################-->
     <div class="sidebar">
       <div >
-        <a href="#top"><p>Notes on DAC</p></a>
+        <a href="#top"><p>Scaling carbon removal</p></a>
         <a href="#measurements"><p>Measurements</p></a>
         <a href="#scale"><p>Scale</p></a>
         <a href="#costCurve"><p>Cost curves</p></a>

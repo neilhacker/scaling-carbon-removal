@@ -477,3 +477,66 @@ class OilBarrelDemand2019Text extends HTMLElement {
   }
 }
 customElements.define('oil-barrel-demand-2019-text', OilBarrelDemand2019Text);
+
+class ApolloMissionCost extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.statista.com/statistics/271823/daily-global-crude-oil-demand-since-2006//">
+    <data-val constval="$280 billion" class="ApolloMissionCost" onmouseover="hoverByClass('ApolloMissionCost','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('apollo-mission-cost', ApolloMissionCost);
+
+class USAMilitarySpending2019 extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.statista.com/statistics/272473/us-military-spending-from-2000-to-2012/">
+    <data-val constval="$734 billion" class="USAMilitarySpending2019" onmouseover="hoverByClass('USAMilitarySpending2019','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('usa-military-spending', USAMilitarySpending2019);
+
+class FossilFuelSubsidies extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2020/Apr/IRENA_Energy_subsidies_2020.pdf">
+    <data-val constval="$3.1 trillion" class="FossilFuelSubsidies" onmouseover="hoverByClass('FossilFuelSubsidies','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('fossil-fuel-subsidies', FossilFuelSubsidies);
+
+class RenewableSubsidies extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.irena.org/-/media/Files/IRENA/Agency/Publication/2020/Apr/IRENA_Energy_subsidies_2020.pdf">
+    <data-val constval="$163 billion" class="RenewableSubsidies" onmouseover="hoverByClass('RenewableSubsidies','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('renewable-subsidies', RenewableSubsidies);
+
+class CleanAirAct extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <a href="https://www.epa.gov/clean-air-act-overview/benefits-and-costs-clean-air-act-1990-2020-second-prospective-study">
+    <data-val constval="$65 billion" class="CleanAirAct" onmouseover="hoverByClass('CleanAirAct','#e2d8f1')" >
+    </data-val>
+    </a>
+`;
+  }
+}
+customElements.define('clean-air-act', CleanAirAct);
+
+
+
