@@ -59,11 +59,22 @@
       <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
 
 
+      <!-- cost curve time to $100 & $10 -->
       <r-var name="HundredDollars" value="100" format=".5">%</r-var>
       <r-var name="TenDollars" value="10" format=".5">%</r-var>
+      <r-var name="dacLearningCurve" value="3" format=".5"></r-var>
 
-      <r-var name="dacLearningCurve" value="30" format=".5"></r-var>
-  
+      <!-- net zero emissions graph -->
+      <r-var name="emissionReductionRate" value="2" format=".5"></r-var>
+      <r-var name="carbonRemovalAmount" value="0.001" format=".5"></r-var>
+      <r-var name="carbonRemovalRate" value="20" format=".5"></r-var>
+      <r-var name="year" value="15" format=".1f"></r-var>
+      <r-var name="removalCostInGivenYeaer" :value="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year) * costperton*((1-(dacLearningCurve/100)) ** year))" format=".9"></r-var>
+
+      <!-- cost to get to net zero emissions graph -->
+      <!-- This is the number of tonnes of carbon removed in 2050 * cost per tonne of carbon removed in 2050 * 20% to add padding -->
+      <r-var name="maxCostYAxis" :value="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** 30) * costperton*((1-(dacLearningCurve/100)) ** 30)) * 1.2" format=".9"></r-var>
+        
       <r-var name="yearsToHundredDollars" :value="Math.log(100/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
       <r-var name="yearsToTenDollars" :value="Math.log(10/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
 
@@ -277,9 +288,12 @@
           we might expect the technology to cost 800 dollars, after 2 years, 640 dollars, and after 10 years 107 dollars.
         </p>
 
+        <!-- cost curve demo graph -->
         <p style="text-align: center;">
-          <r-svg-chart xlabel="Time" ylabel="Unit Price" xlim="[0,10]" :ylim="[0, costperton]" width="700" height="400" x-axis-location="origin" y-axis-location="origin">
+          <r-svg-chart xlabel="Time" ylabel="Unit Price" xlim="[0,30]" :ylim="[0, costperton]" width="700" height="400" x-axis-location="origin" y-axis-location="origin">
             <r-svg-eqn eqn="costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{dacLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
+            <r-svg-eqn eqn="costperton*((1-(40/100)) ** x)" :listen="{dacLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
+
             <r-svg-node :x="yearsToHundredDollars" y="100" fill="#ff7f0e"></r-svg-node>
             <r-svg-text :x="yearsToHundredDollars" y="100" text="$100 "></r-svg-text>
             <r-svg-path :data="[[yearsToHundredDollars, 0],[yearsToHundredDollars, 100]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
@@ -312,6 +326,90 @@
           years for the price of a tonne of DAC to fall to 
           <ten-dollars></ten-dollars>
         </p>
+
+        <h2 id="netZeroCosts">Net zero costs</h2>
+        <p>
+            Getting to net zero is not going to be cheap or easy. The two graphs below are meant to help 
+            illustrate the scaling and cost challenges that will have to be overcome to reach the 
+            2050 net zero target.
+        
+            <!-- net zero timeline chart -->
+            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[-20, 50]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
+
+                <r-svg-path :data="[[10, 0],[10, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="10" y="40" text="2030 "></r-svg-text>
+                <r-svg-path :data="[[20, 0],[20, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="20" y="40" text="2040 "></r-svg-text>
+                <r-svg-path :data="[[30, 0],[30, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="30" y="40" text="2050 "></r-svg-text>
+                <r-svg-path :data="[[0, -10],[40, -10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="15" y="-13" text="10Gt removal "></r-svg-text>
+
+                <r-svg-path :data="[[year, -20],[year, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-node :x="year" :y="20" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+                <r-svg-text :x="year+0.4" :y="22" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-text :x="year+2.4" :y="22" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+                <r-svg-text :x="year+0.4" :y="18" text="Removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-text :x="year+5.7" :y="18" :text="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
+
+
+                <r-svg-eqn eqn="37.7*((1-(emissionReductionRate/100)) ** x)" :listen="{emissionReductionRate}" stroke="#2ca02c"></r-svg-eqn>
+                <r-svg-eqn eqn="-carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
+                <r-svg-eqn eqn="37.7*((1-(emissionReductionRate/100)) ** x) -carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#000000" stroke-width="2"></r-svg-eqn>
+            </r-svg-chart>
+
+            <!-- chart value margin note -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="yearsUntilTenDollars">
+                Emission reduction rate:
+                <r-dynamic class="emissionReductionRate" onmouseover="hoverByClass('emissionReductionRate','#E4FFED')" 
+                bind="emissionReductionRate" after="%" min="-20" max="100" step="0.01"></r-dynamic> 
+                <br><br>
+                Carbon removal growth rate:
+                <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
+                bind="carbonRemovalRate" after="%" min="0" max="100" step="0.01"></r-dynamic> 
+                <br>
+                Carbon removal learning rate:
+                <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
+                bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
+                <br><br>
+                Current removal cost: <cost-per-ton></cost-per-ton> 
+                <br>
+                Current carbon removal:
+                <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
+                bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.001"></r-dynamic> 
+                <br>
+            </span>
+
+            <!-- net zero cost chart -->
+            <r-svg-chart xlabel="Time" ylabel="Cost ($bn)" xlim="[0,40]" :ylim="[0, maxCostYAxis]" width="700" height="300" x-axis-location="origin" y-axis-location="3">
+
+                <r-svg-path :data="[[10, 0],[10, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="10" :y="maxCostYAxis*0.8" text="2030" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-path :data="[[20, 0],[20, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="20" :y="maxCostYAxis*0.8" text="2040" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-path :data="[[30, 0],[30, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-text :x="30" :y="maxCostYAxis*0.8" text="2050" :listen="maxCostYAxis"></r-svg-text>
+
+                <r-svg-path :data="[[year, 0],[year, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-node :x="year" :y="maxCostYAxis/2" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*1.1" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-text :x="year+2.4" :y="(maxCostYAxis/2)*1.1" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*0.9" text="$" :listen="maxCostYAxis"></r-svg-text>
+                <r-svg-text :x="year+0.8" :y="(maxCostYAxis/2)*0.9" :text="removalCostInGivenYeaer.toPrecision(4)" ></r-svg-text>
+                <r-svg-text :x="year+3" :y="(maxCostYAxis/2)*0.9" text="bn" :listen="maxCostYAxis"></r-svg-text>
+
+                <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x) * costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate,costperton,dacLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
+            </r-svg-chart>
+
+            There are a few key points I think are worth pointing out based on the charts above. 
+
+          </p>
 
         <h2 id="support">Support</h2>
         <p>
@@ -364,6 +462,7 @@
         <a href="#measurements"><p>Measurements</p></a>
         <a href="#scale"><p>Scale</p></a>
         <a href="#costCurve"><p>Cost curves</p></a>
+        <a href="#netZeroCosts"><p>Net zero costs</p></a>
         <a href="#support"><p>Support</p></a>
         <a href="#acknowledgements"><p>Acknowledgements</p></a>
       </div>

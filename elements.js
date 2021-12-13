@@ -58,8 +58,8 @@ customElements.define('reactive-val-example-text', ReactiveValExampleText);
 class CostPerTon extends HTMLElement {
     connectedCallback() {
       this.innerHTML = /*html*/`
-      <r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
-      bind="costperton" after=" dollars per tonne" min="0" max="1000"></r-dynamic> 
+      $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+      bind="costperton" after=" per tonne" min="0" max="1000"></r-dynamic> 
       `;
     }
   }
