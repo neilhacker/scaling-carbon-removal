@@ -9,8 +9,5 @@ There are two different sources I'm using to get the effect I want.
 - tuffte css (https://github.com/edwardtufte/tufte-css) is being used to get the calculations to show up to the side of the text.
 
 ## Result
-https://user-images.githubusercontent.com/39994403/145275142-13aea925-e823-4704-b74f-b180859ea6bf.mov
+Go here for a short screen recording of the site if you want to see it (as of 12/12/21) https://drive.google.com/file/d/1jsEbwuG7ed0V5gjWy8V7brorQYpphcnF/view?usp=sharing
 
-*This content is from https://cognitivemedium.com/dac-notes
-
-The user facing results are actually pretty good, edititing the code though is a pain as for number heavy paragraphs you need to include many tags and components. Also currently sidenotes are inline so very much break up the reading of the document when editing.
