@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
-    <title>Notes on DAC</title>
+    <title>Scaling carbon removal</title>
     <link rel="stylesheet" href="tufte.css"/>
     <!-- <link rel="stylesheet" href="latex.css"/> -->
     <link rel="stylesheet" href="curvenote.css">
@@ -11,7 +11,7 @@
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <script async src="https://unpkg.com/@curvenote/article"></script>
 
-    <script type="text/javascript" src="dac.js"></script>
+    <script type="text/javascript" src="helpers.js"></script>
     <script type="text/javascript" src="elements.js"></script>
     <script type="text/javascript" src="sidenote.js"></script>
 
@@ -101,7 +101,7 @@
           and the calculation used to compute them will show up to the side.
         </p>
 
-        <h2 id="measurements">Measurements</h2>
+        <h2 id="measurements">Measurements & Terms</h2>
         <p>
             Country emission values are <b>consumption</b>
                 <sup>1</sup>
@@ -132,6 +132,7 @@
         <h2 id="scale">Scale</h2>
         <h3>Scale of emissions</h3>
         <p>
+            <!-- scale of emissions margin graph -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="emissionsComparison">
@@ -209,6 +210,7 @@
         <p>
             <oil-demand-cost-2019-sidenote></oil-demand-cost-2019-sidenote>
 
+            <!-- scale of costs margin graph -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="yearsUntilTenDollars">
@@ -277,7 +279,6 @@
             <quantity-of-co2></quantity-of-co2> million tonnes then the total cost of this would be <total-removal-cost></total-removal-cost>
             million (<total-removal-cost-billions></total-removal-cost-billions> billion).
         </p>
-
 
         <h2 id="costCurve">Cost curves</h2>
         <p>
@@ -475,11 +476,40 @@
                 <li>From current levels carbon removal needs to grow on the order of 35%-40% a year to reach 
                     10Gt of CO₂ removal by 2050. This is a truly massive scale up operation!
                 </li>
-                <li>Milk</li>
+                <li>While the learning rate for carbon removal won't change actual emissions it has a massive effect
+                    on how much we will spend. Breaking through 10Gt at 2050 will cost around 430bn with a 5% learning rate
+                    but only around 85bn with a 10% learning rate. 
+                </li>
             </ol>
-             
+        </p>
 
-          </p>
+        <h2 id="portfolio">Portfolio of approaches</h2>
+        <p>
+            The above examples are, necessarily, an oversimplification. One big one is to treat 'carbon removal'
+            as an almost homogeneous group that has a single cost curve. In reality there are many different
+            technologies all capable of removing CO₂ from the atmosphere and they all exhibit differences in 
+            how large the can likely scale to, how quickly they can scale, how expensive they are today and how 
+            much we might expect them to get cheaper in the future (cost curves). For example, as far as different sources
+            of carbon removal go there are:
+        </p>
+
+        <ol>
+            <li>Forests </li>
+            <li>Direct Air Capture</li>
+            <li>Bioenergy with carbon capture and storage </li>
+            <li>Soil</li>
+            <li>Blue Carbon </li>
+            <li>Enhanced Weathering</li>
+        </ol>
+
+        <p>
+            These all come with different tradeoffs, for example while forests can remove a tonne of carbon much more
+            cheaply than many alternatives if you want to scale them up you run up against actual available land 
+            quantities. DAC doesn't take up much land at all but is currently one of the more expensive options and
+            also requires a lot of energy. That being said the more technological solutions are also the ones that might
+            benefit the most from learning effects helping to reduce their costs over time. 
+        </p>
+
 
         <h2 id="support">Support</h2>
         <p>
