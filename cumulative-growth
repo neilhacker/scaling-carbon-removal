@@ -1,0 +1,15 @@
+This is just a note on how cumulative growth (i.e of tonnes of carbon removed) was calculated:
+
+we have:
+y = C * r^x
+
+y = tonnes removed at time x
+C = tonnes removed at time 0 (current tonnes removed)
+r = rate of growth of tonnes removed (20% increase a year -> r=1.2)
+x = year &or time
+
+we want to calculate ∑Cr^x from 0 to n
+
+= C * (1-r^(n+1))/(1-r)
+
+

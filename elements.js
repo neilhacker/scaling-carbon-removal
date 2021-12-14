@@ -136,6 +136,84 @@ class PercCostDecrText extends HTMLElement {
 }
 customElements.define('perc-cost-decr-text', PercCostDecrText);
 
+// ####################### Low cost tech cost per ton #######################
+class LowCostTechCostPerTon extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-dynamic class="lowCostTechCostPerTon" onmouseover="hoverByClass('lowCostTechCostPerTon','#E4FFED')" 
+    bind="lowCostTechCostPerTon" after="" min="0" max="200" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('low-cost-tech-cpt', LowCostTechCostPerTon);
+
+// ####################### Low cost tech current tons removed #######################
+class LowCostTechCurrentRemoval extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="lowCostTechCurrentRemoval" onmouseover="hoverByClass('lowCostTechCurrentRemoval','#E4FFED')" 
+    bind="lowCostTechCurrentRemoval" after="" min="0" max="200" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('low-cost-tech-current-removal', LowCostTechCurrentRemoval);
+
+// ####################### Low cost tech learning rate #######################
+class LowCostTechLearningRate extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="lowCostTechLearningRate" onmouseover="hoverByClass('lowCostTechLearningRate','#E4FFED')" 
+    bind="lowCostTechLearningRate" after="%" min="0" max="100" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('low-cost-tech-learning-rate', LowCostTechLearningRate);
+
+// ####################### High cost tech cost per ton #######################
+class HighCostTechCostPerTon extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    $<r-dynamic class="highCostTechCostPerTon" onmouseover="hoverByClass('highCostTechCostPerTon','#E4FFED')" 
+    bind="highCostTechCostPerTon" after="" min="0" max="200" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('high-cost-tech-cpt', HighCostTechCostPerTon);
+
+// ####################### High cost tech current tons removed #######################
+class HighCostTechCurrentRemoval extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="highCostTechCurrentRemoval" onmouseover="hoverByClass('highCostTechCurrentRemoval','#E4FFED')" 
+    bind="highCostTechCurrentRemoval" after="" min="0" max="200" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('high-cost-tech-current-removal', HighCostTechCurrentRemoval);
+
+// ####################### High cost tech learning rate #######################
+class HighCostTechLearningRate extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="highCostTechLearningRate" onmouseover="hoverByClass('highCostTechLearningRate','#E4FFED')" 
+    bind="highCostTechLearningRate" after="%" min="0" max="100" step="0.1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('high-cost-tech-learning-rate', HighCostTechLearningRate);
+
+// ####################### Percent Carbon From Low Cost Tech #######################
+class PercCarbonFromLowCostTech extends HTMLElement {
+  connectedCallback() {
+    this.innerHTML = /*html*/`
+    <r-dynamic class="percCarbonFromLowCostTech" onmouseover="hoverByClass('percCarbonFromLowCostTech','#E4FFED')" 
+    bind="percCarbonFromLowCostTech" after="%" min="0" max="100" step="1"></r-dynamic> 
+`;
+  }
+}
+customElements.define('perc-carbon-from-low-cost-tech', PercCarbonFromLowCostTech);
+
+
 
 // ###################################################################################################################
 // ############################################## Calculated VALUES ##################################################
