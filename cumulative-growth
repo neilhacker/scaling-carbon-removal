@@ -12,4 +12,18 @@ we want to calculate ∑Cr^x from 0 to n
 
 = C * (1-r^(n+1))/(1-r)
 
+---------------
+For the unit cost for a technology at time n given the cumulative volume is given by above 
+
+Cx = C1 * x ^log2(b) 
+b = 1-l 
+l = learning rate
+
+if we have that the tech costs Cx at x cumulative units then to rearrage for C1 we have 
+C1 = Cx/x ^log2(b) 
+
+to calculate the unit cost curve at time n we find the cumulative units at time n and then 
+plug this in as x
+
+Cn = C1 * (C * (1-r^(n+1))/(1-r))^log2(b) 
 

@@ -10,6 +10,8 @@
 
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <script async src="https://unpkg.com/@curvenote/article"></script>
+    <!-- <script async src="https://unpkg.com/@curvenote/svg"></script> -->
+
 
     <script type="text/javascript" src="helpers.js"></script>
     <script type="text/javascript" src="elements.js"></script>
@@ -93,6 +95,7 @@
       <r-var name="lowCostTechCostPerTon" value="50" format=".5"></r-var>
       <r-var name="lowCostTechCurrentRemoval" value="1000000" format=".8"></r-var>
       <r-var name="lowCostTechLearningRate" value="2" format=".5"></r-var>
+      <r-var name="lowCostTechWrightsLawStartVal" value="lowCostTechCostPerTon/(lowCostTechCurrentRemoval ** Math.log2(1-lowCostTechLearningRate/100))" format=".5"></r-var>
 
 
       <r-var name="highCostTechCostPerTon" value="500" format=".5"></r-var>
@@ -581,7 +584,7 @@
 
           <!-- wrigths law curve demo graph -->
           <p style="text-align: center;">
-            <r-svg-chart xlabel="Cumulative tonnes removed" ylabel="Unit Price" xlim="[0,10000000000]" :ylim="[0, wrightLearningCurveStartVal*1.5]" width="700" height="400" x-axis-location="origin" y-axis-location="origin">
+            <r-svg-chart xlabel="Cumulative tonnes removed" ylabel="Unit Price" :xlim="[1,10000000000]" :ylim="[1, wrightLearningCurveStartVal*1.5]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
               <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
 
             </r-svg-chart>
@@ -591,165 +594,6 @@
             This all ties in to something we'll look at again below, and thant is the benefits of not simply buying what is 
             cheapest today but considering how prices for different carbon removal technologies might change over time.
             <br><br>
-            Let's say that you have two technologies that can both remove CO₂ from the atmosphere. They differ in two main 
-            ways though, one (<b>Option A</b>) has a low current cost per tonne of <low-cost-tech-cpt></low-cost-tech-cpt> 
-            to remove <low-cost-tech-current-removal></low-cost-tech-current-removal> tonnes but it also 
-            has a very low learning rate of <low-cost-tech-learning-rate></low-cost-tech-learning-rate> i.e it won't see much 
-            decrease from its current cost level as use of it scales up. The other technology (<b>Option B</b>) however is 
-            starting from a higher current cost per tonne of <high-cost-tech-cpt></high-cost-tech-cpt> to remove 
-            <high-cost-tech-current-removal></high-cost-tech-current-removal> tonnes but also has a higher learning rate of 
-            <high-cost-tech-learning-rate></high-cost-tech-learning-rate>. This means that it will see steeper declines in 
-            cost if we scale up its usage. Now let's suppose we ramp up the scale of carbon removal from a 
-            baseline today of <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
-            bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.0001"></r-dynamic>
-            by 
-            <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
-            bind="carbonRemovalRate" after="%" min="0" max="100" step="0.01"></r-dynamic>
-             a year. How will changing our mixture between using these different technologies
-            effect costs?
-            <br><br>
-            Suppose we procure <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech> of carbon removal 
-            from technology A and the rest from technology B. Over time then the
-            costs will look like this: (click <b>here</b> to see cumulative tonnes removed, & therefore cost per tonne decreases,
-            by technogy A and <b>here</b> for technology B)
-
-            <!-- cumulative tons for tech A MARGIN note -->
-            <label for="mn-demo" class="margin-toggle">&#8853;</label>
-            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="yearsUntilTenDollars">
-                <br><br><br><br>
-                % removal from technology A: <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech>
-                <br>
-                % increase annual carbon removal: 
-                <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
-                bind="carbonRemovalRate" after="%" min="0" max="100" step="1"></r-dynamic>
-                <br>
-
-                <b>Cumulative tonnes for tech A</b>
-                <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
-
-                  <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-                  <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-                  <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-  
-                  <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-  
-                  <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                  <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-  
-                  <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
-                  <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-  
-                  <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
-                  " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
-    
-                  <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
-                </r-svg-chart>
-                <br>
-                <b>Unit cost per tonne for tech A</b>
-                <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
-
-                  <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-                  <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-                  <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-  
-                  <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                  <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-  
-                  <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                  <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-  
-                  <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
-                  <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-  
-                  <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
-                  " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
-    
-                  <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
-                </r-svg-chart>
-                <br>
-
-            </span>
-
-
-            <!-- portfolio of tech carbon cost timeline chart -->
-            <r-svg-chart xlabel="Time" ylabel="Cost ($bn)" xlim="[0,40]" :ylim="[0, maxCostYAxis]" width="700" height="250" x-axis-location="origin" y-axis-location="3">
-
-                <r-svg-path :data="[[10, 0],[10, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="10" :y="maxCostYAxis*0.8" text="2030" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-path :data="[[20, 0],[20, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="20" :y="maxCostYAxis*0.8" text="2040" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-path :data="[[30, 0],[30, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="30" :y="maxCostYAxis*0.8" text="2050" :listen="maxCostYAxis"></r-svg-text>
-
-                <r-svg-path :data="[[year, 0],[year, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-node :x="year" :y="maxCostYAxis/2" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*1.1" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+2.4" :y="(maxCostYAxis/2)*1.1" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*0.9" text="Cost ($bn):" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+4.6" :y="(maxCostYAxis/2)*0.9" text="$" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+5.1" :y="(maxCostYAxis/2)*0.9" :text="removalCostInGivenYeaer.toPrecision(4)" ></r-svg-text>
-
-                <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x) * costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate,costperton,dacLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
-            </r-svg-chart>
-
-            <!-- portfolio of tech ANNUAL carbon removal timeline chart -->
-            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
-
-                <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-                <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-                <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-                <r-svg-path :data="[[0, 10],[40, 10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="2" y="9" text="10Gt removal "></r-svg-text>
-
-                <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-                <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+2.4" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-                <r-svg-text :x="year+0.4" :y="4" text="Removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+5.7" :y="4" :text="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-                <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
-            </r-svg-chart>
-
-            <!-- portfolio of tech CUMULATIVE carbon removal timeline chart -->
-            <r-svg-chart xlabel="Time" ylabel="Cumulative Gt" xlim="[0,40]" :ylim="[0, cumulativeTonsRemovedBy2050*1.2]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
-
-              <r-svg-path :data="[[10, 0],[10, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="10" :y="cumulativeTonsRemovedBy2050*0.8" text="2030 "></r-svg-text>
-              <r-svg-path :data="[[20, 0],[20, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="20" :y="cumulativeTonsRemovedBy2050*0.8" text="2040 "></r-svg-text>
-              <r-svg-path :data="[[30, 0],[30, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="30" :y="cumulativeTonsRemovedBy2050*0.8" text="2050 "></r-svg-text>
-
-              <r-svg-path :data="[[year, -20],[year, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-node :x="year" :y="cumulativeTonsRemovedBy2050*0.3" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-              <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.35" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+2.4" :y="cumulativeTonsRemovedBy2050*0.35" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-              <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.25" text="Cumulative removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+9.7" :y="cumulativeTonsRemovedBy2050*0.25" 
-              :text="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(year+1))) / (1-(1+(carbonRemovalRate/100)))).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-              <r-svg-eqn eqn="carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100)))
-              " :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
-
-          </r-svg-chart>
           </p>
 
         <h2 id="portfolio">Portfolio of approaches</h2>
@@ -760,8 +604,8 @@
             how large the can likely scale to, how quickly they can scale, how expensive they are today and how 
             much we might expect them to get cheaper in the future (cost curves). For example, as far as different sources
             of carbon removal go there are:
+        
         </p>
-
         <ol>
             <li>Forests </li>
             <li>Direct Air Capture</li>
@@ -784,6 +628,168 @@
             might be the best in the longer run. 
         </p>
 
+        <h2 id="portfolioExample">Simple portfolio example</h2>
+        <p>
+        Let's say that you have two technologies that can both remove CO₂ from the atmosphere. They differ in two main 
+        ways though, one (<b>Option A</b>) has a low current cost per tonne of <low-cost-tech-cpt></low-cost-tech-cpt> 
+        to remove <low-cost-tech-current-removal></low-cost-tech-current-removal> tonnes but it also 
+        has a very low learning rate of <low-cost-tech-learning-rate></low-cost-tech-learning-rate> i.e it won't see much 
+        decrease from its current cost level as use of it scales up. The other technology (<b>Option B</b>) however is 
+        starting from a higher current cost per tonne of <high-cost-tech-cpt></high-cost-tech-cpt> to remove 
+        <high-cost-tech-current-removal></high-cost-tech-current-removal> tonnes but also has a higher learning rate of 
+        <high-cost-tech-learning-rate></high-cost-tech-learning-rate>. This means that it will see steeper declines in 
+        cost if we scale up its usage. Now let's suppose we ramp up the scale of carbon removal from a 
+        baseline today of <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
+        bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.0001"></r-dynamic>
+        by 
+        <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
+        bind="carbonRemovalRate" after="%" min="0" max="100" step="0.01"></r-dynamic>
+         a year. How will changing our mixture between using these different technologies
+        effect costs?
+        <br><br>
+        Suppose we procure <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech> of carbon removal 
+        from technology A and the rest from technology B. Over time then the
+        costs will look like this: (click <b>here</b> to see cumulative tonnes removed, & therefore cost per tonne decreases,
+        by technogy A and <b>here</b> for technology B)
+
+        <!-- cumulative tons for tech A MARGIN note -->
+        <label for="mn-demo" class="margin-toggle">&#8853;</label>
+        <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+        <span class="marginnote" id="yearsUntilTenDollars">
+            <br><br><br><br>
+            % removal from technology A: <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech>
+            <br>
+            % increase annual carbon removal: 
+            <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
+            bind="carbonRemovalRate" after="%" min="0" max="100" step="1"></r-dynamic>
+            <br>
+
+            <b>Cumulative tonnes for tech A</b>
+            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
+
+              <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
+              <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
+              <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
+
+              <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+              <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+              <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+              <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
+              <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
+
+              <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
+              " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
+
+              <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
+            </r-svg-chart>
+            <br>
+            <b>Unit cost per tonne for tech A</b>
+            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
+
+              <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
+              <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
+              <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
+
+              <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+              <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+              <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+              <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+              <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
+              <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
+
+              <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
+              " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
+
+              <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
+            </r-svg-chart>
+            <br>
+
+        </span>
+
+
+        <!-- portfolio of tech carbon cost timeline chart -->
+        <r-svg-chart xlabel="Time" ylabel="Cost ($bn)" xlim="[0,40]" :ylim="[0, maxCostYAxis]" width="700" height="250" x-axis-location="origin" y-axis-location="3">
+
+            <r-svg-path :data="[[10, 0],[10, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="10" :y="maxCostYAxis*0.8" text="2030" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-path :data="[[20, 0],[20, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="20" :y="maxCostYAxis*0.8" text="2040" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-path :data="[[30, 0],[30, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="30" :y="maxCostYAxis*0.8" text="2050" :listen="maxCostYAxis"></r-svg-text>
+
+            <r-svg-path :data="[[year, 0],[year, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-node :x="year" :y="maxCostYAxis/2" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+            <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*1.1" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-text :x="year+2.4" :y="(maxCostYAxis/2)*1.1" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+            <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*0.9" text="Cost ($bn):" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-text :x="year+4.6" :y="(maxCostYAxis/2)*0.9" text="$" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-text :x="year+5.1" :y="(maxCostYAxis/2)*0.9" :text="removalCostInGivenYeaer.toPrecision(4)" ></r-svg-text>
+
+            <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x) * costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate,costperton,dacLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
+        </r-svg-chart>
+
+        <!-- portfolio of tech ANNUAL carbon removal timeline chart -->
+        <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
+
+            <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
+            <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
+            <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
+            <r-svg-path :data="[[0, 10],[40, 10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-text :x="2" y="9" text="10Gt removal "></r-svg-text>
+
+            <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+            <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+            <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-text :x="year+2.4" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+            <r-svg-text :x="year+0.4" :y="4" text="Removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
+            <r-svg-text :x="year+5.7" :y="4" :text="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
+
+            <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
+        </r-svg-chart>
+
+        <!-- portfolio of tech CUMULATIVE carbon removal timeline chart -->
+        <r-svg-chart xlabel="Time" ylabel="Cumulative Gt" xlim="[0,40]" :ylim="[0, cumulativeTonsRemovedBy2050*1.2]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
+
+          <r-svg-path :data="[[10, 0],[10, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+          <r-svg-text :x="10" :y="cumulativeTonsRemovedBy2050*0.8" text="2030 "></r-svg-text>
+          <r-svg-path :data="[[20, 0],[20, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+          <r-svg-text :x="20" :y="cumulativeTonsRemovedBy2050*0.8" text="2040 "></r-svg-text>
+          <r-svg-path :data="[[30, 0],[30, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+          <r-svg-text :x="30" :y="cumulativeTonsRemovedBy2050*0.8" text="2050 "></r-svg-text>
+
+          <r-svg-path :data="[[year, -20],[year, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+          <r-svg-node :x="year" :y="cumulativeTonsRemovedBy2050*0.3" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+
+          <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.35" text="Year:" :listen="maxCostYAxis"></r-svg-text>
+          <r-svg-text :x="year+2.4" :y="cumulativeTonsRemovedBy2050*0.35" :text="(year+2020).toPrecision(4)" ></r-svg-text>
+
+          <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.25" text="Cumulative removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
+          <r-svg-text :x="year+9.7" :y="cumulativeTonsRemovedBy2050*0.25" 
+          :text="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(year+1))) / (1-(1+(carbonRemovalRate/100)))).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
+
+          <r-svg-eqn eqn="carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100)))
+          " :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
+
+      </r-svg-chart>
+      </p>
 
         <h2 id="support">Support</h2>
         <p>
@@ -839,6 +845,7 @@
         <a href="#netZeroCosts"><p>Net zero costs</p></a>
         <a href="#wright"><p>Wright's law</p></a>
         <a href="#portfolio"><p>Portfolio approach</p></a>
+        <a href="#portfolioExample"><p>Portfolio example</p></a>
         <a href="#support"><p>Support</p></a>
         <a href="#acknowledgements"><p>Acknowledgements</p></a>
       </div>

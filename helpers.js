@@ -1,5 +1,30 @@
 
 
+/*function to calculate cumulative cost of scale increases*/
+// SUM[n,k] C1 k^log2(b) 
+// k is start cumulative volume
+//  n is end cumuluative volume
+function cumulativeCost(k, n, c1, l) {
+    const b = 1- l/100
+    Qb = Math.ceil(n)
+
+    console.log(k)
+    console.log(Qb)
+    console.log(c1)
+    console.log(Math.log2(b))
+
+    var totalCost = 0
+    for (let i = k; i < Qb+1; i++) {
+        var unitCost =  i ** Math.log2(b)
+        totalCost += unitCost
+    }
+    totalCost = totalCost * c1
+    totalCost = Math.ceil(totalCost)
+    // document.getElementById("scaleCost").innerHTML = totalCost;
+    document.getElementById("scaleCost").innerHTML = "$"+totalCost.toLocaleString();
+
+}
+
 /*function to hide/show sidebar*/
 function sidebar(idTag) {
     console.log(idTag)

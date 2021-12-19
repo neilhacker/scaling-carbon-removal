@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Scaling carbon removal</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <!-- <link rel="stylesheet" href="latex.css"/> -->
+    <link rel="stylesheet" href="curvenote.css">
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+    <!-- <script async src="https://unpkg.com/@curvenote/svg"></script> -->
+
+
+    <script type="text/javascript" src="helpers.js"></script>
+    <script type="text/javascript" src="elements.js"></script>
+    <script type="text/javascript" src="sidenote.js"></script>
+
+
+  </head>
+
+  <body>    
+
+    <div class="wrapper">
+
+    <article>
+      
+        <!-- wrights law curve example -->
+      <!-- wrightLearningCurveStartVal = Cx/(x^log(2,b)) where b = 1-1/wrightLearningCurve -->
+      <r-var name="wrightLearningCurveStartValExample" :value="600/((10)**(Math.log(1-(20/100))/Math.log(2)))" format=".9"></r-var>
+      <r-var name="wrightLearningCurveStartVal" :value="costperton/((carbonRemovalAmount)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+
+      <r-var name="wrightLearningCurve" value="20" format=".5"></r-var>                 <!-- L -->
+      <r-var name="costperton" value="600" format=".5"></r-var>                         <!-- Ca -->
+      <r-var name="costpertonLow" value="100" format=".5"></r-var>                      <!-- Cb -->
+      <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    <!-- Qa -->
+      <r-var name="wrightsLawC1" :value="costperton /cumulativeCarbonRemovalAmount ** Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+      <r-var name="log2b" :value="Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+
+      <!-- Qb -->
+      <r-var name="scaleIncreaseToNewCost" :value="(costpertonLow/wrightsLawC1) ** (1/Math.log2(1-(wrightLearningCurve/100)))" format=",.0f"></r-var>
+      <!-- Cx = C1 x^log2(b) -->
+      <!-- C1 = Cx /x^log2(b) -->
+      <!-- C1 = costperton /cumulativeCarbonRemovalAmount^log2(b) -->
+      <!-- x = (Cx/C1)^(1/log2(b)) -->
+      <!-- x = (costpertonLow/C1)^(1/log2(b)) -->
+      <!-- x = (costpertonLow/(costperton /cumulativeCarbonRemovalAmount^log2(b)))^(1/log2(b)) -->
+
+
+      <r-var name="carbonRemovalAmount" value="10" format=",.6"></r-var>
+
+
+
+      <r-var name="doublingsToReduce50Prec" :value="(Math.log(0.5)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
+      <r-var name="doublingsToReduce90Prec" :value="(Math.log(0.1)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
+      <r-var name="doublingsToReduce99Prec" :value="(Math.log(0.01)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
+
+      <r-var name="volIncreaseToReduce50Prec" :value="(2 ** doublingsToReduce50Prec).toPrecision(3)" format=".6"></r-var>
+      <r-var name="volIncreaseToReduce90Prec" :value="(2 ** doublingsToReduce90Prec).toPrecision(5)" format=".6"></r-var>
+      <r-var name="volIncreaseToReduce99Prec" :value="(2 ** doublingsToReduce99Prec).toPrecision(8)" format=".6"></r-var>
+
+      <r-var name="volIncrease" value="10" format=".6"></r-var>
+      <r-var name="precCostReductionDueToVolIncrease" :value="(100-(volIncrease ** (Math.log2(1-(wrightLearningCurve/100))) * 100)).toPrecision(3)" format=".6"></r-var>
+    
+      <r-var name="sliderStep" value="1" format=".0f"></r-var>
+
+          <!-- This is here to allow the cumulative cost function to work, it reads in the C1 value based on a 
+            tag with the  wrightsLawC1 class so this needs to exist somewhere-->
+          <r-display style="display:none" class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+          bind="wrightsLawC1" ></r-display>
+        
+
+
+
+
+      <section>
+
+        <h1 id="measurements">Interactive introduction to cost curves</h1>
+                    
+        <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="hi">
+                We can use the equation \(C_x = C_1 x^{log_2(b)} \).
+                Going through each part of this we have:  <br>
+                \(C_x \) as the cost of the \(x^{th} \) unit <br>
+                \(C_1 \) is the cost of the \(1^{st} \) unit <br> 
+                \(b = 1- l \) where \( l \) is the learning rate, the decimal verion of the % decrease in cost per doubling of cumulative volume i.e 20% → 0.2 <br>
+                <br> 
+                Let's apply this to our example above. Now we don't know \(C_1 \) but there is a way to calculate it if you know 
+                what \(C_x \) for some value of \(x \) and the learning rate \(l \). If you do some rearranging you get 
+                \(C_1 = \dfrac{C_x}{x^{log_2(b)}} \). In our example the learning rate = 20% so \(b = 1- l  = 1 - 0.2 = 0.8\)
+                we also know that when \(x = 10 \) then \(C_x = 1000 \). Putting this all together we can get 
+                \(C_1 = \dfrac{1000}{10^{log_2(0.8)}} = 2098.6\). We can then plug this into our original equation to get the 
+                general form of \(C_x = 2098.6 x^{log_2(0.8)} \) and this is the equation of the line you see on the graph.
+                
+            </span> 
+
+            A cost curve is a way of looking at the unit cost of a technology and how this changes as we scale up the production
+            of this technology. Typically this involves describing the % decrease in unit price for a doubling in the 
+            cumulative volume of this technology, we then call this % decrease in cost the learning rate. For example if a 
+            technology gets 20% cheaper every time we double the cumulative volume of units made then it has a learning rate of 20%.
+            If you want more info you can run through an example below or or click <b onclick="sidebar('hi')">here</b> to see how 
+            we calculate the curve. 
+            <br><br>
+            Step: <r-dynamic bind="sliderStep" :min="1" max="4" step="1"></r-dynamic>
+            
+        </p>
+
+        <p>
+            <r-visible :visible="sliderStep == 1" hidden="">
+                Let's say we are currently producing 10 units of a good at a price of $600 per unit.
+            </r-visible>
+
+            <r-visible :visible="sliderStep == 2" hidden="">
+                Over time we increase the total cumualtive units made first to 20 units then to 40 units. Each doubling of cumulative units
+                is associated with a 20% decrease in the per unit price of this good. 
+            </r-visible>
+
+            <r-visible :visible="sliderStep == 3" hidden="">
+                We can then use these historic decreases in cost to forecast what the costs might look like in the future if this trend was 
+                to continue.
+            </r-visible>
+
+            <r-visible :visible="sliderStep == 4" hidden="">
+                Now lets see how different learning curves change our prices as we scale up. We'll keep the same first quantity,price 
+                pair of 10 units at $600 per unit, try chaning the learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                 to see how our price forecasts change.
+            </r-visible>
+
+            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,1000]" :ylim="[1, sliderStep == 4? wrightLearningCurveStartVal*1.2 : 2000]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
+                <r-svg-node :x="10" :y="600" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="10" y="600" text="$600 "></r-svg-text>
+
+                <r-svg-node :x="20" :y="sliderStep == 2 || sliderStep == 3? 480 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="20" :y="sliderStep == 2 || sliderStep == 3? 480 : 0.5" text="$480 "></r-svg-text>
+
+                <r-svg-node :x="40" :y="sliderStep == 2 || sliderStep == 3? 384 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="40" :y="sliderStep == 2 || sliderStep == 3? 384 : 0.5" text="$384 "></r-svg-text>
+
+                <r-svg-eqn eqn="sliderStep == 3? wrightLearningCurveStartValExample *(x ** (Math.log(1-(20/100))/Math.log(2))) : 0 " :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+
+                <!-- step 4 -->
+                <r-svg-eqn eqn="sliderStep == 4 ? wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))): 0" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+                <r-svg-node :x="20" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="20" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" :text="(wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))).toPrecision(3) "></r-svg-text>
+
+                <r-svg-node :x="40" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="40" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" :text="(wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))).toPrecision(3) "></r-svg-text>
+
+            </r-svg-chart>
+
+
+        </p>
+
+        <p>
+            What learning rates have various technologies actually seen in the past? Consider the following:
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="learning curve examples">
+            <!-- unused link
+            https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2006/2006rb%20Rubin%20et%20al,%20IEAGHG%202006-6.pdf -->
+
+          <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+          <b style="color: #5de28b">Nuclear power plants</b> from 1975-93 in OECD countries. It is worth noting 
+          that from 2010 to today though Nuclear has seen cost increases instead.
+          <br>
+          <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+          <!-- https://ourworldindata.org/cheap-renewables-growth -->
+          <b style="color: #5ebbe0">Japanese Air conditioners</b> from 1972-97, resulting in a 57% decrease
+          in costs.
+          <br>
+          <!-- https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2015/A%20review%20of%20learning%20rates%20for%20electricity%20supply%20technologies.pdf -->
+          <b style="color: #aa5ee0">Gas turbine power plants</b> from 1958-90
+          <br>
+          <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+          <b style="color: #e05e7e">Wind power</b> in OECD countries between 1981-95
+          <br>
+          <!-- https://ourworldindata.org/battery-price-decline -->
+          <b style="color: #e09f5e">Lithium ion batteries</b> from 1991. Given that it's seen cumulative capacity, 
+          measured in watt-hours, increase nealy 100,000 times (or around 16.5 doublings) this has lead to a cost
+          decrease of over 97%.
+          <br>
+          <!-- https://ourworldindata.org/cheap-renewables-growth -->
+          <b style="color: #e09f5e">Solar PV modules</b> from 1976. These have seen capacity 
+          increase over 1 million times, measured by watts, leading to a price decline of around 99.6%.
+          <br>
+          <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+          <b style="color: #d35ee0">Transistors</b> have had a truly remarkable journey 1954-2019 leading to price 
+          declines of many many orders of magnitude.                 
+            </span> 
+
+            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,100000]" :ylim="[1, 1000]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
+                <!-- <r-svg-node :x="10" :y="1000" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="10" y="1000" text="$1000 "></r-svg-text> -->
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(5.8/100))/Math.log(2)))" stroke="#5de28b"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" fill="#5de28b"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" text="5.8%"></r-svg-text>
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(10/100))/Math.log(2)))" stroke="#5ebbe0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" fill="#5ebbe0"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" text="10%"></r-svg-text>
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(15/100))/Math.log(2)))" stroke="#aa5ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" fill="#aa5ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" text="15%"></r-svg-text>
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(17/100))/Math.log(2)))" stroke="#e05e7e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" fill="#e05e7e"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" text="17%"></r-svg-text>
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(20/100))/Math.log(2)))" stroke="#e09f5e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" fill="#e09f5e"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" text="20%"></r-svg-text>
+
+                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(32/100))/Math.log(2)))" stroke="#d35ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" fill="#d35ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" text="32%"></r-svg-text>
+
+            </r-svg-chart>
+
+            This chart is meant to be illustrative. These technologies did not all start with a unit cost of $1000 and 
+            certaintly didn't all manage to continue scaling cumulative capacity the same amounts as each other, transistors
+            for example have scaled much more than anything else in this list and so have also seen much larger price declines. 
+            What this chart is meant to do is show the range of learning rates various other technologies have experienced at some 
+            point.
+            </p>
+
+            <h2>Scaling down costs</h2>
+            <p>
+                Suppose our unit costs currently are 
+                $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+                bind="costperton"  min="0" max="1000" step="1"></r-dynamic> 
+                after a cumulative volume of 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
+                tonnes of carbon removed. If we have a learning rate of 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                and we want to move our unit costs down to
+                $<r-dynamic class="costpertonLow" onmouseover="hoverByClass('costpertonLow','#E4FFED')" 
+                bind="costpertonLow"  min="0" max="1000" step="1"></r-dynamic> 
+                then we will need to scale up our cumulative volume of tonnes removed to 
+                <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+                bind="scaleIncreaseToNewCost" ></r-display>
+                 tonnes. 
+ 
+                 <br><br>
+                 <b 
+                 onclick="cumulativeCost(
+                     document.getElementsByClassName('cumulativeCarbonRemovalAmount')[0].value, /* Qa */
+                     document.getElementsByClassName('scaleIncreaseToNewCost')[0].value  , /* Qb */
+                     document.getElementsByClassName('wrightsLawC1')[0].value, /* c1 */
+                     document.getElementsByClassName('wrightLearningCurve')[0].value /* l */
+                     )">Click here</b> to see how much this would cost.
+
+                <b id="scaleCost"></b>
+
+            </p>
+
+           <p>
+          One thing we might want to consider is 
+          how much we have to scale cumulative production until our unit costs fall by various %'s from current prices.
+          You can play around with the graph below to see how our unit costs change as we scale up cumulative volume 
+          when we have a learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+          bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic> 
+          For example if we have a learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+          bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic> then it will take:
+          <br>
+
+
+
+          <r-display class="doublingsToReduce50Prec" onmouseover="hoverByClass('doublingsToReduce50Prec','#E4FFED')" 
+          bind="doublingsToReduce50Prec" ></r-display>
+          doublings of volume (<r-display class="volIncreaseToReduce50Prec" onmouseover="hoverByClass('volIncreaseToReduce50Prec','#E4FFED')" 
+          bind="volIncreaseToReduce50Prec" ></r-display>x)
+          for unit prices to fall by 50%
+          <br>
+          <r-display class="doublingsToReduce90Prec" onmouseover="hoverByClass('doublingsToReduce90Prec','#E4FFED')" 
+          bind="doublingsToReduce90Prec" ></r-display>
+          doublings of volume (<r-display class="volIncreaseToReduce90Prec" onmouseover="hoverByClass('volIncreaseToReduce90Prec','#E4FFED')" 
+          bind="volIncreaseToReduce90Prec" ></r-display>x)
+          for unit prices to fall by 90%
+          <br>
+          <r-display class="doublingsToReduce99Prec" onmouseover="hoverByClass('doublingsToReduce99Prec','#E4FFED')" 
+          bind="doublingsToReduce99Prec" ></r-display>
+          doublings of volume (<r-display class="volIncreaseToReduce99Prec" onmouseover="hoverByClass('volIncreaseToReduce99Prec','#E4FFED')" 
+          bind="volIncreaseToReduce99Prec" ></r-display>x)
+          for unit prices to fall by 99%
+
+          <label for="mn-demo" class="margin-toggle">&#8853;</label>
+          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+          <span class="marginnote" id="yearsUntilTenDollars">
+            Increase in cumulative volume: <r-display class="volIncrease" onmouseover="hoverByClass('volIncrease','#E4FFED')" 
+            bind="volIncrease" ></r-display>x
+            <br>
+            % decrease in unit cost: <r-display class="precCostReductionDueToVolIncrease" onmouseover="hoverByClass('precCostReductionDueToVolIncrease','#E4FFED')" 
+            bind="precCostReductionDueToVolIncrease" ></r-display>%
+            <br>
+            <r-display class="yval" onmouseover="hoverByClass('yval','#E4FFED')" 
+            bind="yval" ></r-display>
+  
+          </span>
+
+
+          <r-svg-chart xlabel="Increase in cumulative units" ylabel="Unit Price as % of original" :xlim="[1,volIncreaseToReduce99Prec]" :ylim="[1, 100]" x-axis-type="log" width="700" height="400"  y-axis-location="origin" x-axis-location="origin">
+            <r-svg-eqn eqn="x ** (Math.log2(1-(wrightLearningCurve/100))) * 100" :listen="{wrightLearningCurveStartVal,wrightLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
+
+            <r-svg-node :x="volIncrease" :y="50" :drag="{volIncrease: x}" fill="#ff7f0e"></r-svg-node>
+            <r-svg-path :data="[[volIncrease, 1],[volIncrease, 100]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+          </r-svg-chart>
+
+        </p>
+
+        <h2>Shots on goal</h2>
+        <blockquote>
+            <p>If we want to achieve a 90 percent probability of success, we must 
+                take into account historical rates of success from publicly available data; doing that suggests that we need to actively 
+                pursue not two or three vaccine candidates, but 15 to 20.</p>
+            <footer><a href="https://www.nytimes.com/2020/05/04/opinion/coronavirus-vaccine.html">Christopher Snyder and 
+                Alex Tabarrok on spreading out investments for a solution to covid 19</a></footer>
+          </blockquote>
+
+        <p>            
+
+              Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
+              how cheap they can get, and how much carbon they will ultimately be able to remove. In an ideal world we would 
+              know these things and be able to focus resources on the best solutions.  
+  
+        </p>
+        
+      
+      </section>
+    </article>
+
+    <!-- ##################### sidebar #####################-->
+    <div class="sidebar">
+      <div >
+        <a href="#top"><p>Scaling carbon removal</p></a>
+        <a href="#measurements"><p>Measurements</p></a>
+      </div>
+    </div>
+    
+  </div>  <!-- end of wrapper div -->
+  </body>
+</html>
