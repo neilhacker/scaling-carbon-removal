@@ -26,58 +26,216 @@
 
     <article>
       
+        <!--------------------------- ------------- -------------------------->
+        <!--------------------------- SCALE UP RATE -------------------------->
+        <!--------------------------- ------------- -------------------------->
+        <r-var name="currentCO2removal" value="10000" format=",.10"></r-var>                 
+        <r-var name="targetCO2removal" value="1000000000" format=",.10"></r-var>
+        <r-var name="co2removalScaleUp" :value="Math.trunc(targetCO2removal/currentCO2removal)" format=",.10"></r-var>
+        <r-var name="co2removalAnnualGrowthRate" :value="Math.trunc(((co2removalScaleUp ** (1/30))-1)*100)" format=".4"></r-var>
+
+        <!----------------------------- ----------- -------------------------->
+        <!----------------------------- COST CURVES -------------------------->
+        <!----------------------------- ----------- -------------------------->
         <!-- wrights law curve example -->
-      <!-- wrightLearningCurveStartVal = Cx/(x^log(2,b)) where b = 1-1/wrightLearningCurve -->
-      <r-var name="wrightLearningCurveStartValExample" :value="600/((10)**(Math.log(1-(20/100))/Math.log(2)))" format=".9"></r-var>
-      <r-var name="wrightLearningCurveStartVal" :value="costperton/((carbonRemovalAmount)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+        <!-- wrightLearningCurveStartVal = Cx/(x^log(2,b)) where b = 1-1/wrightLearningCurve -->
+        <r-var name="sliderStep" value="1" format=".0f"></r-var>
+        <r-var name="wrightLearningCurveStartValExample" :value="600/((10)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+        <r-var name="wrightLearningCurveStartVal" :value="costperton/((carbonRemovalAmount)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+        <r-var name="carbonRemovalAmount" value="10" format=",.6"></r-var>
 
-      <r-var name="wrightLearningCurve" value="20" format=".5"></r-var>                 <!-- L -->
-      <r-var name="costperton" value="600" format=".5"></r-var>                         <!-- Ca -->
-      <r-var name="costpertonLow" value="100" format=".5"></r-var>                      <!-- Cb -->
-      <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    <!-- Qa -->
-      <r-var name="wrightsLawC1" :value="costperton /cumulativeCarbonRemovalAmount ** Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
-      <r-var name="log2b" :value="Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+        <!-- values used to compute cumulative cost to move down cost curve -->
+        <r-var name="wrightLearningCurve" value="15" format=".5"></r-var>                 <!-- L -->
+        <r-var name="costperton" value="600" format=".5"></r-var>                         <!-- Ca -->
+        <r-var name="costpertonLow" value="100" format=".5"></r-var>                      <!-- Cb -->
+        <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    <!-- Qa -->
+        <r-var name="wrightsLawC1" :value="costperton /cumulativeCarbonRemovalAmount ** Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+        <r-var name="log2b" :value="Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+        <!-- Qb see Qb margin note for calculation detail if this is hard to decode -->
+        <r-var name="scaleIncreaseToNewCost" :value="(costpertonLow/wrightsLawC1) ** (1/Math.log2(1-(wrightLearningCurve/100)))" format=",.0f"></r-var>
+        <r-var name="totalCostToCb" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (scaleIncreaseToNewCost**(log2b+1)-(cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
 
-      <!-- Qb -->
-      <r-var name="scaleIncreaseToNewCost" :value="(costpertonLow/wrightsLawC1) ** (1/Math.log2(1-(wrightLearningCurve/100)))" format=",.0f"></r-var>
-      <!-- Cx = C1 x^log2(b) -->
-      <!-- C1 = Cx /x^log2(b) -->
-      <!-- C1 = costperton /cumulativeCarbonRemovalAmount^log2(b) -->
-      <!-- x = (Cx/C1)^(1/log2(b)) -->
-      <!-- x = (costpertonLow/C1)^(1/log2(b)) -->
-      <!-- x = (costpertonLow/(costperton /cumulativeCarbonRemovalAmount^log2(b)))^(1/log2(b)) -->
+        <!-- values used to compute cumulative cost to scale up volume -->
+        <r-var name="currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
+        <!-- <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    Qa -->
+        <r-var name="yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>               <!--  -->
+        <r-var name="yearsTo10Gt" :value="Math.log(10000000000/currentCarbonRemovalAmount)/Math.log(1+yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var>
+        <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
+        <r-var name="cumulativeScaleTo10Gt" :value="(currentCarbonRemovalAmount * ( (1-(1+(yearlyIncreaseInTonnesPerc/100))**(yearsTo10Gt+1)) / (1-(1+(yearlyIncreaseInTonnesPerc/100))) )) - currentCarbonRemovalAmount + cumulativeCarbonRemovalAmount" format=",.12"></r-var>        
+        <r-var name="totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (cumulativeScaleTo10Gt**(log2b+1)-(cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
+        <r-var name="avgeCostPerYear" :value="Math.trunc(totalCostToCbVolExample/yearsTo10Gt)" format=",.13"></r-var>
 
 
-      <r-var name="carbonRemovalAmount" value="10" format=",.6"></r-var>
+        <!----------------------------- --------- ---------------------------->
+        <!----------------------------- PORTFOLIO ---------------------------->
+        <!----------------------------- --------- ---------------------------->
+        <!-- Two tech portfolio example -->
+        <r-var name="portfolio_currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
+        <r-var name="portfolio_cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    
+        <r-var name="portfolio_yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>               <!--  -->
+        <r-var name="portfolio_yearsTo10Gt" :value="Math.log(10000000000/portfolio_currentCarbonRemovalAmount)/Math.log(1+portfolio_yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var>
+        <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
+        <r-var name="portfolio_cumulativeScaleTo10Gt" :value="(portfolio_currentCarbonRemovalAmount * ( (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))**(portfolio_yearsTo10Gt+1)) / (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))) )) - portfolio_currentCarbonRemovalAmount + portfolio_cumulativeCarbonRemovalAmount" format=",.12"></r-var>        
+        
+        <!-- this changes we have 2 Cb values 1 for each tech then we add them -->
+        <r-var name="portfolio_totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (portfolio_cumulativeScaleTo10Gt**(log2b+1)-(portfolio_cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
+
+        <r-var name="percentOfRemovalFromTechA" value="50" format=",.6"></r-var>
+
+        <!-- shots on goal -->
+        <r-var name="probabilityOfSuccessIndividual" value="5" format=",.2"></r-var>
+        <r-var name="probabilityOfSuccessOverall" value="95" format=",.2"></r-var>
+
+        <r-var name="numberOfTries" :value="Math.trunc(Math.log(1-(probabilityOfSuccessOverall/100))/Math.log(1-(probabilityOfSuccessIndividual/100)))" format=",.6"></r-var>
 
 
 
-      <r-var name="doublingsToReduce50Prec" :value="(Math.log(0.5)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
-      <r-var name="doublingsToReduce90Prec" :value="(Math.log(0.1)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
-      <r-var name="doublingsToReduce99Prec" :value="(Math.log(0.01)/Math.log(1-(wrightLearningCurve/100))).toPrecision(3)" format=".6"></r-var>
+        <section>
 
-      <r-var name="volIncreaseToReduce50Prec" :value="(2 ** doublingsToReduce50Prec).toPrecision(3)" format=".6"></r-var>
-      <r-var name="volIncreaseToReduce90Prec" :value="(2 ** doublingsToReduce90Prec).toPrecision(5)" format=".6"></r-var>
-      <r-var name="volIncreaseToReduce99Prec" :value="(2 ** doublingsToReduce99Prec).toPrecision(8)" format=".6"></r-var>
+        <h1 id="title">Scaling up carbon removal</h1>
+        <h2 id="capacity">Scale of capacity</h2>
+        <p>
+            To reach our 10Gt target will require absolutely huge scale ups in current methods of CDR. 
+            One question to ask is what would these scale ups resemble? Are they literally out of the 
+            scope of anything we have done before or are they 'just merely' a lot?
+            <br><br>
 
-      <r-var name="volIncrease" value="10" format=".6"></r-var>
-      <r-var name="precCostReductionDueToVolIncrease" :value="(100-(volIncrease ** (Math.log2(1-(wrightLearningCurve/100))) * 100)).toPrecision(3)" format=".6"></r-var>
-    
-      <r-var name="sliderStep" value="1" format=".0f"></r-var>
+            If we consider a CDR strategy that currently removes
+            <r-dynamic class="currentCO2removal" onmouseover="hoverByClass('currentCO2removal','#E4FFED')" 
+            bind="currentCO2removal"  min="0" max="1000000" step="10"></r-dynamic> 
+            tons a year and we want to scale this to reach
+            <r-dynamic class="targetCO2removal" onmouseover="hoverByClass('targetCO2removal','#E4FFED')" 
+            bind="targetCO2removal"  min="0" max="10000000000" step="100"></r-dynamic> 
+            tons a year by 2050, i.e in 30 ish years time, then this would mean scaling up our tons removed 
+            <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
+            bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+            time, or a yearly compounded growth rate of 
+            <r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
+            bind="co2removalAnnualGrowthRate" onclick="sidebar('yearsTo10Gt')"></r-display>%. 
+            <br><br>
+            The bar charts below are meant to show how this growth rate compares with some other industries or products that 
+            may have comparable characteristics. 
 
-          <!-- This is here to allow the cumulative cost function to work, it reads in the C1 value based on a 
-            tag with the  wrightsLawC1 class so this needs to exist somewhere-->
-          <r-display style="display:none" class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
-          bind="wrightsLawC1" ></r-display>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="growth base rates">  
+                <b style="color: #5de28b">Solar</b> from 1985-2015 scaled 25,470 times (+<b>40.2%</b> a year) 
+                <br>
+                <b style="color: #5ebbe0">Wind</b> from 1985-2015 scaled 13,812 times (+<b>37.4%</b> a year) 
+                <br>
+                <!-- https://ourworldindata.org/grapher/modern-renewable-energy-consumption?country=~OWID_WRL -->
+                <b style="color: #aa5ee0">Total renewables</b> from 1990-2020 (using this range as this is roughly when solar or wind had >1TWh) scaled 3.3 times (+<b>4%</b> a year) 
+                <br>
+                <b style="color: #e05e7e">EV</b> from 2010-2020 scaled 406 times (+<b>82.3%</b> a year) 
+                <br>
+                <b style="color: #e09f5e">EV</b> are projected between 2020-2030 to scale 11.7 times increase (+<b>27.9%</b> a year) 
+                <br>
+                <b style="color: #5e60e0">EV</b> averaged from 2010-2030 are projected to scale 4,741 times (+<b>52.6%</b> a year) 
+                <br>
+                <!-- https://pubs.rsc.org/en/content/articlelanding/2021/ee/d0ee02681f#fig4 -->
+                <b style="color: #d35ee0">Lithium ion batteries</b> from 1991-2017 scaled around 1,000,000 times (+<b>70%</b> a year)  
+                <br>
+                <b style="color: #e71b1b">Lithium ion batteries</b> from 1992-2017 scaled around 50,000 times (+<b>54%</b> a year)  
+                <br>
+                <b style="color: #0aa174">Mobile subscriptions</b> from 1989-2019 scaled around 1,138 times (+<b>26.4%</b> a year)  
+                <br>
+                <b>Example CDR scale rate</b> needed to hit targed tons by 2050
+                +<r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
+                bind="co2removalAnnualGrowthRate"></r-display>% a year.
+            </span> 
+
+            <r-svg-chart  ylabel="Annual growth rate (%)" :xlim="[0,24]" :ylim="[0, 85]"  width="700" height="400"  y-axis-location="10" x-axis-location="hidden" >
+                <!-- solar -->
+                <r-svg-text :x="1" :y="40.2" text="40.2%"></r-svg-text>
+                <r-svg-path :data="[[1, 0],[1, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[2, 0],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[1, 40.2],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[1, 0],[2, 0]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+
+                <!-- wind -->
+                <r-svg-text :x="3" :y="37.4" text="37.4%"></r-svg-text>
+                <r-svg-path :data="[[3, 0],[3, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[4, 0],[4, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[3, 37.4],[4, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[3, 0],[4, 0]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+
+                <!-- renewables -->
+                <r-svg-text :x="5" :y="4" text="4%"></r-svg-text>
+                <r-svg-path :data="[[5, 0],[5, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[6, 0],[6, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[5, 4],[6, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[5, 0],[6, 0]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_historic -->
+                <r-svg-text :x="7" :y="82.3" text="82.3%"></r-svg-text>
+                <r-svg-path :data="[[7, 0],[7, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[8, 0],[8, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[7, 82.3],[8, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[7, 0],[8, 0]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_projected -->
+                <r-svg-text :x="9" :y="27.9" text="27.9%"></r-svg-text>
+                <r-svg-path :data="[[9, 0],[9, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[10, 0],[10, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[9, 27.9],[10, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[9, 0],[10, 0]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_avge -->
+                <r-svg-text :x="11" :y="52.6" text="52.6%"></r-svg-text>
+                <r-svg-path :data="[[11, 0],[11, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[12, 0],[12, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[11, 52.6],[12, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[11, 0],[12, 0]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+
+                <!-- lithium 1991 -->
+                <r-svg-text :x="13" :y="70" text="70%"></r-svg-text>
+                <r-svg-path :data="[[13, 0],[13, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[14, 0],[14, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[13, 70],[14, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[13, 0],[14, 0]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+
+                <!-- lithium 1992 -->
+                <r-svg-text :x="15" :y="54" text="54%"></r-svg-text>
+                <r-svg-path :data="[[15, 0],[15, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[16, 0],[16, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[15, 54],[16, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[15, 0],[16, 0]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+
+                <!-- mobile -->
+                <r-svg-text :x="17" :y="26.4" text="26.4%"></r-svg-text>
+                <r-svg-path :data="[[17, 0],[17, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[18, 0],[18, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[17, 26.4],[18, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[17, 0],[18, 0]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+
+                <!-- co2removalAnnualGrowthRate -->
+                <r-svg-text :x="19" :y="co2removalAnnualGrowthRate" :text="co2removalAnnualGrowthRate"></r-svg-text>
+                <r-svg-path :data="[[19, 0],[19, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1"stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[20, 0],[20, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[19, co2removalAnnualGrowthRate],[20, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1"stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[19, 0],[20, 0]]" stroke="#000000" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+            </r-svg-chart>
+            Looking at the above rates of scaling we see the extent of the challenge in front of us. <b>We will need to scale 
+            up carbon removal technologies at the rate of some of our fastest growing technologies in the 
+            world today. </b>
+            <br><br>
+            Many of the tecnologies above were/are heavily subsidised by governments around the world and recieved billions in funding from 
+            governments for R&D. Many, specifically the energy related ones, have the added benefit of being general purpose 
+            technologies which means that the demand for them if they get cheap enough is basically infinte. If solar became incredibly cheap
+            then the question of who would want to buy it sorts itself out almost instantly. This helped enable a clear path to who would 
+            buy the product if you could get it cheap enough, everyone. 
+            <br><br>
+            While very much against the traditional definition a clean atmosphere is a pretty good contender for a wholly different 
+            kind of general purpose technology and so if you class cdr strategies as enablers of this then it is a new kind of framing 
+            that adds to their importance.  
+
+       
+        </p>
+
         
 
-
-
-
-      <section>
-
-        <h1 id="measurements">Interactive introduction to cost curves</h1>
-                    
+        <h2 id="measurements">Interactive introduction to cost curves</h2>
         <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -101,14 +259,11 @@
             of this technology. Typically this involves describing the % decrease in unit price for a doubling in the 
             cumulative volume of this technology, we then call this % decrease in cost the learning rate. For example if a 
             technology gets 20% cheaper every time we double the cumulative volume of units made then it has a learning rate of 20%.
-            If you want more info you can run through an example below or or click <b onclick="sidebar('hi')">here</b> to see how 
+            If you want more info you can run through an example below or or <b style="cursor:pointer" onclick="sidebar('hi')">click here</b> to see how 
             we calculate the curve. 
             <br><br>
-            Step: <r-dynamic bind="sliderStep" :min="1" max="4" step="1"></r-dynamic>
+            Step <r-dynamic bind="sliderStep" :min="1" max="4" step="1"></r-dynamic>:
             
-        </p>
-
-        <p>
             <r-visible :visible="sliderStep == 1" hidden="">
                 Let's say we are currently producing 10 units of a good at a price of $600 per unit.
             </r-visible>
@@ -134,13 +289,13 @@
                 <r-svg-node :x="10" :y="600" fill="#ff7f0e"></r-svg-node>
                 <r-svg-text :x="10" y="600" text="$600 "></r-svg-text>
 
-                <r-svg-node :x="20" :y="sliderStep == 2 || sliderStep == 3? 480 : 0.5" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="20" :y="sliderStep == 2 || sliderStep == 3? 480 : 0.5" text="$480 "></r-svg-text>
+                <r-svg-node :x="20" :y="sliderStep == 2 || sliderStep == 3? 510 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="20" :y="sliderStep == 2 || sliderStep == 3? 510 : 0.5" text="$510 "></r-svg-text>
 
-                <r-svg-node :x="40" :y="sliderStep == 2 || sliderStep == 3? 384 : 0.5" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="40" :y="sliderStep == 2 || sliderStep == 3? 384 : 0.5" text="$384 "></r-svg-text>
+                <r-svg-node :x="40" :y="sliderStep == 2 || sliderStep == 3? 433.5 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="40" :y="sliderStep == 2 || sliderStep == 3? 433.5 : 0.5" text="$433.5 "></r-svg-text>
 
-                <r-svg-eqn eqn="sliderStep == 3? wrightLearningCurveStartValExample *(x ** (Math.log(1-(20/100))/Math.log(2))) : 0 " :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+                <r-svg-eqn eqn="sliderStep == 3? wrightLearningCurveStartValExample *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : 0 " :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
 
                 <!-- step 4 -->
                 <r-svg-eqn eqn="sliderStep == 4 ? wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))): 0" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
@@ -152,167 +307,356 @@
 
             </r-svg-chart>
 
-
         </p>
 
         <p>
-            What learning rates have various technologies actually seen in the past? Consider the following:
-
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="learning curve examples">
             <!-- unused link
             https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2006/2006rb%20Rubin%20et%20al,%20IEAGHG%202006-6.pdf -->
 
-          <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
-          <b style="color: #5de28b">Nuclear power plants</b> from 1975-93 in OECD countries. It is worth noting 
-          that from 2010 to today though Nuclear has seen cost increases instead.
-          <br>
-          <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
-          <!-- https://ourworldindata.org/cheap-renewables-growth -->
-          <b style="color: #5ebbe0">Japanese Air conditioners</b> from 1972-97, resulting in a 57% decrease
-          in costs.
-          <br>
-          <!-- https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2015/A%20review%20of%20learning%20rates%20for%20electricity%20supply%20technologies.pdf -->
-          <b style="color: #aa5ee0">Gas turbine power plants</b> from 1958-90
-          <br>
-          <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
-          <b style="color: #e05e7e">Wind power</b> in OECD countries between 1981-95
-          <br>
-          <!-- https://ourworldindata.org/battery-price-decline -->
-          <b style="color: #e09f5e">Lithium ion batteries</b> from 1991. Given that it's seen cumulative capacity, 
-          measured in watt-hours, increase nealy 100,000 times (or around 16.5 doublings) this has lead to a cost
-          decrease of over 97%.
-          <br>
-          <!-- https://ourworldindata.org/cheap-renewables-growth -->
-          <b style="color: #e09f5e">Solar PV modules</b> from 1976. These have seen capacity 
-          increase over 1 million times, measured by watts, leading to a price decline of around 99.6%.
-          <br>
-          <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
-          <b style="color: #d35ee0">Transistors</b> have had a truly remarkable journey 1954-2019 leading to price 
-          declines of many many orders of magnitude.                 
+            <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+            <b style="color: #5de28b">Nuclear power plants</b> from 1975-93 in OECD countries. It is worth noting 
+            that from 2010 to today though Nuclear has seen cost increases instead.
+            <br>
+            <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+            <!-- https://ourworldindata.org/cheap-renewables-growth -->
+            <b style="color: #5ebbe0">Japanese Air conditioners</b> from 1972-97, resulting in a 57% decrease
+            in costs.
+            <br>
+            <!-- https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2015/A%20review%20of%20learning%20rates%20for%20electricity%20supply%20technologies.pdf -->
+            <b style="color: #aa5ee0">Gas turbine power plants</b> from 1958-90
+            <br>
+            <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+            <b style="color: #e05e7e">Wind power</b> in OECD countries between 1981-95
+            <br>
+            <!-- https://ourworldindata.org/battery-price-decline -->
+            <b style="color: #e09f5e">Lithium ion batteries</b> from 1991. Given that it's seen cumulative capacity, 
+            measured in watt-hours, increase nealy 100,000 times (or around 16.5 doublings) this has lead to a cost
+            decrease of over 97%.
+            <br>
+            <!-- https://ourworldindata.org/cheap-renewables-growth -->
+            <b style="color: #e09f5e">Solar PV modules</b> from 1976. These have seen capacity 
+            increase over 1 million times, measured by watts, leading to a price decline of around 99.6%.
+            <br>
+            <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+            <b style="color: #d35ee0">Transistors</b> have had a truly remarkable journey 1954-2019 leading to price 
+            declines of many many orders of magnitude.     
+            <br>
+            <b>Example carbon removal Curve</b> This is the learning rate we guess for carbon removal, currently
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>.
             </span> 
+            
+            What learning rates have various technologies actually seen in the past? Consider the following:
 
-            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,100000]" :ylim="[1, 1000]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
-                <!-- <r-svg-node :x="10" :y="1000" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="10" y="1000" text="$1000 "></r-svg-text> -->
+            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,100000]" :ylim="[1, wrightLearningCurveStartVal*1.1]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(5.8/100))/Math.log(2)))" stroke="#5de28b"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" fill="#5de28b"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" text="5.8%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(5.8/100))/Math.log(2)))" stroke="#5de28b"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" fill="#5de28b"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" text="5.8%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(10/100))/Math.log(2)))" stroke="#5ebbe0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" fill="#5ebbe0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" text="10%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(10/100))/Math.log(2)))" stroke="#5ebbe0"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" fill="#5ebbe0"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" text="10%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(15/100))/Math.log(2)))" stroke="#aa5ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" fill="#aa5ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" text="15%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(15/100))/Math.log(2)))" stroke="#aa5ee0"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" fill="#aa5ee0"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" text="15%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(17/100))/Math.log(2)))" stroke="#e05e7e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" fill="#e05e7e"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" text="17%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(17/100))/Math.log(2)))" stroke="#e05e7e"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" fill="#e05e7e"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" text="17%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(20/100))/Math.log(2)))" stroke="#e09f5e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" fill="#e09f5e"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" text="20%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(20/100))/Math.log(2)))" stroke="#e09f5e"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" fill="#e09f5e"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" text="20%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(32/100))/Math.log(2)))" stroke="#d35ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" fill="#d35ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" text="32%"></r-svg-text>
 
-                <r-svg-eqn eqn="1000 *(x ** (Math.log(1-(32/100))/Math.log(2)))" stroke="#d35ee0"></r-svg-eqn>
-                <r-svg-node :x="5000" :y="1000 *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" fill="#d35ee0"></r-svg-node>
-                <r-svg-text :x="5000" :y="1000 *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" text="32%"></r-svg-text>
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>
+                <r-svg-node :x="300" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" fill="#000000"></r-svg-node>
+                <r-svg-text :x="300*1.2" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" :text="wrightLearningCurve.toPrecision(2)"></r-svg-text>
+                <r-svg-text :x="300*1.7" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" text="%"></r-svg-text>
 
             </r-svg-chart>
 
-            This chart is meant to be illustrative. These technologies did not all start with a unit cost of $1000 and 
+            This chart is meant to be illustrative. These technologies did not all start with the same unit cost and 
             certaintly didn't all manage to continue scaling cumulative capacity the same amounts as each other, transistors
             for example have scaled much more than anything else in this list and so have also seen much larger price declines. 
             What this chart is meant to do is show the range of learning rates various other technologies have experienced at some 
             point.
-            </p>
+        </p>
 
-            <h2>Scaling down costs</h2>
-            <p>
-                Suppose our unit costs currently are 
+        <h2>Moving down the cost curve</h2>
+        <h3>Scaling down costs</h3>
+        <p>
+            <!-- Qb calculation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="Qb">
+                <b>Calculating cumulative volume needed for new unit cost (Qb)</b>
+                <br><br>
+                Ca = 
                 $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
-                bind="costperton"  min="0" max="1000" step="1"></r-dynamic> 
-                after a cumulative volume of 
+                bind="costperton"  min="0" max="1000" step="1"></r-dynamic>
+                <br>
+                Qa = 
                 <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
-                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
-                tonnes of carbon removed. If we have a learning rate of 
-                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
-                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
-                and we want to move our unit costs down to
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Cb = 
                 $<r-dynamic class="costpertonLow" onmouseover="hoverByClass('costpertonLow','#E4FFED')" 
                 bind="costpertonLow"  min="0" max="1000" step="1"></r-dynamic> 
-                then we will need to scale up our cumulative volume of tonnes removed to 
+                <br>
+                l = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                <br><br>
+                \(C_x = C_1 x^{log_2(b)} \)
+                <br><br>
+                \(C_1 = \dfrac{C_x}{x^{log_2(b)}} = \dfrac{C_a}{Q_a^{log_2(b)}} \)
+                <br><br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display>
+                <br><br>
+                Now we want to solve for x when \(C_x = C_b\)
+                <br>
+                \(x = \dfrac{C_x}{C_1}^\dfrac{1}{log_2(b)} = \dfrac{C_b}{C_1}^\dfrac{1}{log_2(b)} = Q_b \)
+                <br><br>
+                \(Q_b = \) <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+                bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display> tonnes
+            </span> 
+
+            <!-- Total cost calculation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="Cb">
+                <b>Calculating Total cost needed move down cost curve to new unit cost</b>
+                <br><br>
+                (warning this is more mathsy than other calculations)
+                <br><br>
+
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Qb = 
                 <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
-                bind="scaleIncreaseToNewCost" ></r-display>
-                 tonnes. 
- 
-                 <br><br>
-                 <b 
-                 onclick="cumulativeCost(
-                     document.getElementsByClassName('cumulativeCarbonRemovalAmount')[0].value, /* Qa */
-                     document.getElementsByClassName('scaleIncreaseToNewCost')[0].value  , /* Qb */
-                     document.getElementsByClassName('wrightsLawC1')[0].value, /* c1 */
-                     document.getElementsByClassName('wrightLearningCurve')[0].value /* l */
-                     )">Click here</b> to see how much this would cost.
+                bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display> tonnes
+                <br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display>
+                <br>
+                L = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                & b = 1 - L 
+                <br><br>
+                We want to sum the cost per unit for each unit along the way from where we are now (Qa) 
+                to our target new cumualtive units (Qb), aka this equation:
+                <br><br>
+                \( Total Cost = \sum_{k=Q_a}^{Q_b} C_1 k ^{log_2 (b)} \)
+                <br><br>
+                Now there is actually no closed form solution to this that is nice at all, it involves Bernoulli numbers and 
+                then some other complications. However, we can approximate this summation with an integral (Euler–Maclaurin 
+                formula etc). 
+                <br><br>
+                \( Total Cost ≈ \int_{Q_a -1}^{Q_b} C_1 x ^{log_2 (b)} dx \)
+                <br><br>
+                \( = C_1 \int_{Q_a -1}^{Q_b} x ^{log_2 (b)} dx \)
+                <br><br>
+                \( = C_1  [ \dfrac{1}{log_2(b)+1} x ^{log_2(b)+1}]_{Q_a -1}^{Q_b}  \)
+                <br><br>
+                \( = z (Q_b^{log_2(b)+1} - (Q_a -1)^{log_2(b)+1})  \)
+                <br><br>
+                Where \( z = \dfrac{C_1}{log_2(b)+1}  \)
+                <br><br>
+                Total Cost = $<r-display class="totalCostToCb" onmouseover="hoverByClass('totalCostToCb','#E4FFED')" 
+                bind="totalCostToCb" onclick="sidebar('Cb')"></r-display>
+            </span>
 
-                <b id="scaleCost"></b>
+            Suppose our unit costs currently are 
+            $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+            bind="costperton"  min="0" max="1000" step="1"></r-dynamic> 
+            after a cumulative volume of 
+            <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+            bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
+            tonnes of carbon removed. If we have a learning rate of 
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+            and we want to move our unit costs down to
+            $<r-dynamic class="costpertonLow" onmouseover="hoverByClass('costpertonLow','#E4FFED')" 
+            bind="costpertonLow"  min="0" max="1000" step="1"></r-dynamic> 
+            then we will need to scale up our cumulative volume of tonnes removed to 
+            <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+            bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display>
+            tonnes. This would have a total cost of approximately 
+            $<r-display class="totalCostToCb" onmouseover="hoverByClass('totalCostToCb','#E4FFED')" 
+            bind="totalCostToCb" onclick="sidebar('Cb')"></r-display>
+        </p>
 
-            </p>
+        <h3>Scaling up annual removal</h3>
+        <p>
+            <!-- years to 10Gt equation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="yearsTo10Gt">
+                <b>Calculating the years to get to 10Gt annual removal</b>
+                <br><br>
 
-           <p>
-          One thing we might want to consider is 
-          how much we have to scale cumulative production until our unit costs fall by various %'s from current prices.
-          You can play around with the graph below to see how our unit costs change as we scale up cumulative volume 
-          when we have a learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
-          bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic> 
-          For example if we have a learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
-          bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic> then it will take:
-          <br>
+                Current annual removal (C)= 
+                <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+                bind="currentCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Yearly growth rate (r)= 
+                <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+                bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" step="1"></r-dynamic>%
+                <br><br>
+                \( 10Gt = C (1+\dfrac{r}{100})^{t}  \)
+                <br><br>
+                \( t = log_{(1+\dfrac{r}{100})} (\dfrac{10Gt}{C})  \)
+                <br><br>
+                \( t = \) <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+                bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years
+            </span>
 
+            <!-- Total cost to 10Gt annual removal  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="CbTo10Gt">
+                <b>Calculating Total cost needed produce 10Gt of removal annually</b>
+                <br><br>
+                (warning this is more mathsy than other calculations)
+                <br><br>
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Current annual removal (C)= 
+                <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+                bind="currentCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Years to 10Gt annualy (t)= 
+                <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+                bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years
+                <br>
+                Yearly growth rate (r)= 
+                <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+                bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" step="1"></r-dynamic>%
+                <br><br>
+                First we need to find the cumulative tonnes (Qb) of CO₂ we will have removed by the time we get to 10Gt annually.
+                We can do that by summing the tonnes removed each year with the equation below:
+                <br><br>
+                \( Q_b = \sum_{k=0}^{t} C (1+\dfrac{r}{100})^{k} \)
+                <br><br>
+                \(  = C \sum_{k=0}^{t} (1+\dfrac{r}{100})^{k} \)
+                <br><br>
+                Now this is the sum of a geometric series and so we can use the following closed form expression.
+                <br><br>
+                \( Q_b = C \dfrac{1-(1+\dfrac{r}{100})^{t+1}}{1-(1+\dfrac{r}{100})} \)
+                <br><br>
+                We need to make two adjustments to this to avoid double counting, these being subtracting the tonnes of CO₂ removed 
+                this year, and adding the cumulative tonnes removed up unitl this year.
+                <br><br>
+                \( Q_b = C \dfrac{1-(1+\dfrac{r}{100})^{t+1}}{1-(1+\dfrac{r}{100})} - C + Qa \)
+                <br><br>
+                \( Q_b = \) <r-display class="cumulativeScaleTo10Gt" onmouseover="hoverByClass('cumulativeScaleTo10Gt','#E4FFED')" 
+                bind="cumulativeScaleTo10Gt"></r-display> tonnes
+                <br><br>
+                Now we can use the same integral we used for the last example to calculate the total cost of these tonnes of CO₂ 
+                removed. To do this we will also need these values from before:
+                <br><br>
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display> (this is the same as in the previous example)
+                <br>
+                L = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                & b = 1 - L 
+                <br><br>
+                \( Total Cost ≈ \int_{Q_a -1}^{Q_b} C_1 x ^{log_2 (b)} dx \)
+                <br><br>
+                Total Cost = $<r-display class="totalCostToCbVolExample" onmouseover="hoverByClass('totalCostToCbVolExample','#E4FFED')" 
+                bind="totalCostToCbVolExample"></r-display>
+            </span>
 
+            Let's look at a slightly different case, we're going to look at the cost of scaling up annual volume 
+            up to 10Gt a year. This time suppose we are currently removing 
+            <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+            bind="currentCarbonRemovalAmount"  min="0" max="10000" step="1"></r-dynamic> 
+            tonnes of carbon from the atmosphere at a unit cost of 
+            $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+            bind="costperton"  min="0" max="1000" step="1"></r-dynamic>. 
+            To locate ourselves on the cost curve also suppose cumulatively we have removed 
+            <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+            bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
+            tonnes of carbon in total & again our learning rate is 
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>.
+            Now if we increase our tonnes removed by 
+            <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+            bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" after="%" step="1"></r-dynamic>
+            a year in will take 
+            <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+            bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display>
+            years for us to reach a 10Gt scale and total cost of this increase will be approximately 
+            $<r-display class="totalCostToCbVolExample" onmouseover="hoverByClass('totalCostToCbVolExample','#E4FFED')" 
+            bind="totalCostToCbVolExample" onclick="sidebar('CbTo10Gt')"></r-display>.
+            
+            <br><br>
+            One thing to really emphasise about the example is the effect of changing the amount we are scaling up removal each year.
+            Currently this is set to <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+            bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" after="%" step="1"></r-dynamic>
+            & at this rate, with our other set values, it will take us 
+            <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+            bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years 
+            to get to our 10Gt of removal a year target. The thing I really want to emphasise is that if we increase the yearly 
+            growth rate, while it means paying more in any given year it also means that the total cost to scale to our 10Gt 
+            target actually <i>falls</i>. The reasoning for this is just that if we scale slowly then we are spending more 
+            years still paying a lot for carbon removal but not actually yet at our target rate. This leads to the result 
+            that in our race to 10Gt a year <b>increasing speed and minimising total cost work with not against each other</b>.           
+        </p>
 
-          <r-display class="doublingsToReduce50Prec" onmouseover="hoverByClass('doublingsToReduce50Prec','#E4FFED')" 
-          bind="doublingsToReduce50Prec" ></r-display>
-          doublings of volume (<r-display class="volIncreaseToReduce50Prec" onmouseover="hoverByClass('volIncreaseToReduce50Prec','#E4FFED')" 
-          bind="volIncreaseToReduce50Prec" ></r-display>x)
-          for unit prices to fall by 50%
-          <br>
-          <r-display class="doublingsToReduce90Prec" onmouseover="hoverByClass('doublingsToReduce90Prec','#E4FFED')" 
-          bind="doublingsToReduce90Prec" ></r-display>
-          doublings of volume (<r-display class="volIncreaseToReduce90Prec" onmouseover="hoverByClass('volIncreaseToReduce90Prec','#E4FFED')" 
-          bind="volIncreaseToReduce90Prec" ></r-display>x)
-          for unit prices to fall by 90%
-          <br>
-          <r-display class="doublingsToReduce99Prec" onmouseover="hoverByClass('doublingsToReduce99Prec','#E4FFED')" 
-          bind="doublingsToReduce99Prec" ></r-display>
-          doublings of volume (<r-display class="volIncreaseToReduce99Prec" onmouseover="hoverByClass('volIncreaseToReduce99Prec','#E4FFED')" 
-          bind="volIncreaseToReduce99Prec" ></r-display>x)
-          for unit prices to fall by 99%
-
-          <label for="mn-demo" class="margin-toggle">&#8853;</label>
-          <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-          <span class="marginnote" id="yearsUntilTenDollars">
-            Increase in cumulative volume: <r-display class="volIncrease" onmouseover="hoverByClass('volIncrease','#E4FFED')" 
-            bind="volIncrease" ></r-display>x
+        <h2>Portfolio approach</h2>
+        <p>
+            One large simplification we've been using up until now is that there will be a single, constant, learning curve.
+            This has the effect of assuming almost all technologies can be treated alike. This is very much not the case, 
+            some might be cheaper today so look more attractive for those who want immediate cost effective ways of removing 
+            CO₂. Some might have a lower learning rate so we won't expect them to fall in price by as much as we scale volume. 
+            Some may have stricter limits on how much they can actually scale, such as running out of the right kind of land.
+            Some may be able to fall in price but may have a harder to budge price floor due to things like energy use.
+            <br><br>
+            Considering every trade off is more than I want to go into in this piece, if you do want a really great look at 
+            how these things effect more specifically what you want to use for CO₂ removal I'd really recommend checking out 
+            <a href="https://www.roadto10gigatons.com/">roadTo10gigatons.com</a>. What I want to do here are look at a few
+            simplified examples to give some intuition as to why, at this stage, spreading funding out over a portfolio of 
+            options may well be the optimal move. 
+            <br><br>
+            Firstly let's look at a case where we have different learning rates, with a currently high cost option also having
+            a high learning rate. This means that as we scale this technology even though it costs a lot now we might expect 
+            it to get a lot cheaper in the future. While this might not be the case in real life to make the comparison simple
+            we will assume both technologies have removed the same cumulative amount of CO₂ so far and so start at the same 
+            quantity value on their cost curves. 
+            <br><br>
+            <b>Technology A</b> has a low current cost per tonne of $75 to remove 10000 tonnes 
+            but it also has a very low learning rate of 2% i.e it won't see much decrease from its current cost 
+            level as use of it scales up. 
             <br>
-            % decrease in unit cost: <r-display class="precCostReductionDueToVolIncrease" onmouseover="hoverByClass('precCostReductionDueToVolIncrease','#E4FFED')" 
-            bind="precCostReductionDueToVolIncrease" ></r-display>%
-            <br>
-            <r-display class="yval" onmouseover="hoverByClass('yval','#E4FFED')" 
-            bind="yval" ></r-display>
-  
-          </span>
-
-
-          <r-svg-chart xlabel="Increase in cumulative units" ylabel="Unit Price as % of original" :xlim="[1,volIncreaseToReduce99Prec]" :ylim="[1, 100]" x-axis-type="log" width="700" height="400"  y-axis-location="origin" x-axis-location="origin">
-            <r-svg-eqn eqn="x ** (Math.log2(1-(wrightLearningCurve/100))) * 100" :listen="{wrightLearningCurveStartVal,wrightLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
-
-            <r-svg-node :x="volIncrease" :y="50" :drag="{volIncrease: x}" fill="#ff7f0e"></r-svg-node>
-            <r-svg-path :data="[[volIncrease, 1],[volIncrease, 100]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          </r-svg-chart>
+            <b>Technology B</b> however is starting from a higher current cost per tonne of $500 to remove 10000 tonnes but 
+            also has a higher learning rate of 20% . This means that it will see steeper declines in cost if we scale up its usage. 
+            <br><br>
+            Now let's suppose we ramp up the 
+            scale of carbon removal from a baseline today of 10000 tonnes by 20% a year. Currently we are getting 
+            <r-dynamic class="percentOfRemovalFromTechA" onmouseover="hoverByClass('percentOfRemovalFromTechA','#E4FFED')" 
+            bind="percentOfRemovalFromTechA"  min="0" max="100" after="%" step="1"></r-dynamic> 
+            of our CO₂ removal each year from technology A
 
         </p>
 
@@ -326,11 +670,29 @@
           </blockquote>
 
         <p>            
-
               Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
-              how cheap they can get, and how much carbon they will ultimately be able to remove. In an ideal world we would 
-              know these things and be able to focus resources on the best solutions.  
-  
+              how cheap they can get, and how much carbon they will ultimately be able to remove. Suppose for now though that 
+              any given approach has a 
+              <r-dynamic class="probabilityOfSuccessIndividual" onmouseover="hoverByClass('probabilityOfSuccessIndividual','#E4FFED')" 
+              bind="probabilityOfSuccessIndividual"  min="0" max="100" after="%" step="1"></r-dynamic> 
+              chance of getting to the 10Gt per year target, to have a 
+              <r-dynamic class="probabilityOfSuccessOverall" onmouseover="hoverByClass('probabilityOfSuccessOverall','#E4FFED')" 
+              bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> 
+              chance of getting at least one viable technology we would need to invest in and start scaling up around
+              <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
+              bind="numberOfTries"></r-display> 
+              technologies today. 
+        </p>
+
+        <h2>Uncertainty</h2>
+        <p>
+            There is a famous probability puzzle called the multi-armed bandit problem. In it we are faced with a number of 
+            one armed bandits (slot machines) all with a different probability of paying out the jackpot. We want to maximise our
+            expected winnings over a certain number of arm pulls. The problem though is that we don't know what the likihood of any 
+            machine to pay out is. If we want to learn this we have to spend some of our arm pulls to get a better idea of how likely
+            a given machine is to pay out, but if we only have a set number of total arm pulls what is our best course of action?
+            <br><br>
+            While the specifics change depending on some assumptions broadly we 
         </p>
         
       
@@ -339,6 +701,8 @@
 
     <!-- ##################### sidebar #####################-->
     <div class="sidebar">
+        <!-- <r-outline open=""></r-outline> -->
+
       <div >
         <a href="#top"><p>Scaling carbon removal</p></a>
         <a href="#measurements"><p>Measurements</p></a>
