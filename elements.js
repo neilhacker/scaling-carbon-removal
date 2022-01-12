@@ -1,5 +1,9 @@
 
+function myFunction(x) {
+  a_C1 = curvenote.getVariableByName("a_C1").get()
+  return a_C1*x
 
+}
 
 class ValInWords extends HTMLElement {
   connectedCallback() {
@@ -70,8 +74,8 @@ class CostPerTonText extends HTMLElement {
     var width = this.attributes.width.value
 
     this.innerHTML = /*html*/`
-    <val-in-words title="Cost per tonne" width=${width} class="costperton" 
-    onmouseover="hoverByClass('costperton','#E4FFED')"></val-in-words> 
+    <val-in-words title="Cost per tonne" width=${width} class="scaleOfCost_costperton" 
+    onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')"></val-in-words> 
     `;
   }
 }

@@ -22,6 +22,8 @@ function cumulativeCost(k, n, c1, l) {
     totalCost = Math.ceil(totalCost)
     // document.getElementById("scaleCost").innerHTML = totalCost;
     document.getElementById("scaleCost").innerHTML = "$"+totalCost.toLocaleString();
+    document.getElementById("scaleCostMargin").innerHTML = "$"+totalCost.toLocaleString();
+
 
 }
 

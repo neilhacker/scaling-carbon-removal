@@ -26,13 +26,33 @@
 
     <article>
       
-        <!--------------------------- ------------- -------------------------->
-        <!--------------------------- SCALE UP RATE -------------------------->
-        <!--------------------------- ------------- -------------------------->
+        <!--------------------------- ----------------- -------------------------->
+        <!--------------------------- SCALE OF CAPACITY -------------------------->
+        <!--------------------------- ----------------- -------------------------->
         <r-var name="currentCO2removal" value="10000" format=",.10"></r-var>                 
         <r-var name="targetCO2removal" value="1000000000" format=",.10"></r-var>
         <r-var name="co2removalScaleUp" :value="Math.trunc(targetCO2removal/currentCO2removal)" format=",.10"></r-var>
         <r-var name="co2removalAnnualGrowthRate" :value="Math.trunc(((co2removalScaleUp ** (1/30))-1)*100)" format=".4"></r-var>
+
+        <!--------------------------- ------------- -------------------------->
+        <!--------------------------- SCALE OF COST -------------------------->
+        <!--------------------------- ------------- -------------------------->
+        <!-- cost of removal comparison graph values (in millions) -->
+        <r-var name="usaMilitarySpending" :value="734000" format=".9"></r-var>
+        <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
+        <r-var name="oilDemandCost2019" :value="64.3 * 36400" format=".9"></r-var>
+        <r-var name="apolloMissions" :value="280000" format=".9"></r-var>
+        <r-var name="cleanAirAct" :value="65000" format=".9"></r-var>
+        <r-var name="fossilFuelSubsidies" :value="3100000" format=".9"></r-var>
+        <r-var name="renewableSubsidies" :value="160000" format=".9"></r-var>
+        <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
+
+        <!-- cost per ton is in cost curve section -->
+        <r-var name="scaleOfCost_costperton" value="200" format=".5"></r-var>                         <!-- Ca -->
+        <r-var name="quantityofco2" value="5600" format=",.6"></r-var>
+        <r-var name="totalRemovalCost" :value="scaleOfCost_costperton * quantityofco2" format=",.9"></r-var>
+        <r-var name="totalRemovalCostBillions" :value="totalRemovalCost/1000" format=",.9"></r-var>
+  
 
         <!----------------------------- ----------- -------------------------->
         <!----------------------------- COST CURVES -------------------------->
@@ -69,6 +89,20 @@
         <!----------------------------- --------- ---------------------------->
         <!----------------------------- PORTFOLIO ---------------------------->
         <!----------------------------- --------- ---------------------------->
+        
+        <!-- 
+            portfolio of approaches 
+            years = 30
+            target = 10,000,000,000
+         -->
+         <r-var name="single_approach_starting_removal" value="10000" format=",.6"></r-var>
+         <r-var name="single_approach_annual_growth" :value="(((10000000000/single_approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
+
+         <r-var name="num_of_approaches" value="8" format=",.6"></r-var>
+         <r-var name="approach_starting_removal" value="10000" format=",.6"></r-var>
+         <!-- each approach target in 2050 / amount now gives magnitude increase then look per year -->
+         <r-var name="approach_annual_growth" :value="((((10000000000/num_of_approaches)/approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
+
         <!-- Two tech portfolio example -->
         <r-var name="portfolio_currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
         <r-var name="portfolio_cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    
@@ -93,7 +127,85 @@
         <section>
 
         <h1 id="title">Scaling up carbon removal</h1>
-        <h2 id="capacity">Scale of capacity</h2>
+        <h2>Overview</h2>
+        <p>
+            This document is meant to look at the problem of scaling up carbon removal, specifically with a focus on 
+            the financial aspects of this. The main questions are:
+            <ul>
+                <li>What should we be funding today
+                </li>
+                <li>How much might we expect to be spending/how does this change based on assumptions
+                </li>
+                <li>How might this funding come about/be focused 
+                </li>
+            </ul>
+        </p>
+        <p>
+            If you more interested in the technical details of various approaches then the recent(ish) 
+            <a href="https://cdrprimer.org/">CDR Primer</a> is a great place to start. This essay is less about technical
+            details and more about questions around resource allocationand costs. 
+            <br><br>
+            The main things I hope you take away from this document are:
+            <ul>
+                <li>To be on track to hit 10Gt of CDR by 2050 we need to start scaling up our efforts a lot, and right now</li>
+                <li>We need to be channeling funding into many different types of CDR</li>
+                <li>especially a lot more funding into areas that might have much higher costs per tonne today but which have the 
+                    likelihood to scale this cost down as we ramp up our use of them</li>
+                <li>If one of the main things we care about is hitting the target of 10Gt of removal a year then speed and cost are 
+                    aligned, i.e the faster we scale the cheaper it will be in total</li>
+            </ul>
+            </p>
+            <p>
+            This document is a bit different to most in that I've tried to make calculations, somewhat, interactive and explained 
+            step by step. Numbers in green are ones that you can slide to change the values of. For example, how will total costs 
+            change if we scale up carbon removal faster or what will happen to total costs if we spend more of our budget today on 
+            approaches with less of a learning effect? Numbers in blue are ones that are calculated from a mixture of our reactive 
+            values, constants or data values. If you click on them I’ve tried to present the steps I went through to calculate them 
+            in the margin.   
+
+            <br><br>
+            For the best experience if you can try to read this essay fullscreen on a computer rather than a phone.
+
+
+        </p>
+
+        <h2 id="scale_of_problem">Scale of problem</h2>
+        <p>
+            This section aims to be a short bit of contextualising of how much CO₂ we need to remove, how quickly we 
+            need to ramp up our capabilities, and how much this could cost.
+    
+        </p>
+
+        <h3 id="emissions">Scale of emissions</h3>
+        <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="growth base rates">  
+                For a bit of scale: 
+                <br>
+                - The USA's emissions in 2019 were <usa-emissions></usa-emissions> tonnes.
+                <br>
+                - China's 2019 emissions were <china-emissions></china-emissions> tonnes.
+                <br>
+                - Worldwide 2019 CO₂ emissions from coal were <world-coal-emissions></world-coal-emissions> tonnes.
+            </span> 
+
+            We currently emit about 35 gigatonnes of CO₂ annually, of this between 1.5 and 3.1 gigatonnes are classed as hard 
+            to avoid emissions and so we be very difficult to stop producing any time soon. If we want to get to net zero then 
+            we will almost certainly have to not only reduce emissions but also remove CO₂ from the atmosphere. The scale of 
+            carbon removal will almost certainly want to be higher than this hard-to-avoid emission rate however, in fact the IPCC
+            report suggests that we will want to be at the scale of <b>10Gt a year</b> of carbon removal by 2050. 
+            <br><br>
+            Why will we need to do more
+            removal than just the hard-to-avoid emissions? Simply put it's because we will likely not get our emissions all the way down
+            to just these sources and even then being at net-zero will not reverse the increase of atmpospheric CO₂ it will will only 
+            stop the acceleration of it. If we want to get back down to CO₂ levels of the past this will require the active drawdown 
+            of historic emissions as well. 
+
+
+        </p>
+
+        <h3 id="capacity">Scale of capacity</h3>
         <p>
             To reach our 10Gt target will require absolutely huge scale ups in current methods of CDR. 
             One question to ask is what would these scale ups resemble? Are they literally out of the 
@@ -229,13 +341,119 @@
             While very much against the traditional definition a clean atmosphere is a pretty good contender for a wholly different 
             kind of general purpose technology and so if you class cdr strategies as enablers of this then it is a new kind of framing 
             that adds to their importance.  
+        </p>
 
-       
+        <h3 id="cost">Scale of cost</h3>
+        <p>
+            <oil-demand-cost-2019-sidenote></oil-demand-cost-2019-sidenote>
+
+            <!-- scale of costs margin graph -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
+                    <r-svg-node :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" text="US military"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(usaMilitarySpending), 0],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(usaMilitarySpending)],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" text="Oil"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(oilDemandCost2019), 0],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(oilDemandCost2019)],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" text="Apollo"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(apolloMissions), 0],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(apolloMissions)],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" text="Fossil Subsidies"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(fossilFuelSubsidies), 0],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(fossilFuelSubsidies)],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+                    <r-svg-node :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" text="Renewable Subsidies"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(renewableSubsidies), 0],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(renewableSubsidies)],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" text="Clean Air Act"></r-svg-text>
+                    <r-svg-path :data="[[Math.sqrt(cleanAirAct), 0],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, Math.sqrt(cleanAirAct)],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+    
+                    <r-svg-node :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" :listen="totalRemovalCost" fill="#ff7f0e"></r-svg-node>
+                    <r-svg-text :x="sqrtTotalRemovalCost" :y="sqrtTotalRemovalCost" text="Carbon removal"></r-svg-text>
+                    <r-svg-path :data="[[sqrtTotalRemovalCost, 0],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                    <r-svg-path :data="[[0, sqrtTotalRemovalCost],[sqrtTotalRemovalCost, sqrtTotalRemovalCost]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                </r-svg-chart>
+                Try changing the cost per tonne for carbon removal &or the number of tonnes and see how the total cost
+                changes in relation to the other base line values.
+            </span>
+
+            How much will it cost to remove carbon from the atmosphere? Again it might be useful
+            to give some base rates as to how much other things cost to give us some perspective.
+            For example:
+            <br>
+            - The total cost of oil demand in 2019 was <oil-demand-cost-2019></oil-demand-cost-2019> billion
+            <br>
+            - The 2019 USA military budget was <usa-military-spending></usa-military-spending>
+            <br>
+            - 2011 compliance costs for the Clean Air Act were <clean-air-act></clean-air-act>
+            <br>
+            - 2017 direct fossil fuel subsidies were <fossil-fuel-subsidies></fossil-fuel-subsidies>
+            <br>
+            - 2017 renewable subsidies were <renewable-subsidies></renewable-subsidies>
+            <br>
+            - The cost of the Apollo moon missions (adjusted for inflation) was <apollo-mission-cost></apollo-mission-cost>
+            <br><br>
+            Currently it costs between 1000 to 100 dollars to remove a tonne of carbon from the atmosphere. Let's suppose that 
+            on average it cost 
+            $<r-dynamic class="scaleOfCost_costperton" onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')" 
+                bind="scaleOfCost_costperton"  min="0" max="1000" step="1"></r-dynamic>
+            to remove carbon. 
+            
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="totalRemovalCostBillions">
+                <b>Calculations for total removal cost</b> <br>
+                <cost-per-ton-text width="40%"></cost-per-ton-text> = 
+                $<r-dynamic class="scaleOfCost_costperton" onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')" 
+                bind="scaleOfCost_costperton"  min="0" max="1000" step="1"></r-dynamic>
+                <br><br>
+                <quantity-of-co2-text width="40%"></quantity-of-co2-text> = <quantity-of-co2></quantity-of-co2> million tonnes
+                <br><br>
+                <total-removal-cost-text width="20%"></total-removal-cost-text> 
+                = <cost-per-ton-text width="30%"></cost-per-ton-text> * <quantity-of-co2-text width="30%"></quantity-of-co2-text>
+                <br>
+                = <r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
+                bind="totalRemovalCostBillions" ></r-display> billion     
+            </span> 
+            <!-- <total-removal-cost-sidenote></total-removal-cost-sidenote> -->
+
+            If we assume we are going to try to remove
+            <r-dynamic class="quantityofco2" onmouseover="hoverByClass('quantityofco2','#E4FFED')" 
+            bind="quantityofco2" min="0" max="35000"></r-dynamic> 
+            million tonnes then the total cost of this would be 
+            $<r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
+            bind="totalRemovalCostBillions"  onclick="sidebar('totalRemovalCostBillions')"></r-display> billion).
+
+            <br><br>
+            How our costs actually develop over time will depend a lot on 
+            <ul>
+                <li>What mix of approaches we chose to use</li>
+                <li>The way different approaches have their costs scale down as we scale up usage</li>
+            </ul>
+        </p>
+        <p>
+            We will have a look below at these two factors in more detail. The main takeaways I want to leave you with 
+            from this section is that <b>this will not be cheap but compared to many other activities it will not be 
+            ahistorically expensive. </b>     
         </p>
 
         
 
-        <h2 id="measurements">Interactive introduction to cost curves</h2>
+        <h2 id="intro to cost curves">Introduction to cost curves</h2>
         <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -262,7 +480,7 @@
             If you want more info you can run through an example below or or <b style="cursor:pointer" onclick="sidebar('hi')">click here</b> to see how 
             we calculate the curve. 
             <br><br>
-            Step <r-dynamic bind="sliderStep" :min="1" max="4" step="1"></r-dynamic>:
+            Step <r-dynamic bind="sliderStep" min="1" max="4" step="1"></r-dynamic>:
             
             <r-visible :visible="sliderStep == 1" hidden="">
                 Let's say we are currently producing 10 units of a good at a price of $600 per unit.
@@ -309,7 +527,20 @@
 
         </p>
 
+        <h3 id="cc_relevance">Relevance to CDR</h3>
         <p>
+            How might we expect things like DAC to scale down their costs? The short answer is we really aren't too sure 
+            at the moment. This is one of the reasons why we need to be funding multiple shots at various approaches so we 
+            can get a better understanding of what might scale and what might not. However, we can look at a few factors to at 
+            least make some kind of informed guess.
+        </p>
+        <p>
+            <b>Historical base rates</b>
+            <br>
+            Many frontier CDR strategies resemble, at a high level, many other industrial processes. They use energy, chemicals 
+            require supporting infrastructure etc. While there is a reasonable range of learning rates for many comparable products 
+            like this the below should give some indication of historically how we might orient our base rates.
+
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="learning curve examples">
@@ -349,8 +580,6 @@
             bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>.
             </span> 
             
-            What learning rates have various technologies actually seen in the past? Consider the following:
-
             <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,100000]" :ylim="[1, wrightLearningCurveStartVal*1.1]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
                 <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(5.8/100))/Math.log(2)))" stroke="#5de28b"></r-svg-eqn>
                 <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" fill="#5de28b"></r-svg-node>
@@ -389,10 +618,35 @@
             What this chart is meant to do is show the range of learning rates various other technologies have experienced at some 
             point.
         </p>
-
-        <h2>Moving down the cost curve</h2>
-        <h3>Scaling down costs</h3>
         <p>
+            <b>Material costs</b>
+            <br>
+            There is fair reason to think that costs might fall a fair amount on the material side. While it is of course not a 
+            1-for-1 comparison a study looking to disentangle the various causes of price declines in lithium ion batteries found 
+            that the largest contributor to these declines was R&D specifically around “advancements in chemistry and materials science”. 
+            If we look at an estimated cost breakdown for solid sorbet DAC systems we can see that the largest single contributor is the 
+            contractor array for which advances in material science, for example with MOF's, would be able to make large gains here.
+            <img src="img/dac_costs.png" alt="cost breakdown for dac" />  
+
+        </p>
+        <p>
+            <b>Energy floor</b>
+            <br>
+            One potential issue with cost scaling for many of these approaches will be that energy might present somewhat of a price 
+            floor. To be sure better chemistry could lead to less energy per ton to be needed and energy prices, especially renewable 
+            ones which would be the ones powering our cdr systems, will likely fall more, but you can’t scale costs down forever if you 
+            have to pay for energy. Depending on the energy resource, capturing 1 MtCO2/yr requires 180 – 500 MW of power (CDR primer ch2), 
+            at current prices this would put a floor of, at minimum
+            Solar pv module price is around $0.38 a Watt 
+            $68.4 to $190 potential price floor at current energy prices
+            If we are at the higher end of this power usage limit then this price floor could prove to be a real obstacle to our ability 
+            to scale at an affordable price.
+        </p>
+
+        <h3 id="moving_down_cc">Moving down the cost curve</h3>
+        <p>
+            <b>Scaling down costs</b>
+            <br>
             <!-- Qb calculation  -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -497,9 +751,9 @@
             $<r-display class="totalCostToCb" onmouseover="hoverByClass('totalCostToCb','#E4FFED')" 
             bind="totalCostToCb" onclick="sidebar('Cb')"></r-display>
         </p>
-
-        <h3>Scaling up annual removal</h3>
         <p>
+            <b>Scaling up annual removal</b>
+            <br>
             <!-- years to 10Gt equation  -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -623,77 +877,346 @@
             years still paying a lot for carbon removal but not actually yet at our target rate. This leads to the result 
             that in our race to 10Gt a year <b>increasing speed and minimising total cost work with not against each other</b>.           
         </p>
-
-        <h2>Portfolio approach</h2>
         <p>
-            One large simplification we've been using up until now is that there will be a single, constant, learning curve.
-            This has the effect of assuming almost all technologies can be treated alike. This is very much not the case, 
-            some might be cheaper today so look more attractive for those who want immediate cost effective ways of removing 
-            CO₂. Some might have a lower learning rate so we won't expect them to fall in price by as much as we scale volume. 
-            Some may have stricter limits on how much they can actually scale, such as running out of the right kind of land.
-            Some may be able to fall in price but may have a harder to budge price floor due to things like energy use.
+            The above is clearly an oversimplification, we assume:
+            <ul>
+                <li>A known, and constant, learning rate</li>
+                <li>A single learning rate across all approaches</li>
+                <li>Constant yearly scaling of capacity (sometimes at massive levels)</li>
+            </ul>
+        </p>
+        <p>
+            Hopefully it can still serve as a useful guide for the order of magnitude we might be expecting to pay at 
+            and how important things like the learning rate are for our calculations.
+        </p>
+
+        <h2 id="portfolio">Portfolios</h2>
+        <p>
+            There are two types of portfolios that we can talk about. 
+        </p>
+        <h3 id=approaches>Portfolio of apporoaches</h3>
+        <p>
+            We can broadly split most CDR approaches into two main camps. 
+            Camp one is nature based solutions. These are things like afforestation & reforestation, soil sequestration, 
+            biochar and ocean interventions. Camp two are technological solutions; these mainly include DAC, enhanced weathering. 
+            Some interventions somewhat fall into both camps such as BECCS or genetically modifying trees/plants/plankton to capture 
+            more CO₂. 
             <br><br>
-            Considering every trade off is more than I want to go into in this piece, if you do want a really great look at 
-            how these things effect more specifically what you want to use for CO₂ removal I'd really recommend checking out 
-            <a href="https://www.roadto10gigatons.com/">roadTo10gigatons.com</a>. What I want to do here are look at a few
-            simplified examples to give some intuition as to why, at this stage, spreading funding out over a portfolio of 
-            options may well be the optimal move. 
-            <br><br>
-            Firstly let's look at a case where we have different learning rates, with a currently high cost option also having
-            a high learning rate. This means that as we scale this technology even though it costs a lot now we might expect 
-            it to get a lot cheaper in the future. While this might not be the case in real life to make the comparison simple
-            we will assume both technologies have removed the same cumulative amount of CO₂ so far and so start at the same 
-            quantity value on their cost curves. 
-            <br><br>
-            <b>Technology A</b> has a low current cost per tonne of $75 to remove 10000 tonnes 
-            but it also has a very low learning rate of 2% i.e it won't see much decrease from its current cost 
-            level as use of it scales up. 
+            Again broadly each class of solutions has some common drawbacks that mean using any single intervention would likely 
+            struggle to get to the full scale we need.
             <br>
-            <b>Technology B</b> however is starting from a higher current cost per tonne of $500 to remove 10000 tonnes but 
-            also has a higher learning rate of 20% . This means that it will see steeper declines in cost if we scale up its usage. 
+            - Nature based solutions have land and water use as major constraints to how much we can expect them to be able to scale.
+            <br> 
+            - Technological solutions tend to have energy and therefore cost as major barriers to scaling up.
             <br><br>
-            Now let's suppose we ramp up the 
-            scale of carbon removal from a baseline today of 10000 tonnes by 20% a year. Currently we are getting 
-            <r-dynamic class="percentOfRemovalFromTechA" onmouseover="hoverByClass('percentOfRemovalFromTechA','#E4FFED')" 
-            bind="percentOfRemovalFromTechA"  min="0" max="100" after="%" step="1"></r-dynamic> 
-            of our CO₂ removal each year from technology A
+            It should be noted as well that these two groups also tend to differ more in other ways. Nature based solutions tend to 
+            simply impact humans in more ways than technological ones and so have as we mentioned downsides in terms of water/land 
+            usage but also tend to have more co-benefits than technological ones such as improving biodiversity. 
+            <br><br>
+            Another broad difference is in terms of permanence. Nature based solutions tend to have lower levels of permanence guarantees 
+            than technological solutions or BECCS. This is largely because the process is more easily reversible. Trees can be cut or 
+            burnt down, soil or agricultural practices can change, all of which lose some of the benefits from these approaches. 
+            Technological solutions typically involve much more permanent forms of sequestration like injecting carbon underground or 
+            using it to cure cement. These are very difficult to reverse and so are much more likely to keep carbon locked away for a 
+            long time. […microsoft issues with long term storage].
+            <br><br>
+            Another large difference is additionality. This isn't such a large issue when it comes to looking at theoretical amounts 
+            of CDR that could be created but can be an issue when looking at specifically which things to be funding. For example, we 
+            might know that soils could sequester …. more carbon with certain practices, however, we need to direct funds to specific 
+            soil projects and some of the time it might not be so clear if a particular project would lead to an increase in CDR vs the 
+            counterfactual. […microsoft issues with additionality ].
+            <br><br>  
+            Technological solutions again are usually much more clear about their additionality. If you put a big fan somewhere and 
+            it sucks 4000 tons of CO₂ a year you can be pretty sure that this is 4000 more tons of CO₂ removed from the air than if 
+            there was no big fan. This is somewhat of an oversimplification, in reality you need to look at the lifecycle analysis of 
+            the whole cdr system to see what the additionality would be, i.e what carbon was produced to make the system, to power it, 
+            to transport and store the carbon? Still while these things add complexity the counterfactual is much clearer. 
+            <br><br>
+            Despite it seeming like technological solutions have an edge in many different areas, it should be taken from the above to 
+            suggest that they are better. Two things should be made clear. 
+            <br>
+            - We will <b>almost certainly need both</b> technological and nature based solutions
+            <br> 
+            - <b>At the moment technological ones cost a lot</b>. 
+            <br><br>
+            In fact if we look at this table from the <a href="https://www.nap.edu/read/25259/chapter/2#5">NAS report</a> the levels of 
+            “Safe Potential Rate of CO2 Removal Possible Given Current Technology and Understanding and at ≤$100/t CO2” for 
+            DAC is 0, because at the moment it is just so expensive. In a similar vein the rates for carbon mineralisation 
+            are unknown as the tech is simply so untested at scale.
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                You might say that this is an unfair comparison as if we have multiple approaches all starting from the same level
+                as the single approach then the outcome is purely due to the difference in starting tons. This is true but is also 
+                not too disimilar to real life.  
+            </span>
+            This is going to be a bit coarse but one clear benefit of having multiple approaches (and this also holds to some extent 
+            for projects) is that it simply decreases the amount any needs to scale to hit some fixed target. To make this a bit more 
+            concrete say you're trying to scale up from 
+            <r-dynamic class="single_approach_starting_removal" onmouseover="hoverByClass('single_approach_starting_removal','#E4FFED')" 
+            bind="single_approach_starting_removal"  min="1000" max="100000" step="100"></r-dynamic>
+             tons to 10Gt in 30 years. If you only have a single approach then this 
+            approach would need to scale by 
+            <r-display class="single_approach_annual_growth" onmouseover="hoverByClass('single_approach_annual_growth','#E4FFED')" 
+            bind="single_approach_annual_growth" ></r-display>%
+             a year. If however you have
+            <r-dynamic class="num_of_approaches" onmouseover="hoverByClass('num_of_approaches','#E4FFED')" 
+            bind="num_of_approaches"  min="0" max="15" step="1"></r-dynamic>
+            different approaches all starting at 
+            <r-dynamic class="approach_starting_removal" onmouseover="hoverByClass('approach_starting_removal','#E4FFED')" 
+            bind="approach_starting_removal"  min="1000" max="50000" step="100"></r-dynamic>
+            tons today then each approach only needs to scale by
+            <r-display class="approach_annual_growth" onmouseover="hoverByClass('approach_annual_growth','#E4FFED')" 
+            bind="approach_annual_growth" ></r-display>%
+             a year to get you to your target. 
 
         </p>
 
-        <h2>Shots on goal</h2>
+        <h3 id="projects">Portfolio of projects</h3>
+        <p>
+            In some ways this serves a similar function to the 
+            portfolio of approaches. Any given project/specific instantiation of an approach, may have certain scale limitations 
+            placed upon it. You might want to scale up a specific type of carbon mineralisation but maybe at some point you will 
+            hit real difficulties obtaining the needed materials. 
+            </br></br>
+            There is of course another reason why you would want a portfolio of approaches within any given category and that is 
+            because many of them will fail. This could be because the science just doesn't end up being able to scale, but we couldn't 
+            know that until we tried. It might be for more normal reasons like founders falling out or simple project financing failures. 
+            It also might be because even though some approaches might get us to scale eventually some will be able to do it faster, and 
+            again we might simply not be able to tell until we try. 
+            </br></br>
+        </p>
         <blockquote>
             <p>If we want to achieve a 90 percent probability of success, we must 
                 take into account historical rates of success from publicly available data; doing that suggests that we need to actively 
                 pursue not two or three vaccine candidates, but 15 to 20.</p>
             <footer><a href="https://www.nytimes.com/2020/05/04/opinion/coronavirus-vaccine.html">Christopher Snyder and 
                 Alex Tabarrok on spreading out investments for a solution to covid 19</a></footer>
-          </blockquote>
-
-        <p>            
-              Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
-              how cheap they can get, and how much carbon they will ultimately be able to remove. Suppose for now though that 
-              any given approach has a 
-              <r-dynamic class="probabilityOfSuccessIndividual" onmouseover="hoverByClass('probabilityOfSuccessIndividual','#E4FFED')" 
-              bind="probabilityOfSuccessIndividual"  min="0" max="100" after="%" step="1"></r-dynamic> 
-              chance of getting to the 10Gt per year target, to have a 
-              <r-dynamic class="probabilityOfSuccessOverall" onmouseover="hoverByClass('probabilityOfSuccessOverall','#E4FFED')" 
-              bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> 
-              chance of getting at least one viable technology we would need to invest in and start scaling up around
-              <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
-              bind="numberOfTries"></r-display> 
-              technologies today. 
-        </p>
-
-        <h2>Uncertainty</h2>
+        </blockquote>
         <p>
-            There is a famous probability puzzle called the multi-armed bandit problem. In it we are faced with a number of 
-            one armed bandits (slot machines) all with a different probability of paying out the jackpot. We want to maximise our
-            expected winnings over a certain number of arm pulls. The problem though is that we don't know what the likihood of any 
-            machine to pay out is. If we want to learn this we have to spend some of our arm pulls to get a better idea of how likely
-            a given machine is to pay out, but if we only have a set number of total arm pulls what is our best course of action?
+            Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
+            how cheap they can get, and how much carbon they will ultimately be able to remove. Suppose for now though that 
+            any given approach has a 
+            <r-dynamic class="probabilityOfSuccessIndividual" onmouseover="hoverByClass('probabilityOfSuccessIndividual','#E4FFED')" 
+            bind="probabilityOfSuccessIndividual"  min="0" max="100" after="%" step="1"></r-dynamic> 
+            chance of getting to the 10Gt per year target, to have a 
+            <r-dynamic class="probabilityOfSuccessOverall" onmouseover="hoverByClass('probabilityOfSuccessOverall','#E4FFED')" 
+            bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> 
+            chance of getting at least one viable technology we would need to invest in and start scaling up around
+            <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
+            bind="numberOfTries"></r-display> 
+            technologies today. 
             <br><br>
-            While the specifics change depending on some assumptions broadly we 
+            The exact numbers are not really what I want to emphasis here it is more that <b>if we want to have a chance of getting a 
+            working option</b> and we are still at a stage where we have many unknowns around what could work, what could scale, how 
+            quickly things could scale, then this <b>almost certainly requires us to cast a wide net</b> and fund many options in order 
+            to end up backing the handful that do work.   
         </p>
+
+        <h2 id="allocation">Allocation</h2>
+        <p>
+            We need to be spending money scaling up carbon removal today and how we spend this money really matters. 
+            We could simply be spending it all on nature based solutions that are proven to work and have a low cost per 
+            tonne. While this in theory could get us to the 10Gt per year target this would not be long term sequestrations and we 
+            would likely hit some really pretty difficult tradeoffs in terms of land, water etc before we get there. 
+            <br><br>
+            We will almost certainly need a portfolio of approaches to hit a 10Gt a year target. This portfolio if we want to avoid 
+            some of the more difficult tradeoffs to do with nature based solutions will almost certainly want to include technological 
+            options. While these are too expensive today to be of much use, what do we have to do to make them viable options in the 
+            future?
+            <br><br>
+            [there will be a model here]
+        </p>
+
+        <h2 id="funding">Funding</h2>
+        <p>
+            One general point to make is that obviously this is a two sided market you have companies that are creating a service 
+            (cdr) and buyers who are buying the service (tons of carbon removed) How we think about the two sides though is quite 
+            different. The supply side, for technological solutions, is going to be made up of a handful of firms who need money, 
+            but also talent. The demand side will be made up of buyers who by in large will only be providing money. 
+            <br><br>
+            The supply side will be providing a semi-commodity but the semi distinction is an important one, geologic storage in one 
+            place is to a large extent analogous to geologic storage in another (LCAs being equivalent and all), but geologic storage 
+            in one place and a forest in another really aren't the same, for reasons hopefully made clear by now. The demand side is 
+            providing something much closer to a commodity good, money. Again there are important reasons why it is not a strict 
+            commodity, getting your product brought in a guaranteed way over a long time horizon creates opportunities that selling 
+            one offs to any willing customer doesn't but the point stands that on the scale of commodityness the demand side is much 
+            more fungible. 
+            <br><br>
+            It is also drawing from a much wider area, or in other words there are more dollars that could in principle be spent on 
+            buying CDR than there are scientists and engineers who could work on it. For these reasons it would be exceptionally 
+            unfortunate if the demand side was ever the bottleneck holding up progress. 
+            <br><br>
+            It should, as much as we can, be the case that if something is slowing down the scaling of potentially variable cdr 
+            strategies it is because running and scaling a frontier tech company is difficult, not because no one will buy your 
+            stuff. (and even then we should be trying to make the company bit easier). In a situation as critical as reaching our 
+            cdr targets, missing them because of not having enough money would be the most unfortunate and lamentable reason possible.
+            <br><br>
+            While mentioned earlier that a ton is not a ton is not a ton it is also true to some extent that a dollar is not a dollar 
+            is not a dollar. 
+        </p>
+
+        <h3 id="supply">Supply side</h3>
+        <p>
+            Given the global importance of reducing carbon in the atmosphere you would expect governments to be playing a very 
+            large role in trying to help these technologies become cheaper. The good news is that governments are starting to ramp 
+            up funding for these technologies
+            <br><br>
+            <b>Grants</b>
+            <br>
+            The UK has <a href="https://www.gov.uk/government/publications/direct-air-capture-and-other-greenhouse-gas-removal-technologies-competition/projects-selected-for-phase-1-of-the-direct-air-capture-and-greenhouse-gas-removal-programme">
+            just announced the 24 projects</a> it will be backing for experiments into DAC. They have 
+            <a href="https://www.gov.uk/government/news/pm-a-new-deal-for-britain">also announced up to $100m</a>
+            in new funding for dac R&D.
+            <br><br>
+            The us government similarly has recently put out a request for information from their newly formed department of 
+            fossil energy and carbon management for things to look into funding and they have currently put aside a budget of … 
+            for direct R&D funding for frontier cdr areas.
+            <br><br>
+
+            <b>VC</b>
+            <br>
+            VC money is also rapidly moving into the cdr space. There are a few caveats however. Ultimately vc's aim to make money 
+            from their investments. There are two ways for cdr companies to make money, the first is to sell the actual long term 
+            removal of CO₂ either on a voluntary market or to the government, the other is to use the CO₂ in a product that also 
+            sequesters long term (e.g carbon cure). 
+            <br><br>
+            One issue with the second option is that as Klaus Lacker points out we create far more CO₂ than all the gravel and sand 
+            output in the world so while these types of approaches could scale a lot they will almost certainly not take us enough 
+            of the way.
+            <br><br>
+            An issue with the former, sell to companies/governments, is that the very companies that might need vc dollars the most i.e 
+            high tech not ready for market yet, are also the ones who produce a good at above market rate and so may not be able to 
+            find a steady stream of buyers. To some extent this doesn't seem to have been too bad as companies like carbon engineering 
+            or climeworks have seen large amounts of funding but it still is likely holding back even more money from moving in.
+            <br><br>
+            <b>Project finance</b>
+            <br>
+            Project finance is a typical way by which long term infrastructure projects are able to pay for their 
+            creation/construction which typically involve using the projects expected cashflows for repayments. This kind of 
+            financing is one of the primary vehicles renewable company used to scale projects and will likely be crucial for the 
+            scaling up of various cdr approaches as well. 
+            <br><br>
+            Project finance is intimatly linked to the demand side of the equation as you are typically directly using cashflows to 
+            get the financing in the first place. What this allows is for the scale up of much large infrastructure facilities, and 
+            in a non dilutive way. Many CDR strategies are simply too early and in too much of an immature market to be able to 
+            sell their tons of carbon removed in this way allowing them to scale. 
+            <br><br>
+            Also the more nascent approaches have the added problem of trying to sell tons removed well above 'market rates', which
+            creates the problem of who would buy them → little demand → can't get financing → can't scale → can't get cheaper.
+            <br><br>
+            This is clearly not a totally preventative problem, comapies are still getting government and VC funding but project financing
+            allows access to truly massive scale of capital and in the race to 10Gt even though we have other funding avenues every one 
+            is crucial. 
+            <br><br>
+            <b>Milestone based funding</b>
+            <br>
+            One of the most effective blends of government funding with private companies came from the NASA COTS programme in the 
+            early 2000s. The US was decommissioning the space shuttle and needed a way to run resupply missions to the ISS without 
+            having to pay another country to do it. What they did was to effectively run a request for proposals for any companies 
+            who wanted to propose a launch system. These were then assessed on a number of factors, likelihood of technically working, 
+            cost etc, and then ultimately two companies were chosen.
+            <br><br>
+            There were a few main differences to this kind of process to normal government procurement:
+            <ul>
+                <li> 
+                    The government only gave specifications on what needed to be achieved not the specific methods by which to 
+                    achieve them (result oriented not process oriented)
+                </li>
+                <li> 
+                    They paid out based on milestones rather than a cost plus model. If the company hit a certain technical milestone 
+                    on their roadmap the government gave them a set amount of money. This put more risk onto the individual companies 
+                    as they would be responsible for paying for cost overruns. It also meant the government only paid out as specific 
+                    progress was made. This helped derisk the government from massive cost overruns.
+                </li>
+            </ul>
+        </p>
+        <p>
+            The end result was that one of the companies funded was spacex and the government saw its costs to resupply the ISS plummet 
+            by almost an order of magnitude while at the same time the most successful space company in the world was able to be born.
+            <br><br>
+            This kind of approach seems to lend itself almost perfectly to the position we are in with cdr.   
+        </p>
+
+        <h3 id="demand">Demand</h3>
+        <p>
+            <b>Voluntary carbon market</b>
+            <br>
+            One thing that is happening today are that private companies like stripe, shopify and microsoft, are coming into the carbon 
+            removal space and offering to buy removal capacity far above market rates in order to try to help various companies scale 
+            and move down their cost curves. 
+            <br><br>
+            When stripe started their carbon purchasing they started with $1m, which is an insanely small amount and yet they reported 
+            that this amount of capital was at the time a huge deal for the companies involved. In fact stripe has gone on to be the 
+            literal first customer of a number of the companies they back.
+            <br><br>
+            While the figures are not yet public stripe has also allowed companies on their platform to directly contribute a percentage 
+            of their revenue towards the companies stripe is buying from thus providing what is likely a reasonably sized, and maybe more 
+            importantly recurring, source of funds for these companies. 
+            <br><br>
+            Voluntary carbon markets for frontier cdr approaches are still not very large though. Some of this is a supply issue, 
+            microsoft found it actually impossible given the submissions they had for their spending to find enough long term 
+            sequestration companies to get to their net zero targets. Some of the issue though is demand based. At the moment net-zero 
+            pledges largely treat a ton of carbon removed by a forest the same as one that is injected underground or mineralised. 
+            While we will need to scale up nature based solutions as well what this does is mean that many companies if they are simply 
+            trying to hit their net zero target do not have an incentive currently to buy the well above market priced carbon removal 
+            from the more frontier approaches.   
+            <br><br>
+            <b>Carbon purchase agreements</b>
+            <br>
+            Energy sources such as solar and wind benefitted massively from Power purchase agreements (PPAs) which were long term agreements by companies/governments 
+            to buy energy from specific projects. This enabled these projects to literally take this commitment to the bank where they 
+            could then raise project financing to either expand their portfolio of renewable energy projects or build specific ones using 
+            the agreement.
+            <br><br>
+            Buying a few years worth of RECs from a renewable project does not provide the stable and sizable cash stream that a 
+            renewable project developer needs to get financing to build new green power projects. In a PPA, Google is agreeing to buy 
+            all the power from a project for many years. Google has, in effect, totally accepted the power price risk that the project
+            owner would otherwise face—instead of taking the risk of selling into the power market on a short-term basis, Google is 
+            providing the seller with a guaranteed revenue stream for 20 years. This is something the developer can literally take to 
+            the bank”
+            <br><br>
+            Google emphasises this bankability later in the document as well where they say that if they only brought the RECs this would
+            provide the energy providers with only a fraction of the benefit of going all in with a PPA. It is interesting to contrast 
+            this with the way voluntary carbon markets work today. Currently we are largely in the buying just the REC phase of many 
+            markets, especially for frontier technologies.
+            <br><br>
+            It should be noted that the UK currently has the Woodland Carbon Guarantee which allows for the option to sell captured 
+            carbon to the government at a guaranteed price. This is a great initiative and should probably be copied more around the 
+            world, however, it still doesn't necessarily help frontier companies. If they are likely to produce a tonne of removed 
+            carbon for well above the price guarantee then selling to the government does little to help them gain a positive expected 
+            value with which to finance their projects. In their case they may well need much more specific agreements for buying from 
+            their specific facilities with the expectation that the carbon removed will have a higher price per tonne than other sources
+            but that this will allow these companies to fund more project expansion to move down their cost curves.
+            <br><br>
+            This doesn't really happen at the moment. We see some companies like stripe or shopify that are buying from frontier companies
+            at above market rates but not necessarily in a more formalised long term way. This is not necessarily a bug, at least at 
+            this point. …explore vs exploit …etc
+            <br><br>
+            There are some big differences between what google did and what might/does need to be done with CDR. Google specifically 
+            says that they “always try to buy renewable energy from the most cost-competitive sources within the grids where we operate.” 
+
+            <br><br>
+            <b>Advanced market commitments</b>
+            <br>
+            Advanced market commitments are when some group guarantees to buy a given output as long as a certain set of criteria 
+            is met. For example back in …. There was a $1.5bn AMC to buy pneumococcal vaccines for developing countries. The idea was 
+            that the AMC allows both market forces and subsidy like interventions to interact to help create conditions that private 
+            firms would find more favorable to go and try to create a vaccine candidate in. One of the main reasons the AMC is so useful 
+            is that it avoids having to pick which companies to buy from ex-ante and instead lets companies that believe they can make a 
+            profitable candidate self-select. 
+            <br><br>
+            One of the main considerations when designing AMCs is whether the product being brought is technologically close or 
+            technologically distant. What this distinction means in practice is will firms be able to largely use pre-existing R&D 
+            to create the product and the AMC is to incentives capacity increases (technologically close) or will they have to invest 
+            in this R&D as well as invest in capacity increases to create the product (technologically distant). 
+            <br><br>
+            The distant option is more like what we face with many CDR solutions. Things like DAC while in some form of operation 
+            currently are clearly very far away from 
+
+        </p>
+
         
       
       </section>
@@ -701,11 +1224,24 @@
 
     <!-- ##################### sidebar #####################-->
     <div class="sidebar">
-        <!-- <r-outline open=""></r-outline> -->
-
       <div >
-        <a href="#top"><p>Scaling carbon removal</p></a>
-        <a href="#measurements"><p>Measurements</p></a>
+        <!-- <a href="#top"><p>Scaling carbon removal</p></a> -->
+        <a href="#scale_of_problem" class="menuHeader"><div>Scale of problem</div></a>
+        <a href="#emissions" ><div>&nbsp;&nbsp;&nbsp;Emissions</div></a>
+        <a href="#capacity"><div>&nbsp;&nbsp;&nbsp;Capacity</div></a>
+        <a href="#cost"><div>&nbsp;&nbsp;&nbsp;Cost</div></a>
+        <a href="#intro to cost curves" class="menuHeader"><div>Cost curves</div></a>
+        <a href="#cc_relevance" ><div>&nbsp;&nbsp;&nbsp;Relevance to CDR</div></a>
+        <a href="#moving_down_cc"><div>&nbsp;&nbsp;&nbsp;Moving down the &nbsp;&nbsp;&nbsp;cost curve</div></a>
+        <a href="#portfolio" class="menuHeader"><div>Portfolios</div></a>
+        <a href="#approaches" ><div>&nbsp;&nbsp;&nbsp;Approaches</div></a>
+        <a href="#projects"><div>&nbsp;&nbsp;&nbsp;Projects</div></a>
+        <a href="#allocation" class="menuHeader"><div>Portfolio allocation</div></a>
+        <a href="#funding" class="menuHeader"><div>Funding</div></a>
+        <a href="#supply" ><div>&nbsp;&nbsp;&nbsp;Supply side</div></a>
+        <a href="#demand"><div>&nbsp;&nbsp;&nbsp;Demand side</div></a>
+        <a href="#regulation"><div>&nbsp;&nbsp;&nbsp;Regulation</div></a>
+
       </div>
     </div>
     

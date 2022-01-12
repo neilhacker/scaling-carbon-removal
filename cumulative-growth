@@ -27,3 +27,20 @@ plug this in as x
 
 Cn = C1 * (C * (1-r^(n+1))/(1-r))^log2(b) 
 
+-------------------------------------------------
+// to find total cost of moving from Ca,Qa to Cb we could use 
+<b 
+    onclick="cumulativeCost(
+        document.getElementsByClassName('cumulativeCarbonRemovalAmount')[0].value, /* Qa */
+        document.getElementsByClassName('scaleIncreaseToNewCost')[0].value  , /* Qb */
+        document.getElementsByClassName('wrightsLawC1')[0].value, /* c1 */
+        document.getElementsByClassName('wrightLearningCurve')[0].value /* l */
+        )">Click here</b> to see how much this would cost.
+
+<b id="scaleCost" style="color:#7BBEF7" onclick="sidebar('Cb')"></b>
+
+which uses a for loop and a function in helper.js to be exact 
+
+OR
+
+we can use the Euler–Maclaurin formula to approximate it with an integral
