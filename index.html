@@ -79,7 +79,7 @@
         <r-var name="currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
         <!-- <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    Qa -->
         <r-var name="yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>               <!--  -->
-        <r-var name="yearsTo10Gt" :value="Math.log(10000000000/currentCarbonRemovalAmount)/Math.log(1+yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var>
+        <r-var name="yearsTo10Gt" :value="(Math.log(10000000000/currentCarbonRemovalAmount)/Math.log(1+yearlyIncreaseInTonnesPerc/100)).toPrecision(3)" format=",.6"></r-var>
         <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
         <r-var name="cumulativeScaleTo10Gt" :value="(currentCarbonRemovalAmount * ( (1-(1+(yearlyIncreaseInTonnesPerc/100))**(yearsTo10Gt+1)) / (1-(1+(yearlyIncreaseInTonnesPerc/100))) )) - currentCarbonRemovalAmount + cumulativeCarbonRemovalAmount" format=",.12"></r-var>        
         <r-var name="totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (cumulativeScaleTo10Gt**(log2b+1)-(cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
@@ -397,8 +397,19 @@
 
         <h3 id="cost">Scale of cost</h3>
         <p>
-            <oil-demand-cost-2019-sidenote></oil-demand-cost-2019-sidenote>
-
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="oilDemandCost2019SideNote">
+                Avge oil price = <avge-2019-oil-price></avge-2019-oil-price>
+                <br><br>
+                Oil demand = <oil-barrel-demand-2019></oil-barrel-demand-2019>
+                <br><br>
+                Cost of demand 
+                =Avge oil price * Oil demand
+                <br>
+                = <oil-demand-cost-2019></oil-demand-cost-2019> billion
+            </span> 
+      
             <!-- scale of costs margin graph -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -468,15 +479,14 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote-reactive" id="totalRemovalCostBillions">
-                <b>Calculations for total removal cost</b> <br>
-                <cost-per-ton-text width="40%"></cost-per-ton-text> = 
+                Cost per ton = 
                 $<r-dynamic class="scaleOfCost_costperton" onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')" 
                 bind="scaleOfCost_costperton"  min="0" max="1000" step="1"></r-dynamic>
                 <br><br>
-                <quantity-of-co2-text width="40%"></quantity-of-co2-text> = <quantity-of-co2></quantity-of-co2> million tonnes
+                Quantity of CO₂ = <quantity-of-co2></quantity-of-co2> million tonnes
                 <br><br>
-                <total-removal-cost-text width="20%"></total-removal-cost-text> 
-                = <cost-per-ton-text width="30%"></cost-per-ton-text> * <quantity-of-co2-text width="30%"></quantity-of-co2-text>
+                Total cost 
+                = Cost per ton * Quantity
                 <br>
                 = <r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
                 bind="totalRemovalCostBillions" ></r-display> billion     
@@ -693,10 +703,10 @@
             One potential issue with cost scaling for many of these approaches will be that energy might present somewhat of a price 
             floor. To be sure better chemistry could lead to less energy per ton to be needed and energy prices, especially renewable 
             ones which would be the ones powering our cdr systems, will likely fall more, but you can't scale costs down forever if you 
-            have to pay for energy. Depending on the energy resource, capturing 1 MtCO2/yr requires 180 - 500 MW of power (CDR primer ch2), 
-            at current prices this would put a floor of, at minimum
-            Solar pv module price is around $0.38 a Watt 
-            $68.4 to $190 potential price floor at current energy prices
+            have to pay for energy. Depending on the energy resource, capturing 1 MtCO2/yr requires
+            <a href="https://cdrprimer.org/read/chapter-2">180 - 500 MW of power</a>, 
+            at current prices (＄0.38 a Watt for solar) this would put a floor of, at minimum ＄68.4 to ＄190.
+            <br><br>
             If we are at the higher end of this power usage limit then this price floor could prove to be a real obstacle to our ability 
             to scale at an affordable price.
             <br><br>
