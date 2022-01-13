@@ -17,235 +17,367 @@
     <script type="text/javascript" src="elements.js"></script>
     <script type="text/javascript" src="sidenote.js"></script>
 
+
   </head>
 
   <body>    
 
-    <div class="fulldisplay">
-      <h1>Scaling carbon removal </h1>
-      <iframe src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?tab=chart&time=1850..latest&facet=none&country=~OWID_WRL" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
-      <iframe src="https://ourworldindata.org/grapher/global-co-concentration-ppm?time=1850..2018" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>
-      <iframe src="https://ourworldindata.org/grapher/temperature-anomaly?time=earliest..latest&country=~Global" loading="lazy" style="width: 30%; height: 400px; border: 0px none;"></iframe>        
-    </div>  
-
     <div class="wrapper">
 
     <article>
-      <r-var name="reactiveValExample" value="10" format=".5"></r-var>
-      <r-var name="calculatedValExample" :value="reactiveValExample*10" format=".5"></r-var>
+      
+        <!--------------------------- ----------------- -------------------------->
+        <!--------------------------- SCALE OF CAPACITY -------------------------->
+        <!--------------------------- ----------------- -------------------------->
+        <r-var name="currentCO2removal" value="10000" format=",.10"></r-var>                 
+        <r-var name="targetCO2removal" value="1000000000" format=",.10"></r-var>
+        <r-var name="co2removalScaleUp" :value="Math.trunc(targetCO2removal/currentCO2removal)" format=",.10"></r-var>
+        <r-var name="co2removalAnnualGrowthRate" :value="Math.trunc(((co2removalScaleUp ** (1/30))-1)*100)" format=".4"></r-var>
 
-      <!-- scale of emissions comparison graph values -->
-      <r-var name="usaEmissions" value="5.6" format=".5"></r-var>
-      <r-var name="chinaEmissions" value="9.4" format=".5"></r-var>
-      <r-var name="worldCoalEmissions" value="14.6" format=".5"></r-var>
-      <r-var name="worldEmissions" value="37.7" format=".5"></r-var>
-      <r-var name="tenGigatons" value="10" format=".5"></r-var>
-      <r-var name="oneGigaton" value="1" format=".5"></r-var>
-      <r-var name="forestSink" value="7.6" format=".5"></r-var>
-      <r-var name="currentDacCapture" value="0.00001" format=".7"></r-var>
-      <r-var name="emissionComparisonScale" value="0.01" format=".5"></r-var>
+        <!--------------------------- ------------- -------------------------->
+        <!--------------------------- SCALE OF COST -------------------------->
+        <!--------------------------- ------------- -------------------------->
+        <!-- cost of removal comparison graph values (in millions) -->
+        <r-var name="usaMilitarySpending" :value="734000" format=".9"></r-var>
+        <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
+        <r-var name="oilDemandCost2019" :value="64.3 * 36400" format=".9"></r-var>
+        <r-var name="apolloMissions" :value="280000" format=".9"></r-var>
+        <r-var name="cleanAirAct" :value="65000" format=".9"></r-var>
+        <r-var name="fossilFuelSubsidies" :value="3100000" format=".9"></r-var>
+        <r-var name="renewableSubsidies" :value="160000" format=".9"></r-var>
+        <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
 
-      <r-var name="costperton" value="200" format=".5"></r-var>
-      <r-var name="quantityofco2" value="5600" format=".6"></r-var>
-      <r-var name="totalRemovalCost" :value="costperton * quantityofco2" format=".9"></r-var>
-      <r-var name="totalRemovalCostBillions" :value="totalRemovalCost/1000" format=".9"></r-var>
+        <!-- cost per ton is in cost curve section -->
+        <r-var name="scaleOfCost_costperton" value="200" format=".5"></r-var>                         <!-- Ca -->
+        <r-var name="quantityofco2" value="5600" format=",.6"></r-var>
+        <r-var name="totalRemovalCost" :value="scaleOfCost_costperton * quantityofco2" format=",.9"></r-var>
+        <r-var name="totalRemovalCostBillions" :value="totalRemovalCost/1000" format=",.9"></r-var>
+  
 
-      <!-- cost of removal comparison graph values (in millions) -->
-      <r-var name="usaMilitarySpending" :value="734000" format=".9"></r-var>
-      <r-var name="sqrtTotalRemovalCost" :value="Math.sqrt(totalRemovalCost)" format=".9"></r-var>
-      <r-var name="oilDemandCost2019" :value="64.3 * 36400" format=".9"></r-var>
-      <r-var name="apolloMissions" :value="280000" format=".9"></r-var>
-      <r-var name="cleanAirAct" :value="65000" format=".9"></r-var>
-      <r-var name="fossilFuelSubsidies" :value="3100000" format=".9"></r-var>
-      <r-var name="renewableSubsidies" :value="160000" format=".9"></r-var>
-      <r-var name="graphMaxVal" :value="Math.max(sqrtTotalRemovalCost*1.2,1000)" format=".9"></r-var>
+        <!----------------------------- ----------- -------------------------->
+        <!----------------------------- COST CURVES -------------------------->
+        <!----------------------------- ----------- -------------------------->
+        <!-- wrights law curve example -->
+        <!-- wrightLearningCurveStartVal = Cx/(x^log(2,b)) where b = 1-1/wrightLearningCurve -->
+        <r-var name="sliderStep" value="1" format=".0f"></r-var>
+        <r-var name="wrightLearningCurveStartValExample" :value="600/((10)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+        <r-var name="wrightLearningCurveStartVal" :value="costperton/((carbonRemovalAmount)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
+        <r-var name="carbonRemovalAmount" value="10" format=",.6"></r-var>
+
+        <!-- values used to compute cumulative cost to move down cost curve -->
+        <r-var name="wrightLearningCurve" value="15" format=".5"></r-var>                 <!-- L -->
+        <r-var name="costperton" value="600" format=".5"></r-var>                         <!-- Ca -->
+        <r-var name="costpertonLow" value="100" format=".5"></r-var>                      <!-- Cb -->
+        <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    <!-- Qa -->
+        <r-var name="wrightsLawC1" :value="costperton /cumulativeCarbonRemovalAmount ** Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+        <r-var name="log2b" :value="Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
+        <!-- Qb see Qb margin note for calculation detail if this is hard to decode -->
+        <r-var name="scaleIncreaseToNewCost" :value="(costpertonLow/wrightsLawC1) ** (1/Math.log2(1-(wrightLearningCurve/100)))" format=",.0f"></r-var>
+        <r-var name="totalCostToCb" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (scaleIncreaseToNewCost**(log2b+1)-(cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
+
+        <!-- values used to compute cumulative cost to scale up volume -->
+        <r-var name="currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
+        <!-- <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    Qa -->
+        <r-var name="yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>               <!--  -->
+        <r-var name="yearsTo10Gt" :value="Math.log(10000000000/currentCarbonRemovalAmount)/Math.log(1+yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var>
+        <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
+        <r-var name="cumulativeScaleTo10Gt" :value="(currentCarbonRemovalAmount * ( (1-(1+(yearlyIncreaseInTonnesPerc/100))**(yearsTo10Gt+1)) / (1-(1+(yearlyIncreaseInTonnesPerc/100))) )) - currentCarbonRemovalAmount + cumulativeCarbonRemovalAmount" format=",.12"></r-var>        
+        <r-var name="totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (cumulativeScaleTo10Gt**(log2b+1)-(cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
+        <r-var name="avgeCostPerYear" :value="Math.trunc(totalCostToCbVolExample/yearsTo10Gt)" format=",.13"></r-var>
 
 
-      <!-- cost curve time to $100 & $10 -->
-      <r-var name="HundredDollars" value="100" format=".5"></r-var>
-      <r-var name="TenDollars" value="10" format=".5"></r-var>
-      <r-var name="dacLearningCurve" value="3" format=".5"></r-var>
-      <r-var name="yearsToHundredDollars" :value="Math.log(100/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
-      <r-var name="yearsToTenDollars" :value="Math.log(10/costperton)/Math.log((1-(dacLearningCurve/100)))" format=".2"></r-var>
-
-      <!-- net zero emissions graph -->
-      <r-var name="emissionReductionRate" value="2" format=".5"></r-var>
-      <r-var name="carbonRemovalAmount" value="0.001" format=".6"></r-var>
-      <r-var name="carbonRemovalRate" value="20" format=".5"></r-var>
-      <r-var name="year" value="15" format=".1f"></r-var>
-      <r-var name="yearInActualDateForm" :value="(year + 2020).toPrecision(4)" format=".1f"></r-var>
-      <r-var name="removalCostInGivenYeaer" :value="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year) * costperton*((1-(dacLearningCurve/100)) ** year))" format=".9"></r-var>
-
-      <!-- cost of carbon removal in given year side graph -->
-      <r-var name="sqrtRemovalCostInGivenYeaer" :value="Math.sqrt(removalCostInGivenYeaer*1000)" format=".9"></r-var>
-      <r-var name="graphMaxValInGivenYear" :value="Math.max(sqrtRemovalCostInGivenYeaer*1.2,1000)" format=".9"></r-var>
-
-      <!-- cost to get to net zero emissions graph -->
-      <!-- This is the number of tonnes of carbon removed in 2050 * cost per tonne of carbon removed in 2050 * 20% to add padding -->
-      <r-var name="maxCostYAxis" :value="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** 30) * costperton*((1-(dacLearningCurve/100)) ** 30)) * 1.2" format=".9"></r-var>
+        <!----------------------------- --------- ---------------------------->
+        <!----------------------------- PORTFOLIO ---------------------------->
+        <!----------------------------- --------- ---------------------------->
         
-      <!-- wrights law curve example -->
-      <!-- wrightLearningCurveStartVal = Cx/(x^log(2,b)) where b = 1-1/wrightLearningCurve -->
-      <r-var name="wrightLearningCurveStartVal" :value="costperton/((carbonRemovalAmount*1000000000)**(Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" format=".9"></r-var>
-      <r-var name="wrightLearningCurve" value="10" format=".5"></r-var>
-      <!-- <r-var name="currentDacCapture" value="0.00001" format=".7"></r-var> -->
-      <!-- <r-var name="costperton" value="200" format=".5"></r-var> -->
+        <!-- 
+            portfolio of approaches 
+            years = 30
+            target = 10,000,000,000
+         -->
+         <r-var name="single_approach_starting_removal" value="10000" format=",.6"></r-var>
+         <r-var name="single_approach_annual_growth" :value="(((10000000000/single_approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
 
-      <!-- 2 tech portfolio example -->
-      <r-var name="lowCostTechCostPerTon" value="50" format=".5"></r-var>
-      <r-var name="lowCostTechCurrentRemoval" value="1000000" format=".8"></r-var>
-      <r-var name="lowCostTechLearningRate" value="2" format=".5"></r-var>
-      <r-var name="lowCostTechWrightsLawStartVal" value="lowCostTechCostPerTon/(lowCostTechCurrentRemoval ** Math.log2(1-lowCostTechLearningRate/100))" format=".5"></r-var>
+         <r-var name="num_of_approaches" value="8" format=",.6"></r-var>
+         <r-var name="approach_starting_removal" value="10000" format=",.6"></r-var>
+         <!-- each approach target in 2050 / amount now gives magnitude increase then look per year -->
+         <r-var name="approach_annual_growth" :value="((((10000000000/num_of_approaches)/approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
+
+        <!-------------------- -------------------------- -------------------------->
+        <!-------------------- PORTFOLIO ALLOCATION MODEL ------------------------>
+        <!-------------------- -------------------------- -------------------------->
+        <r-var name="yearsToScaleUp" value="30" format=",.10"></r-var>   
+
+        <r-var name="a_costPerTon" value="30" format=",.10"></r-var>   
+        <r-var name="a_learningRate" value="0" format=",.10"></r-var>   
+        <r-var name="a_scaleCap" value="4" format=",.10"></r-var>  <!-- This is in gigatons  -->
+        <r-var name="a_currentTonsRemoval" value="1000000000" format=",.10"></r-var>  <!-- This is in tons  -->
+        <r-var name="a_currentCumulativeTonsRemoval" value="10000000000" format=",.10"></r-var> <!-- need this for cost curve placement/for tech a doesn't really matter as LR=0 -->
+        <r-var name="a_yearsToScaleUp_1" :value="yearsToScaleUp" format=",.10"></r-var> 
+        <r-var name="a_neededAnnualGrowthRate" :value="((((a_scaleCap*1000000000)/a_currentTonsRemoval)**(1/a_yearsToScaleUp_1))-1)*100" format=".3"></r-var> 
+        <r-var name="a_C1" :value="a_costPerTon" format=",.6"></r-var>
+        <r-var name="a_log2b" :value="Math.log2(1-(a_learningRate/100))" format=",.6"></r-var>
+
+        <r-var name="b_costPerTon" value="500" format=",.10"></r-var>   
+        <r-var name="b_learningRate" value="15" format=",.10"></r-var>   
+        <r-var name="b_scaleCap" value="4" format=",.10"></r-var>  <!-- This is in gigatons  -->
+        <r-var name="b_currentTonsRemoval" value="10000" format=",.10"></r-var>  <!-- This is in tons  -->
+        <r-var name="b_currentCumulativeTonsRemoval" value="50000" format=",.10"></r-var> <!-- need this for cost curve placement/for tech a doesn't really matter as LR=0 -->
+        <r-var name="b_yearsToScaleUp_1" :value="yearsToScaleUp" format=",.10"></r-var> 
+        <r-var name="b_neededAnnualGrowthRate" :value="((((b_scaleCap*1000000000)/b_currentTonsRemoval)**(1/b_yearsToScaleUp_1))-1)*100" format=".3"></r-var> 
+        <r-var name="b_C1" :value="b_costPerTon /b_currentCumulativeTonsRemoval ** Math.log2(1-(b_learningRate/100))" format=",.6"></r-var>
+        <r-var name="b_log2b" :value="Math.log2(1-(b_learningRate/100))" format=",.6"></r-var>
+        
+        <r-var name="portfolio_sliderStep" value="1" format=".0f"></r-var>
+
+        <!-- Two tech portfolio example -->
+        <!-- <r-var name="portfolio_currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
+        <r-var name="portfolio_cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    
+        <r-var name="portfolio_yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>              
+        <r-var name="portfolio_yearsTo10Gt" :value="Math.log(10000000000/portfolio_currentCarbonRemovalAmount)/Math.log(1+portfolio_yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var> -->
+        <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
+        <!-- <r-var name="portfolio_cumulativeScaleTo10Gt" :value="(portfolio_currentCarbonRemovalAmount * ( (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))**(portfolio_yearsTo10Gt+1)) / (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))) )) - portfolio_currentCarbonRemovalAmount + portfolio_cumulativeCarbonRemovalAmount" format=",.12"></r-var>         -->
+        
+        <!-- this changes we have 2 Cb values 1 for each tech then we add them -->
+        <!-- <r-var name="portfolio_totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (portfolio_cumulativeScaleTo10Gt**(log2b+1)-(portfolio_cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
+
+        <r-var name="percentOfRemovalFromTechA" value="50" format=",.6"></r-var> -->
+
+        <!-- shots on goal -->
+        <r-var name="probabilityOfSuccessIndividual" value="5" format=",.2"></r-var>
+        <r-var name="probabilityOfSuccessOverall" value="95" format=",.2"></r-var>
+
+        <r-var name="numberOfTries" :value="Math.trunc(Math.log(1-(probabilityOfSuccessOverall/100))/Math.log(1-(probabilityOfSuccessIndividual/100)))" format=",.6"></r-var>
 
 
-      <r-var name="highCostTechCostPerTon" value="500" format=".5"></r-var>
-      <r-var name="highCostTechCurrentRemoval" value="10000" format=".8"></r-var>
-      <r-var name="highCostTechLearningRate" value="15" format=".5"></r-var>
 
-      <r-var name="percCarbonFromLowCostTech" value="15" format=".5"></r-var>
+        <section>
 
-      <r-var name="cumulativeTonsRemovedBy2050" :value="carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(30+1))) / (1-(1+(carbonRemovalRate/100)))" format=".5"></r-var>
-
-
-
-
-
-
-      <section>
-        <h2 id="problem">About this essay</h2>
+        <h1 id="title">Scaling up carbon removal</h1>
+        <h2>Overview</h2>
         <p>
-          <calculated-example-sidenote></calculated-example-sidenote>
-
-          This docurment has a number of different kind of values. There are <b style="color:#874dea;">data</b>
-          values like this this value for the USA CO₂ emissions in 2019 of        
-          <a href="https://ourworldindata.org/explorers/co2?facet=none&country=~USA&Gas=CO%E2%82%82&Accounting=Consumption-based&Fuel=Total&Count=Per+capita"> <usa-emissions></usa-emissions></a>
-          tonnes.
-          Thes values are all links that will take you to the source of the data.
-          There are <b style="color:#66D268;">reactive</b> values like this <reactive-val-example></reactive-val-example>
-          which you can change by clicking the value and dragging your cursor left & right.
-          There are also <b style="color:#db437d;">constant</b> values like this <constant-example-ten></constant-example-ten>. 
-          These values can't be changed and are, well, constant. Lastly there are <b style="color:#7BBEF7;">calculated</b>
-          values like this <calculated-val-example></calculated-val-example> which are the result of 
-          some calculation. You can also click on any of the <b style="color:#7BBEF7;">calculated</b> values
-          and the calculation used to compute them will show up to the side.
-          <br><br>
-          For the best experience if you can try to read this essay fullscreen on a computer rather than a phone.
+            This document is meant to look at the problem of scaling up carbon removal, specifically with a focus on 
+            the financial aspects of this. The main questions are:
+            <ul>
+                <li>What should we be funding today
+                </li>
+                <li>How much might we expect to be spending/how does this change based on assumptions
+                </li>
+                <li>How might this funding come about/be focused 
+                </li>
+            </ul>
         </p>
-
-        <h2 id="measurements">Measurements & Terms</h2>
         <p>
-            Country emission values are <b>consumption</b>
-                <sup>1</sup>
-                <label for="mn-demo" class="margin-toggle">&#8853;</label>
-                <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-                <span class="marginnote" id="yearsUntilTenDollars">
-                <sup>1</sup> These are emissions which have been adjusted for trade. "Territorial / production 
-                emissions minus emissions embedded in exports, plus emissions embedded in imports". 
-                </span>
-            based emissions. By clicking on the value you will be able to have a look at other types of measurements
-            for that particular country. It is also useful to have some idea of the scale of metrics used so just 
-            know that: 
-            <br>
-            1000 kg is 1 tonne.
-            <br>
-            1 Megaton (Mt) is 1,000,000 tonnes.
-            <br>
-            1 Gigatonne (Gt) is 1,000 Megatons or 1,000,000,000 tonnes.
-                <sup>2</sup>
-                <label for="mn-demo" class="margin-toggle">&#8853;</label>
-                <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-                <span class="marginnote" id="yearsUntilTenDollars">
-                <sup>2</sup> One gigatonne is roughly 2x the weight of all humans. 
-                </span>            
+            If you more interested in the technical details of various approaches then the recent(ish) 
+            <a href="https://cdrprimer.org/">CDR Primer</a> is a great place to start. This essay is less about technical
+            details and more about questions around resource allocationand costs. 
             <br><br>
+            The main things I hope you take away from this document are:
+            <ul>
+                <li>To be on track to hit 10Gt of CDR by 2050 we need to start scaling up our efforts a lot, and right now</li>
+                <li>We need to be channeling funding into many different types of CDR</li>
+                <li>especially a lot more funding into areas that might have much higher costs per tonne today but which have the 
+                    likelihood to scale this cost down as we ramp up our use of them</li>
+                <li>If one of the main things we care about is hitting the target of 10Gt of removal a year then speed and cost are 
+                    aligned, i.e the faster we scale the cheaper it will be in total</li>
+            </ul>
+            </p>
+            <p>
+            This document is a bit different to most in that I've tried to make calculations, somewhat, interactive and explained 
+            step by step. Numbers in green are ones that you can slide to change the values of. For example, how will total costs 
+            change if we scale up carbon removal faster or what will happen to total costs if we spend more of our budget today on 
+            approaches with less of a learning effect? Numbers in blue are ones that are calculated from a mixture of our reactive 
+            values, constants or data values. If you click on them I’ve tried to present the steps I went through to calculate them 
+            in the margin.   
+
+            <br><br>
+            For the best experience if you can try to read this essay fullscreen on a computer rather than a phone.
+
+
         </p>
 
-        <h2 id="scale">Scale</h2>
-        <h3>Scale of emissions</h3>
+        <h2 id="scale_of_problem">Scale of problem</h2>
         <p>
-            <!-- scale of emissions margin graph -->
+            This section aims to be a short bit of contextualising of how much CO₂ we need to remove, how quickly we 
+            need to ramp up our capabilities, and how much this could cost.
+    
+        </p>
+
+        <h3 id="emissions">Scale of emissions</h3>
+        <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="emissionsComparison">
-            <r-svg-chart xlabel="" ylabel="" :xlim="[0,emissionComparisonScale]" :ylim="[0, emissionComparisonScale]" :listen="emissionComparisonScale" width="650" height="600" x-axis-location="origin" y-axis-location="origin">
-                <r-svg-node :x="Math.sqrt(usaEmissions)" :y="Math.sqrt(usaEmissions)" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(usaEmissions)" :y="Math.sqrt(usaEmissions)" text="USA"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(usaEmissions), 0],[Math.sqrt(usaEmissions), Math.sqrt(usaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(usaEmissions)],[Math.sqrt(usaEmissions), Math.sqrt(usaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(chinaEmissions)" :y="Math.sqrt(chinaEmissions)/2" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(chinaEmissions)" :y="Math.sqrt(chinaEmissions)/2" text="China"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(chinaEmissions), 0],[Math.sqrt(chinaEmissions), Math.sqrt(chinaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(chinaEmissions)],[Math.sqrt(chinaEmissions), Math.sqrt(chinaEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(forestSink)/2" :y="Math.sqrt(forestSink)" fill="#66D268"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(forestSink)/2" :y="Math.sqrt(forestSink)" text="Forest"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(forestSink), 0],[Math.sqrt(forestSink), Math.sqrt(forestSink)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(forestSink)],[Math.sqrt(forestSink), Math.sqrt(forestSink)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(worldCoalEmissions)" :y="Math.sqrt(worldCoalEmissions)" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(worldCoalEmissions)" :y="Math.sqrt(worldCoalEmissions)" text="Coal"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(worldCoalEmissions), 0],[Math.sqrt(worldCoalEmissions), Math.sqrt(worldCoalEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(worldCoalEmissions)],[Math.sqrt(worldCoalEmissions), Math.sqrt(worldCoalEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(worldEmissions)" :y="Math.sqrt(worldEmissions)" fill="#ff7f0e"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(worldEmissions)" :y="Math.sqrt(worldEmissions)" text="World"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(worldEmissions), 0],[Math.sqrt(worldEmissions), Math.sqrt(worldEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(worldEmissions)],[Math.sqrt(worldEmissions), Math.sqrt(worldEmissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(tenGigatons)" :y="Math.sqrt(tenGigatons)" fill="#db437d"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(tenGigatons)" :y="Math.sqrt(tenGigatons)" text="Ten gigatons"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(tenGigatons), 0],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(tenGigatons)],[Math.sqrt(tenGigatons), Math.sqrt(tenGigatons)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            
-                <r-svg-node :x="Math.sqrt(oneGigaton)" :y="Math.sqrt(oneGigaton)" fill="#db437d"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(oneGigaton)" :y="Math.sqrt(oneGigaton)" text="One gigaton"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(oneGigaton), 0],[Math.sqrt(oneGigaton), Math.sqrt(oneGigaton)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(oneGigaton)],[Math.sqrt(oneGigaton), Math.sqrt(oneGigaton)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                <r-svg-node :x="Math.sqrt(currentDacCapture)" :y="Math.sqrt(currentDacCapture)" fill="#66D268"></r-svg-node>
-                <r-svg-text :x="Math.sqrt(currentDacCapture)/2" :y="Math.sqrt(currentDacCapture)" text="DAC"></r-svg-text>
-                <r-svg-path :data="[[Math.sqrt(currentDacCapture), 0],[Math.sqrt(currentDacCapture), Math.sqrt(currentDacCapture)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-path :data="[[0, Math.sqrt(currentDacCapture)],[Math.sqrt(currentDacCapture), Math.sqrt(currentDacCapture)]]" stroke="#379239" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            </r-svg-chart>
-
-            Adjust the axis to zoom in/out:
-            <r-dynamic class="emissionComparisonScale" onmouseover="hoverByClass('emissionComparisonScale','#E4FFED')" 
-            bind="emissionComparisonScale" min="0" max="7" step="0.001"></r-dynamic> <br><br>
-            Most values are much bigger than DAC so try moving the scale to around 3.5 to see more.
+            <span class="marginnote" id="growth base rates">  
+                For a bit of scale: 
+                <br>
+                - The USA's emissions in 2019 were <usa-emissions></usa-emissions> tonnes.
+                <br>
+                - China's 2019 emissions were <china-emissions></china-emissions> tonnes.
+                <br>
+                - Worldwide 2019 CO₂ emissions from coal were <world-coal-emissions></world-coal-emissions> tonnes.
             </span> 
 
-            Just how much carbon is there to remove? To get a sense of some scale the following 
-            might be useful guide points: 
-            <br>
-            - The USA's emissions in 2019 were <usa-emissions></usa-emissions> tonnes.
-            <br>
-            - Forests were a net carbon sink to the tune of <forest-sink></forest-sink> tonnes in 2019.
-            <br>
-            - China's 2019 emissions were <china-emissions></china-emissions> tonnes.
-            <br>
-            - The IPCC report has suggested we will need carbon removal on the scale of 10 gigatons of 
-            carbon a year by 2050 which is <ten-gigatons></ten-gigatons> tonnes.
-            <br>
-            - Worldwide 2019 CO₂ emissions from coal were <world-coal-emissions></world-coal-emissions>.
-            <br>
-            - The worlds 2019 emissions were <world-emissions></world-emissions> tonnes. 
-            <br>
-            While not the only carbon removal technology to give a sense of where we are as per a 2021 IEA report
-            the world is currently capturing around <current-dac-capture></current-dac-capture> tonnes (1000 tonnes) 
-            of CO₂ per year.
-            <br>
-            
+            We currently emit about 35 gigatonnes of CO₂ annually, of this between 1.5 and 3.1 gigatonnes are classed as hard 
+            to avoid emissions and so we be very difficult to stop producing any time soon. If we want to get to net zero then 
+            we will almost certainly have to not only reduce emissions but also remove CO₂ from the atmosphere. The scale of 
+            carbon removal will almost certainly want to be higher than this hard-to-avoid emission rate however, in fact the IPCC
+            report suggests that we will want to be at the scale of <b>10Gt a year</b> of carbon removal by 2050. 
+            <br><br>
+            Why will we need to do more
+            removal than just the hard-to-avoid emissions? Simply put it's because we will likely not get our emissions all the way down
+            to just these sources and even then being at net-zero will not reverse the increase of atmpospheric CO₂ it will will only 
+            stop the acceleration of it. If we want to get back down to CO₂ levels of the past this will require the active drawdown 
+            of historic emissions as well. 
+
+
         </p>
 
-        <h3>Scale of cost</h3>
+        <h3 id="capacity">Scale of capacity</h3>
+        <p>
+            To reach our 10Gt target will require absolutely huge scale ups in current methods of CDR. 
+            One question to ask is what would these scale ups resemble? Are they literally out of the 
+            scope of anything we have done before or are they 'just merely' a lot?
+            <br><br>
+
+            If we consider a CDR strategy that currently removes
+            <r-dynamic class="currentCO2removal" onmouseover="hoverByClass('currentCO2removal','#E4FFED')" 
+            bind="currentCO2removal"  min="0" max="1000000" step="10"></r-dynamic> 
+            tons a year and we want to scale this to reach
+            <r-dynamic class="targetCO2removal" onmouseover="hoverByClass('targetCO2removal','#E4FFED')" 
+            bind="targetCO2removal"  min="0" max="10000000000" step="100"></r-dynamic> 
+            tons a year by 2050, i.e in 30 ish years time, then this would mean scaling up our tons removed 
+            <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
+            bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+            time, or a yearly compounded growth rate of 
+            <r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
+            bind="co2removalAnnualGrowthRate" onclick="sidebar('yearsTo10Gt')"></r-display>%. 
+            <br><br>
+            The bar charts below are meant to show how this growth rate compares with some other industries or products that 
+            may have comparable characteristics. 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="growth base rates">  
+                <b style="color: #5de28b">Solar</b> from 1985-2015 scaled 25,470 times (+<b>40.2%</b> a year) 
+                <br>
+                <b style="color: #5ebbe0">Wind</b> from 1985-2015 scaled 13,812 times (+<b>37.4%</b> a year) 
+                <br>
+                <!-- https://ourworldindata.org/grapher/modern-renewable-energy-consumption?country=~OWID_WRL -->
+                <b style="color: #aa5ee0">Total renewables</b> from 1990-2020 (using this range as this is roughly when solar or wind had >1TWh) scaled 3.3 times (+<b>4%</b> a year) 
+                <br>
+                <b style="color: #e05e7e">EV</b> from 2010-2020 scaled 406 times (+<b>82.3%</b> a year) 
+                <br>
+                <b style="color: #e09f5e">EV</b> are projected between 2020-2030 to scale 11.7 times increase (+<b>27.9%</b> a year) 
+                <br>
+                <b style="color: #5e60e0">EV</b> averaged from 2010-2030 are projected to scale 4,741 times (+<b>52.6%</b> a year) 
+                <br>
+                <!-- https://pubs.rsc.org/en/content/articlelanding/2021/ee/d0ee02681f#fig4 -->
+                <b style="color: #d35ee0">Lithium ion batteries</b> from 1991-2017 scaled around 1,000,000 times (+<b>70%</b> a year)  
+                <br>
+                <b style="color: #e71b1b">Lithium ion batteries</b> from 1992-2017 scaled around 50,000 times (+<b>54%</b> a year)  
+                <br>
+                <b style="color: #0aa174">Mobile subscriptions</b> from 1989-2019 scaled around 1,138 times (+<b>26.4%</b> a year)  
+                <br>
+                <b>Example CDR scale rate</b> needed to hit targed tons by 2050
+                +<r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
+                bind="co2removalAnnualGrowthRate"></r-display>% a year.
+            </span> 
+
+            <r-svg-chart  ylabel="Annual growth rate (%)" :xlim="[0,24]" :ylim="[0, 85]"  width="700" height="400"  y-axis-location="10" x-axis-location="hidden" >
+                <!-- solar -->
+                <r-svg-text :x="1" :y="40.2" text="40.2%"></r-svg-text>
+                <r-svg-path :data="[[1, 0],[1, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[2, 0],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[1, 40.2],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[1, 0],[2, 0]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+
+                <!-- wind -->
+                <r-svg-text :x="3" :y="37.4" text="37.4%"></r-svg-text>
+                <r-svg-path :data="[[3, 0],[3, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[4, 0],[4, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[3, 37.4],[4, 37.4]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[3, 0],[4, 0]]" stroke="#5ebbe0" stroke-width="1" ></r-svg-path>
+
+                <!-- renewables -->
+                <r-svg-text :x="5" :y="4" text="4%"></r-svg-text>
+                <r-svg-path :data="[[5, 0],[5, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[6, 0],[6, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[5, 4],[6, 4]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[5, 0],[6, 0]]" stroke="#aa5ee0" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_historic -->
+                <r-svg-text :x="7" :y="82.3" text="82.3%"></r-svg-text>
+                <r-svg-path :data="[[7, 0],[7, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[8, 0],[8, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[7, 82.3],[8, 82.3]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[7, 0],[8, 0]]" stroke="#e05e7e" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_projected -->
+                <r-svg-text :x="9" :y="27.9" text="27.9%"></r-svg-text>
+                <r-svg-path :data="[[9, 0],[9, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[10, 0],[10, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[9, 27.9],[10, 27.9]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[9, 0],[10, 0]]" stroke="#e09f5e" stroke-width="1" ></r-svg-path>
+
+                <!-- ev_avge -->
+                <r-svg-text :x="11" :y="52.6" text="52.6%"></r-svg-text>
+                <r-svg-path :data="[[11, 0],[11, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[12, 0],[12, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[11, 52.6],[12, 52.6]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[11, 0],[12, 0]]" stroke="#5e60e0" stroke-width="1" ></r-svg-path>
+
+                <!-- lithium 1991 -->
+                <r-svg-text :x="13" :y="70" text="70%"></r-svg-text>
+                <r-svg-path :data="[[13, 0],[13, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[14, 0],[14, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[13, 70],[14, 70]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[13, 0],[14, 0]]" stroke="#d35ee0" stroke-width="1" ></r-svg-path>
+
+                <!-- lithium 1992 -->
+                <r-svg-text :x="15" :y="54" text="54%"></r-svg-text>
+                <r-svg-path :data="[[15, 0],[15, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[16, 0],[16, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[15, 54],[16, 54]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[15, 0],[16, 0]]" stroke="#e71b1b" stroke-width="1" ></r-svg-path>
+
+                <!-- mobile -->
+                <r-svg-text :x="17" :y="26.4" text="26.4%"></r-svg-text>
+                <r-svg-path :data="[[17, 0],[17, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[18, 0],[18, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[17, 26.4],[18, 26.4]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+                <r-svg-path :data="[[17, 0],[18, 0]]" stroke="#0aa174" stroke-width="1" ></r-svg-path>
+
+                <!-- co2removalAnnualGrowthRate -->
+                <r-svg-text :x="19" :y="co2removalAnnualGrowthRate" :text="co2removalAnnualGrowthRate"></r-svg-text>
+                <r-svg-path :data="[[19, 0],[19, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1"stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[20, 0],[20, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-path :data="[[19, co2removalAnnualGrowthRate],[20, co2removalAnnualGrowthRate]]" stroke="#000000" stroke-width="1"stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[19, 0],[20, 0]]" stroke="#000000" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+
+            </r-svg-chart>
+            Looking at the above rates of scaling we see the extent of the challenge in front of us. <b>We will need to scale 
+            up carbon removal technologies at the rate of some of our fastest growing technologies in the 
+            world today. </b>
+            <br><br>
+            Many of the tecnologies above were/are heavily subsidised by governments around the world and recieved billions in funding from 
+            governments for R&D. Many, specifically the energy related ones, have the added benefit of being general purpose 
+            technologies which means that the demand for them if they get cheap enough is basically infinte. If solar became incredibly cheap
+            then the question of who would want to buy it sorts itself out almost instantly. This helped enable a clear path to who would 
+            buy the product if you could get it cheap enough, everyone. 
+            <br><br>
+            While very much against the traditional definition a clean atmosphere is a pretty good contender for a wholly different 
+            kind of general purpose technology and so if you class cdr strategies as enablers of this then it is a new kind of framing 
+            that adds to their importance.  
+        </p>
+
+        <h3 id="cost">Scale of cost</h3>
         <p>
             <oil-demand-cost-2019-sidenote></oil-demand-cost-2019-sidenote>
 
             <!-- scale of costs margin graph -->
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="yearsUntilTenDollars">
+            <span class="marginnote" id="cost comparison graph">
                 <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxVal]" :ylim="[0, graphMaxVal]" :listen="graphMaxVal" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
                     <r-svg-node :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" fill="#ff7f0e"></r-svg-node>
                     <r-svg-text :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" text="US military"></r-svg-text>
@@ -303,534 +435,938 @@
             - The cost of the Apollo moon missions (adjusted for inflation) was <apollo-mission-cost></apollo-mission-cost>
             <br><br>
             Currently it costs between 1000 to 100 dollars to remove a tonne of carbon from the atmosphere. Let's suppose that 
-            on average it cost <cost-per-ton></cost-per-ton> to remove carbon. 
+            on average it cost 
+            $<r-dynamic class="scaleOfCost_costperton" onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')" 
+                bind="scaleOfCost_costperton"  min="0" max="1000" step="1"></r-dynamic>
+            to remove carbon. 
             
-            <total-removal-cost-sidenote></total-removal-cost-sidenote>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="totalRemovalCostBillions">
+                <b>Calculations for total removal cost</b> <br>
+                <cost-per-ton-text width="40%"></cost-per-ton-text> = 
+                $<r-dynamic class="scaleOfCost_costperton" onmouseover="hoverByClass('scaleOfCost_costperton','#E4FFED')" 
+                bind="scaleOfCost_costperton"  min="0" max="1000" step="1"></r-dynamic>
+                <br><br>
+                <quantity-of-co2-text width="40%"></quantity-of-co2-text> = <quantity-of-co2></quantity-of-co2> million tonnes
+                <br><br>
+                <total-removal-cost-text width="20%"></total-removal-cost-text> 
+                = <cost-per-ton-text width="30%"></cost-per-ton-text> * <quantity-of-co2-text width="30%"></quantity-of-co2-text>
+                <br>
+                = <r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
+                bind="totalRemovalCostBillions" ></r-display> billion     
+            </span> 
+            <!-- <total-removal-cost-sidenote></total-removal-cost-sidenote> -->
 
             If we assume we are going to try to remove
-            <quantity-of-co2></quantity-of-co2> million tonnes then the total cost of this would be <total-removal-cost></total-removal-cost>
-            million (<total-removal-cost-billions></total-removal-cost-billions> billion).
-        </p>
+            <r-dynamic class="quantityofco2" onmouseover="hoverByClass('quantityofco2','#E4FFED')" 
+            bind="quantityofco2" min="0" max="35000"></r-dynamic> 
+            million tonnes then the total cost of this would be 
+            $<r-display class="totalRemovalCostBillions" onmouseover="hoverByClass('totalRemovalCostBillions','#E4FFED')" 
+            bind="totalRemovalCostBillions"  onclick="sidebar('totalRemovalCostBillions')"></r-display> billion).
 
-        <h2 id="costCurve">Cost curves</h2>
+            <br><br>
+            How our costs actually develop over time will depend a lot on 
+            <ul>
+                <li>What mix of approaches we chose to use</li>
+                <li>The way different approaches have their costs scale down as we scale up usage</li>
+            </ul>
+        </p>
         <p>
-          Technological costs are rarely static over time. Costs can fall when we scale up the production of 
-          some technology for two main reasons. The first is economies of scale. This simply describes how it can often
-          be cheaper (per unit) to produce more of something than less of something. If you have a factory 
-          Learning rates are used to describe how much cheaper 
-          a technology gets every year or after a set 
-          amount of cumulative ouptut. They are helpful when thinking about the tragectory the price of a 
-          technology may take over time as it benefits from economies of scale & also from greater experience
-          in making the technology.
-          <br><br>
-
-          We can typically describe the learning curve of a technology by the % amount cheaper it gets to produce 
-          each year. So for example if a technology cost 1000 dollars today and had a learning rate of 20%, then this means
-          that every year we might expect the technology to get 20% cheaper. So after 1 year with this learning rate
-          we might expect the technology to cost 800 dollars, after 2 years, 640 dollars, and after 10 years 107 dollars.
+            We will have a look below at these two factors in more detail. The main takeaways I want to leave you with 
+            from this section is that <b>this will not be cheap but compared to many other activities it will not be 
+            ahistorically expensive. </b>     
         </p>
 
-        <!-- cost curve demo graph -->
-        <p style="text-align: center;">
-          <r-svg-chart xlabel="Time" ylabel="Unit Price" xlim="[0,30]" :ylim="[0, costperton]" width="700" height="400" x-axis-location="origin" y-axis-location="origin">
-            <r-svg-eqn eqn="costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{dacLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
-            <r-svg-eqn eqn="costperton*((1-(40/100)) ** x)" :listen="{dacLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
-
-            <r-svg-text x="3.2" :y="costperton/5" text="Moore's law cost decreases "></r-svg-text>
-
-            <r-svg-node :x="yearsToHundredDollars" y="100" fill="#ff7f0e"></r-svg-node>
-            <r-svg-text :x="yearsToHundredDollars" y="100" text="$100 "></r-svg-text>
-            <r-svg-path :data="[[yearsToHundredDollars, 0],[yearsToHundredDollars, 100]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-path :data="[[0, 100],[yearsToHundredDollars, 100]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            
-            <r-svg-node :x="yearsToTenDollars" y="10" fill="#ff7f0e"></r-svg-node>
-            <r-svg-text :x="yearsToTenDollars" y="10" text="$10 "></r-svg-text>
-            <r-svg-path :data="[[yearsToTenDollars, 0],[yearsToTenDollars, 10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-path :data="[[0, 10],[yearsToTenDollars, 10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          </r-svg-chart>
-          DAC learning curve rate:
-          <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
-          bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
-        </p>
-
-        <p> 
-          <years-to-hundred-dollars-sidenote></years-to-hundred-dollars-sidenote>
-          <years-to-ten-dollars-sidenote>
-
-          </years-to-ten-dollars-sidenote>
-          If we assume the average cost per tonne today is 
-          <cost-per-ton></cost-per-ton>
-          then if the learning rate was 
-          <dac-learning-rate></dac-learning-rate> 
-          it would then it would take
-          <years-to-hundred-dollars></years-to-hundred-dollars>
-          years for the price of a tonne of DAC to fall to 
-          <hundred-dollars></hundred-dollars>
-          & 
-          <years-to-ten-dollars></years-to-ten-dollars>
-          years for the price of a tonne of DAC to fall to 
-          <ten-dollars></ten-dollars>
-        </p>
-
-        <h2 id="netZeroCosts">Net zero costs</h2>
-        <p>
-            Getting to net zero is not going to be cheap or easy. The two graphs below are meant to help 
-            illustrate the scaling and cost challenges that will have to be overcome to reach the 
-            2050 net zero target. Try adjusting the assumptions on the right to try to get the blue line 
-            (net carbon emissions) to intersect the x-axis by 2050.
-            
-            <!-- net zero chart value margin note -->
-            <label for="mn-demo" class="margin-toggle">&#8853;</label>
-            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="yearsUntilTenDollars">
-                <br><br><br><br><br>
-                Emission reduction rate:
-                <r-dynamic class="emissionReductionRate" onmouseover="hoverByClass('emissionReductionRate','#E4FFED')" 
-                bind="emissionReductionRate" after="%" min="-20" max="100" step="0.01"></r-dynamic> 
-                <br><br>
-                Carbon removal growth rate:
-                <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
-                bind="carbonRemovalRate" after="%" min="0" max="100" step="0.01"></r-dynamic> 
-                <br>
-                Carbon removal learning rate:
-                <r-dynamic class="dacLearningCurve" onmouseover="hoverByClass('dacLearningCurve','#E4FFED')" 
-                bind="dacLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic> 
-                <br><br>
-                Current removal cost: <cost-per-ton></cost-per-ton> 
-                <br>
-                Current carbon removal:
-                <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
-                bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.0001"></r-dynamic> 
-                <br>
-            </span>
-
-            <!-- scale of costs margin graph -->
-            <label for="mn-demo" class="margin-toggle">&#8853;</label>
-            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="yearsUntilTenDollars">
-                <br><br>
-                <b>Cost of carbon removal in 
-                <r-display class="year" onmouseover="hoverByClass('year','#E4FFED')" 
-                bind="yearInActualDateForm"></r-display>
-                </b>
-
-                <r-svg-chart xlabel="" ylabel="" :xlim="[0,graphMaxValInGivenYear]" :ylim="[0, graphMaxValInGivenYear]" :listen="graphMaxValInGivenYear" width="700" height="600" x-axis-location="origin" y-axis-location="origin">
-                    <r-svg-node :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(usaMilitarySpending)" :y="Math.sqrt(usaMilitarySpending)" text="US military"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(usaMilitarySpending), 0],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(usaMilitarySpending)],[Math.sqrt(usaMilitarySpending), Math.sqrt(usaMilitarySpending)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-    
-                    <r-svg-node :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(oilDemandCost2019)" :y="Math.sqrt(oilDemandCost2019)" text="Oil"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(oilDemandCost2019), 0],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(oilDemandCost2019)],[Math.sqrt(oilDemandCost2019), Math.sqrt(oilDemandCost2019)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                    <r-svg-node :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(apolloMissions)" :y="Math.sqrt(apolloMissions)" text="Apollo"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(apolloMissions), 0],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(apolloMissions)],[Math.sqrt(apolloMissions), Math.sqrt(apolloMissions)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                    <r-svg-node :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(fossilFuelSubsidies)" :y="Math.sqrt(fossilFuelSubsidies)" text="Fossil Subsidies"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(fossilFuelSubsidies), 0],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(fossilFuelSubsidies)],[Math.sqrt(fossilFuelSubsidies), Math.sqrt(fossilFuelSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-
-                    <r-svg-node :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(renewableSubsidies)" :y="Math.sqrt(renewableSubsidies)" text="Renewable Subsidies"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(renewableSubsidies), 0],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(renewableSubsidies)],[Math.sqrt(renewableSubsidies), Math.sqrt(renewableSubsidies)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-    
-                    <r-svg-node :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="Math.sqrt(cleanAirAct)" :y="Math.sqrt(cleanAirAct)" text="Clean Air Act"></r-svg-text>
-                    <r-svg-path :data="[[Math.sqrt(cleanAirAct), 0],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, Math.sqrt(cleanAirAct)],[Math.sqrt(cleanAirAct), Math.sqrt(cleanAirAct)]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-    
-                    <r-svg-node :x="sqrtRemovalCostInGivenYeaer" :y="sqrtRemovalCostInGivenYeaer" :listen="sqrtRemovalCostInGivenYeaer" fill="#ff7f0e"></r-svg-node>
-                    <r-svg-text :x="sqrtRemovalCostInGivenYeaer" :y="sqrtRemovalCostInGivenYeaer" text="Carbon removal"></r-svg-text>
-                    <r-svg-path :data="[[sqrtRemovalCostInGivenYeaer, 0],[sqrtRemovalCostInGivenYeaer, sqrtRemovalCostInGivenYeaer]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                    <r-svg-path :data="[[0, sqrtRemovalCostInGivenYeaer],[sqrtRemovalCostInGivenYeaer, sqrtRemovalCostInGivenYeaer]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                </r-svg-chart>
-            </span>
         
-            <!-- net zero timeline chart -->
-            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[-20, 50]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
 
-                <r-svg-path :data="[[10, 0],[10, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="10" y="40" text="2030 "></r-svg-text>
-                <r-svg-path :data="[[20, 0],[20, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="20" y="40" text="2040 "></r-svg-text>
-                <r-svg-path :data="[[30, 0],[30, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="30" y="40" text="2050 "></r-svg-text>
-                <r-svg-path :data="[[0, -10],[40, -10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="15" y="-13" text="10Gt removal "></r-svg-text>
-
-                <r-svg-path :data="[[year, -20],[year, 50]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-node :x="year" :y="20" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-                <r-svg-text :x="year+0.4" :y="22" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+2.4" :y="22" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-                <r-svg-text :x="year+0.4" :y="18" text="Removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+5.7" :y="18" :text="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-
-                <r-svg-eqn eqn="37.7*((1-(emissionReductionRate/100)) ** x)" :listen="{emissionReductionRate}" stroke="#2ca02c"></r-svg-eqn>
-                <r-svg-eqn eqn="-carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
-                <r-svg-eqn eqn="37.7*((1-(emissionReductionRate/100)) ** x) -carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#7BBEF7" stroke-width="2"></r-svg-eqn>
-            </r-svg-chart>
-
-            <!-- net zero cost chart -->
-            <r-svg-chart xlabel="Time" ylabel="Cost ($bn)" xlim="[0,40]" :ylim="[0, maxCostYAxis]" width="700" height="300" x-axis-location="origin" y-axis-location="3">
-
-                <r-svg-path :data="[[10, 0],[10, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="10" :y="maxCostYAxis*0.8" text="2030" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-path :data="[[20, 0],[20, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="20" :y="maxCostYAxis*0.8" text="2040" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-path :data="[[30, 0],[30, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-text :x="30" :y="maxCostYAxis*0.8" text="2050" :listen="maxCostYAxis"></r-svg-text>
-
-                <r-svg-path :data="[[year, 0],[year, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-                <r-svg-node :x="year" :y="maxCostYAxis/2" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*1.1" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+2.4" :y="(maxCostYAxis/2)*1.1" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-                <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*0.9" text="Cost ($bn):" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+4.6" :y="(maxCostYAxis/2)*0.9" text="$" :listen="maxCostYAxis"></r-svg-text>
-                <r-svg-text :x="year+5.1" :y="(maxCostYAxis/2)*0.9" :text="removalCostInGivenYeaer.toPrecision(4)" ></r-svg-text>
-
-                <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x) * costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate,costperton,dacLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
-            </r-svg-chart>
-
-            There are a few key points I think are worth emphasising based on the charts above.
-            <br>
-            <ol>
-                <li>Carbon removal would have to scale to truly improbable levels to get to a 2050 net zero if emissions don't
-                    start falling. </li>
-                <li>From current levels carbon removal needs to grow on the order of 35%-40% a year to reach 
-                    10Gt of CO₂ removal by 2050. This is a truly massive scale up operation!
-                </li>
-                <li>While the learning rate for carbon removal won't change actual emissions it has a massive effect
-                    on how much we will spend. Breaking through 10Gt at 2050 will cost around 430bn with a 5% learning rate
-                    but only around 85bn with a 10% learning rate. 
-                </li>
-            </ol>
-        </p>
-
-        <h2 id="wright">Wright's law</h2>
+        <h2 id="intro to cost curves">Introduction to cost curves</h2>
         <p>
-            The examples above use a learning rate that takes effect over time, each year some technology gets x% cheaper.
-            While this has a descriptive property and can be helpful for checking if we are on the right kind of trajectory
-            it mainly is just that, descriptive. It would be a bit weird for us to suggest there is a direct causal relationship
-            between the simple passage of time and things getting chepaer, in reality people have to be working at making things
-            better. 
-            <br><br>
-
-            This is where Wright's law comes in. This is is similar to Moore's law, or the cost curves above, in the sense that it 
-            tracks cost decreases, but, instead of looking at them as a function of time it looks at them as a function of quantity 
-            produced. So instead of how much cheaper do transistors get every year you would look at how much cheaper transistors 
-            get when you have made double the previous quantity. <b>The 'learning rate' is the % costs fall for a doubling of cumulative
-            ouput.</b> 
-            <br><br>
-            If we want to turn this into an equation to predict future costs then we can use \(C_x = C_1 x^{log_2(b)} \)
-            where \(C_x \) is the cost of the \(x^{th} \) unit, \(C_1 \) is the cost of the \(1^{st} \) unit and 
-            \(b = 1- l \) where \( l \) is the learning rate. So for example if costs decrease 20% for every cumulative doubling
-            of output and our first unit cost 500 dollars then \(l = 0.2 \), \(C_1 = 500 \)  and we get \(C_x = 500 x^{log_2(0.8)} \).
-            <br><br>
-            The image below gives an example of Wright's law in action for solar modules.
-          </p>
-
-          <p>
-            <figure>
-              <label for="mn-exports-imports" class="margin-toggle">&#8853;</label>
-              <input type="checkbox" id="mn-exports-imports" class="margin-toggle"/>
-              <span class="marginnote">
-                Image from <a href="https://ourworldindata.org/cheap-renewables-growth">Our World in Data</a> showing the exponential decreases in the cost of solar modules as a function
-                of increases in cumulative modules made. "The learning rate of solar PV modules is 20.2%. With each doubling 
-                of the installed cumulative capacity the price of solar modules declines by 20.2%"
-              </span>
-              <img src="img/solar-cost-curve.png" alt="Cost curve for solar energy" />
-            </figure>
-          </p>
-
-          <p>
-              Let's take some of the examples earlier and recast them into this quantity format where quantity will be 
-              the cumulative number of tonnes of CO₂ removed. Play around with the graph below to see how different 
-              learning rates effect costs. Wright's law is pretty subject to initial conditions so on the right of the
-              graph you can change the settings to pick a quantity of CO₂ removal and its cost,     
-          </p>
-
-          <!-- wrigths law curve demo graph margin note -->
-          <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-            <span class="marginnote" id="yearsUntilTenDollars">
-              Wright's law learning rate:
-              <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
-              bind="wrightLearningCurve" after="%" min="0" max="100" step="0.01"></r-dynamic>
-              <br>
-              Quantity:
-              <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
-              bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.0001"></r-dynamic>
-              <br>
-              Cost:
-              <cost-per-ton></cost-per-ton> 
-              <br>
-              <r-display class="wrightLearningCurveStartVal" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
-              bind="wrightLearningCurveStartVal" ></r-display>
+            <span class="marginnote-reactive" id="hi">
+                We can use the equation \(C_x = C_1 x^{log_2(b)} \).
+                Going through each part of this we have:  <br>
+                \(C_x \) as the cost of the \(x^{th} \) unit <br>
+                \(C_1 \) is the cost of the \(1^{st} \) unit <br> 
+                \(b = 1- l \) where \( l \) is the learning rate, the decimal verion of the % decrease in cost per doubling of cumulative volume i.e 20% → 0.2 <br>
+                <br> 
+                Let's apply this to our example above. Now we don't know \(C_1 \) but there is a way to calculate it if you know 
+                what \(C_x \) for some value of \(x \) and the learning rate \(l \). If you do some rearranging you get 
+                \(C_1 = \dfrac{C_x}{x^{log_2(b)}} \). In our example the learning rate = 20% so \(b = 1- l  = 1 - 0.2 = 0.8\)
+                we also know that when \(x = 10 \) then \(C_x = 1000 \). Putting this all together we can get 
+                \(C_1 = \dfrac{1000}{10^{log_2(0.8)}} = 2098.6\). We can then plug this into our original equation to get the 
+                general form of \(C_x = 2098.6 x^{log_2(0.8)} \) and this is the equation of the line you see on the graph.
+                
+            </span> 
 
-            </span>
-          </p>
+            A cost curve is a way of looking at the unit cost of a technology and how this changes as we scale up the production
+            of this technology. Typically this involves describing the % decrease in unit price for a doubling in the 
+            cumulative volume of this technology, we then call this % decrease in cost the learning rate. For example if a 
+            technology gets 20% cheaper every time we double the cumulative volume of units made then it has a learning rate of 20%.
+            If you want more info you can run through an example below or or <b style="cursor:pointer" onclick="sidebar('hi')">click here</b> to see how 
+            we calculate the curve. 
+            <br><br>
+            Step <r-dynamic bind="sliderStep" min="1" max="4" step="1"></r-dynamic>:
+            
+            <r-visible :visible="sliderStep == 1" hidden="">
+                Let's say we are currently producing 10 units of a good at a price of $600 per unit.
+            </r-visible>
 
-          <!-- wrigths law curve demo graph -->
-          <p style="text-align: center;">
-            <r-svg-chart xlabel="Cumulative tonnes removed" ylabel="Unit Price" :xlim="[1,10000000000]" :ylim="[1, wrightLearningCurveStartVal*1.5]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
-              <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,costperton}" stroke="#2ca02c"></r-svg-eqn>
+            <r-visible :visible="sliderStep == 2" hidden="">
+                Over time we increase the total cumualtive units made first to 20 units then to 40 units. Each doubling of cumulative units
+                is associated with a 20% decrease in the per unit price of this good. 
+            </r-visible>
+
+            <r-visible :visible="sliderStep == 3" hidden="">
+                We can then use these historic decreases in cost to forecast what the costs might look like in the future if this trend was 
+                to continue.
+            </r-visible>
+
+            <r-visible :visible="sliderStep == 4" hidden="">
+                Now lets see how different learning curves change our prices as we scale up. We'll keep the same first quantity,price 
+                pair of 10 units at $600 per unit, try chaning the learning rate of <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                 to see how our price forecasts change.
+            </r-visible>
+
+            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,1000]" :ylim="[1, sliderStep == 4? wrightLearningCurveStartVal*1.2 : 2000]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
+                <r-svg-node :x="10" :y="600" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="10" y="600" text="$600 "></r-svg-text>
+
+                <r-svg-node :x="20" :y="sliderStep == 2 || sliderStep == 3? 510 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="20" :y="sliderStep == 2 || sliderStep == 3? 510 : 0.5" text="$510 "></r-svg-text>
+
+                <r-svg-node :x="40" :y="sliderStep == 2 || sliderStep == 3? 433.5 : 0.5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="40" :y="sliderStep == 2 || sliderStep == 3? 433.5 : 0.5" text="$433.5 "></r-svg-text>
+
+                <r-svg-eqn eqn="sliderStep == 3? wrightLearningCurveStartValExample *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : 0 " :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+
+                <!-- step 4 -->
+                <r-svg-eqn eqn="sliderStep == 4 ? wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))): 0" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+                <r-svg-node :x="20" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="20" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" :text="(wrightLearningCurveStartVal *(20 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))).toPrecision(3) "></r-svg-text>
+
+                <r-svg-node :x="40" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="40" :y="sliderStep == 4 ? wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))) : wrightLearningCurveStartVal*5" :text="(wrightLearningCurveStartVal *(40 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))).toPrecision(3) "></r-svg-text>
 
             </r-svg-chart>
-          </p>
 
-          <p>
-            This all ties in to something we'll look at again below, and thant is the benefits of not simply buying what is 
-            cheapest today but considering how prices for different carbon removal technologies might change over time.
-            <br><br>
-          </p>
+        </p>
 
-        <h2 id="portfolio">Portfolio of approaches</h2>
+        <h3 id="cc_relevance">Relevance to CDR</h3>
         <p>
-            One big simplification used up until this point is to treat 'carbon removal'
-            as an almost homogeneous group that has a single cost curve. In reality there are many different
-            technologies all capable of removing CO₂ from the atmosphere and they all exhibit differences in 
-            how large the can likely scale to, how quickly they can scale, how expensive they are today and how 
-            much we might expect them to get cheaper in the future (cost curves). For example, as far as different sources
-            of carbon removal go there are:
+            How might we expect things like DAC to scale down their costs? The short answer is we really aren't too sure 
+            at the moment. This is one of the reasons why we need to be funding multiple shots at various approaches so we 
+            can get a better understanding of what might scale and what might not. However, we can look at a few factors to at 
+            least make some kind of informed guess.
+        </p>
+        <p>
+            <b>Historical base rates</b>
+            <br>
+            Many frontier CDR strategies resemble, at a high level, many other industrial processes. They use energy, chemicals 
+            require supporting infrastructure etc. While there is a reasonable range of learning rates for many comparable products 
+            like this the below should give some indication of historically how we might orient our base rates.
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="learning curve examples">
+            <!-- unused link
+            https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2006/2006rb%20Rubin%20et%20al,%20IEAGHG%202006-6.pdf -->
+
+            <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+            <b style="color: #5de28b">Nuclear power plants</b> from 1975-93 in OECD countries. It is worth noting 
+            that from 2010 to today though Nuclear has seen cost increases instead.
+            <br>
+            <!-- http://pure.iiasa.ac.at/id/eprint/6787/1/RR-03-002.pdf -->
+            <!-- https://ourworldindata.org/cheap-renewables-growth -->
+            <b style="color: #5ebbe0">Japanese Air conditioners</b> from 1972-97, resulting in a 57% decrease
+            in costs.
+            <br>
+            <!-- https://www.cmu.edu/epp/iecm/rubin/PDF%20files/2015/A%20review%20of%20learning%20rates%20for%20electricity%20supply%20technologies.pdf -->
+            <b style="color: #aa5ee0">Gas turbine power plants</b> from 1958-90
+            <br>
+            <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+            <b style="color: #e05e7e">Wind power</b> in OECD countries between 1981-95
+            <br>
+            <!-- https://ourworldindata.org/battery-price-decline -->
+            <b style="color: #e09f5e">Lithium ion batteries</b> from 1991. Given that it's seen cumulative capacity, 
+            measured in watt-hours, increase nealy 100,000 times (or around 16.5 doublings) this has lead to a cost
+            decrease of over 97%.
+            <br>
+            <!-- https://ourworldindata.org/cheap-renewables-growth -->
+            <b style="color: #e09f5e">Solar PV modules</b> from 1976. These have seen capacity 
+            increase over 1 million times, measured by watts, leading to a price decline of around 99.6%.
+            <br>
+            <!-- https://semiwiki.com/wally-rhines/273231-predicting-trends-in-the-semiconductor-industry/ -->
+            <b style="color: #d35ee0">Transistors</b> have had a truly remarkable journey 1954-2019 leading to price 
+            declines of many many orders of magnitude.     
+            <br>
+            <b>Example carbon removal Curve</b> This is the learning rate we guess for carbon removal, currently
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>.
+            </span> 
+            
+            <r-svg-chart xlabel="Cumulative units" ylabel="Unit Price" :xlim="[1,100000]" :ylim="[1, wrightLearningCurveStartVal*1.1]" x-axis-type="log" y-axis-type="log" width="700" height="400"  y-axis-location="origin">
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(5.8/100))/Math.log(2)))" stroke="#5de28b"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" fill="#5de28b"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(5.8/100))/Math.log(2)))" text="5.8%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(10/100))/Math.log(2)))" stroke="#5ebbe0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" fill="#5ebbe0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(10/100))/Math.log(2)))" text="10%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(15/100))/Math.log(2)))" stroke="#aa5ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" fill="#aa5ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(15/100))/Math.log(2)))" text="15%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(17/100))/Math.log(2)))" stroke="#e05e7e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" fill="#e05e7e"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(17/100))/Math.log(2)))" text="17%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(20/100))/Math.log(2)))" stroke="#e09f5e"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" fill="#e09f5e"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(20/100))/Math.log(2)))" text="20%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(32/100))/Math.log(2)))" stroke="#d35ee0"></r-svg-eqn>
+                <r-svg-node :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" fill="#d35ee0"></r-svg-node>
+                <r-svg-text :x="5000" :y="wrightLearningCurveStartVal *(5000 ** (Math.log(1-(32/100))/Math.log(2)))" text="32%"></r-svg-text>
+
+                <r-svg-eqn eqn="wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>
+                <r-svg-node :x="300" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" fill="#000000"></r-svg-node>
+                <r-svg-text :x="300*1.2" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" :text="wrightLearningCurve.toPrecision(2)"></r-svg-text>
+                <r-svg-text :x="300*1.7" :y="wrightLearningCurveStartVal *(300 ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2)))" text="%"></r-svg-text>
+
+            </r-svg-chart>
+
+            This chart is meant to be illustrative. These technologies did not all start with the same unit cost and 
+            certaintly didn't all manage to continue scaling cumulative capacity the same amounts as each other, transistors
+            for example have scaled much more than anything else in this list and so have also seen much larger price declines. 
+            What this chart is meant to do is show the range of learning rates various other technologies have experienced at some 
+            point.
+        </p>
+        <p>
+            <b>Material costs</b>
+            <br>
+            There is fair reason to think that costs might fall a fair amount on the material side. While it is of course not a 
+            1-for-1 comparison a study looking to disentangle the various causes of price declines in lithium ion batteries found 
+            that the largest contributor to these declines was R&D specifically around “advancements in chemistry and materials science”. 
+            If we look at an estimated cost breakdown for solid sorbet DAC systems we can see that the largest single contributor is the 
+            contractor array for which advances in material science, for example with MOF's, would be able to make large gains here.
+            <img src="img/dac_costs.png" alt="cost breakdown for dac" />  
+
+        </p>
+        <p>
+            <b>Energy floor</b>
+            <br>
+            One potential issue with cost scaling for many of these approaches will be that energy might present somewhat of a price 
+            floor. To be sure better chemistry could lead to less energy per ton to be needed and energy prices, especially renewable 
+            ones which would be the ones powering our cdr systems, will likely fall more, but you can't scale costs down forever if you 
+            have to pay for energy. Depending on the energy resource, capturing 1 MtCO2/yr requires 180 - 500 MW of power (CDR primer ch2), 
+            at current prices this would put a floor of, at minimum
+            Solar pv module price is around $0.38 a Watt 
+            $68.4 to $190 potential price floor at current energy prices
+            If we are at the higher end of this power usage limit then this price floor could prove to be a real obstacle to our ability 
+            to scale at an affordable price.
+        </p>
+
+        <h3 id="moving_down_cc">Moving down the cost curve</h3>
+        <p>
+            <b>Scaling down costs</b>
+            <br>
+            <!-- Qb calculation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="Qb">
+                <b>Calculating cumulative volume needed for new unit cost (Qb)</b>
+                <br><br>
+                Ca = 
+                $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+                bind="costperton"  min="0" max="1000" step="1"></r-dynamic>
+                <br>
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Cb = 
+                $<r-dynamic class="costpertonLow" onmouseover="hoverByClass('costpertonLow','#E4FFED')" 
+                bind="costpertonLow"  min="0" max="1000" step="1"></r-dynamic> 
+                <br>
+                l = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                <br><br>
+                \(C_x = C_1 x^{log_2(b)} \)
+                <br><br>
+                \(C_1 = \dfrac{C_x}{x^{log_2(b)}} = \dfrac{C_a}{Q_a^{log_2(b)}} \)
+                <br><br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display>
+                <br><br>
+                Now we want to solve for x when \(C_x = C_b\)
+                <br>
+                \(x = \dfrac{C_x}{C_1}^\dfrac{1}{log_2(b)} = \dfrac{C_b}{C_1}^\dfrac{1}{log_2(b)} = Q_b \)
+                <br><br>
+                \(Q_b = \) <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+                bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display> tonnes
+            </span> 
+
+            <!-- Total cost calculation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="Cb">
+                <b>Calculating Total cost needed move down cost curve to new unit cost</b>
+                <br><br>
+                (warning this is more mathsy than other calculations)
+                <br><br>
+
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Qb = 
+                <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+                bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display> tonnes
+                <br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display>
+                <br>
+                L = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                & b = 1 - L 
+                <br><br>
+                We want to sum the cost per unit for each unit along the way from where we are now (Qa) 
+                to our target new cumualtive units (Qb), aka this equation:
+                <br><br>
+                \( Total Cost = \sum_{k=Q_a}^{Q_b} C_1 k ^{log_2 (b)} \)
+                <br><br>
+                Now there is actually no closed form solution to this that is nice at all, it involves Bernoulli numbers and 
+                then some other complications. However, we can approximate this summation with an integral (Euler–Maclaurin 
+                formula etc). 
+                <br><br>
+                \( Total Cost ≈ \int_{Q_a -1}^{Q_b} C_1 x ^{log_2 (b)} dx \)
+                <br><br>
+                \( = C_1 \int_{Q_a -1}^{Q_b} x ^{log_2 (b)} dx \)
+                <br><br>
+                \( = C_1  [ \dfrac{1}{log_2(b)+1} x ^{log_2(b)+1}]_{Q_a -1}^{Q_b}  \)
+                <br><br>
+                \( = z (Q_b^{log_2(b)+1} - (Q_a -1)^{log_2(b)+1})  \)
+                <br><br>
+                Where \( z = \dfrac{C_1}{log_2(b)+1}  \)
+                <br><br>
+                Total Cost = $<r-display class="totalCostToCb" onmouseover="hoverByClass('totalCostToCb','#E4FFED')" 
+                bind="totalCostToCb" onclick="sidebar('Cb')"></r-display>
+            </span>
+
+            Suppose our unit costs currently are 
+            $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+            bind="costperton"  min="0" max="1000" step="1"></r-dynamic> 
+            after a cumulative volume of 
+            <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+            bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
+            tonnes of carbon removed. If we have a learning rate of 
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+            and we want to move our unit costs down to
+            $<r-dynamic class="costpertonLow" onmouseover="hoverByClass('costpertonLow','#E4FFED')" 
+            bind="costpertonLow"  min="0" max="1000" step="1"></r-dynamic> 
+            then we will need to scale up our cumulative volume of tonnes removed to 
+            <r-display class="scaleIncreaseToNewCost" onmouseover="hoverByClass('scaleIncreaseToNewCost','#E4FFED')" 
+            bind="scaleIncreaseToNewCost" onclick="sidebar('Qb')"></r-display>
+            tonnes. This would have a total cost of approximately 
+            $<r-display class="totalCostToCb" onmouseover="hoverByClass('totalCostToCb','#E4FFED')" 
+            bind="totalCostToCb" onclick="sidebar('Cb')"></r-display>
+        </p>
+        <p>
+            <b>Scaling up annual removal</b>
+            <br>
+            <!-- years to 10Gt equation  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="yearsTo10Gt">
+                <b>Calculating the years to get to 10Gt annual removal</b>
+                <br><br>
+
+                Current annual removal (C)= 
+                <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+                bind="currentCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Yearly growth rate (r)= 
+                <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+                bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" step="1"></r-dynamic>%
+                <br><br>
+                \( 10Gt = C (1+\dfrac{r}{100})^{t}  \)
+                <br><br>
+                \( t = log_{(1+\dfrac{r}{100})} (\dfrac{10Gt}{C})  \)
+                <br><br>
+                \( t = \) <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+                bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years
+            </span>
+
+            <!-- Total cost to 10Gt annual removal  -->
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="CbTo10Gt">
+                <b>Calculating Total cost needed produce 10Gt of removal annually</b>
+                <br><br>
+                (warning this is more mathsy than other calculations)
+                <br><br>
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Current annual removal (C)= 
+                <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+                bind="currentCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                Years to 10Gt annualy (t)= 
+                <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+                bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years
+                <br>
+                Yearly growth rate (r)= 
+                <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+                bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" step="1"></r-dynamic>%
+                <br><br>
+                First we need to find the cumulative tonnes (Qb) of CO₂ we will have removed by the time we get to 10Gt annually.
+                We can do that by summing the tonnes removed each year with the equation below:
+                <br><br>
+                \( Q_b = \sum_{k=0}^{t} C (1+\dfrac{r}{100})^{k} \)
+                <br><br>
+                \(  = C \sum_{k=0}^{t} (1+\dfrac{r}{100})^{k} \)
+                <br><br>
+                Now this is the sum of a geometric series and so we can use the following closed form expression.
+                <br><br>
+                \( Q_b = C \dfrac{1-(1+\dfrac{r}{100})^{t+1}}{1-(1+\dfrac{r}{100})} \)
+                <br><br>
+                We need to make two adjustments to this to avoid double counting, these being subtracting the tonnes of CO₂ removed 
+                this year, and adding the cumulative tonnes removed up unitl this year.
+                <br><br>
+                \( Q_b = C \dfrac{1-(1+\dfrac{r}{100})^{t+1}}{1-(1+\dfrac{r}{100})} - C + Qa \)
+                <br><br>
+                \( Q_b = \) <r-display class="cumulativeScaleTo10Gt" onmouseover="hoverByClass('cumulativeScaleTo10Gt','#E4FFED')" 
+                bind="cumulativeScaleTo10Gt"></r-display> tonnes
+                <br><br>
+                Now we can use the same integral we used for the last example to calculate the total cost of these tonnes of CO₂ 
+                removed. To do this we will also need these values from before:
+                <br><br>
+                Qa = 
+                <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+                bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic> tonnes
+                <br>
+                \(C_1 = \) $<r-display class="wrightsLawC1" onmouseover="hoverByClass('wrightsLawC1','#E4FFED')" 
+                bind="wrightsLawC1" ></r-display> (this is the same as in the previous example)
+                <br>
+                L = 
+                <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+                bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>
+                & b = 1 - L 
+                <br><br>
+                \( Total Cost ≈ \int_{Q_a -1}^{Q_b} C_1 x ^{log_2 (b)} dx \)
+                <br><br>
+                Total Cost = $<r-display class="totalCostToCbVolExample" onmouseover="hoverByClass('totalCostToCbVolExample','#E4FFED')" 
+                bind="totalCostToCbVolExample"></r-display>
+            </span>
+
+            Let's look at a slightly different case, we're going to look at the cost of scaling up annual volume 
+            up to 10Gt a year. This time suppose we are currently removing 
+            <r-dynamic class="currentCarbonRemovalAmount" onmouseover="hoverByClass('currentCarbonRemovalAmount','#E4FFED')" 
+            bind="currentCarbonRemovalAmount"  min="0" max="10000" step="1"></r-dynamic> 
+            tonnes of carbon from the atmosphere at a unit cost of 
+            $<r-dynamic class="costperton" onmouseover="hoverByClass('costperton','#E4FFED')" 
+            bind="costperton"  min="0" max="1000" step="1"></r-dynamic>. 
+            To locate ourselves on the cost curve also suppose cumulatively we have removed 
+            <r-dynamic class="cumulativeCarbonRemovalAmount" onmouseover="hoverByClass('cumulativeCarbonRemovalAmount','#E4FFED')" 
+            bind="cumulativeCarbonRemovalAmount"  min="0" max="100000" step="1"></r-dynamic>
+            tonnes of carbon in total & again our learning rate is 
+            <r-dynamic class="wrightLearningCurve" onmouseover="hoverByClass('wrightLearningCurve','#E4FFED')" 
+            bind="wrightLearningCurve" after="%" min="0" max="100" step="0.1"></r-dynamic>.
+            Now if we increase our tonnes removed by 
+            <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+            bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" after="%" step="1"></r-dynamic>
+            a year in will take 
+            <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+            bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display>
+            years for us to reach a 10Gt scale and total cost of this increase will be approximately 
+            $<r-display class="totalCostToCbVolExample" onmouseover="hoverByClass('totalCostToCbVolExample','#E4FFED')" 
+            bind="totalCostToCbVolExample" onclick="sidebar('CbTo10Gt')"></r-display>.
+            
+            <br><br>
+            One thing to really emphasise about the example is the effect of changing the amount we are scaling up removal each year.
+            Currently this is set to <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
+            bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" after="%" step="1"></r-dynamic>
+            & at this rate, with our other set values, it will take us 
+            <r-display class="yearsTo10Gt" onmouseover="hoverByClass('yearsTo10Gt','#E4FFED')" 
+            bind="yearsTo10Gt" onclick="sidebar('yearsTo10Gt')"></r-display> years 
+            to get to our 10Gt of removal a year target. The thing I really want to emphasise is that if we increase the yearly 
+            growth rate, while it means paying more in any given year it also means that the total cost to scale to our 10Gt 
+            target actually <i>falls</i>. The reasoning for this is just that if we scale slowly then we are spending more 
+            years still paying a lot for carbon removal but not actually yet at our target rate. This leads to the result 
+            that in our race to 10Gt a year <b>increasing speed and minimising total cost work with not against each other</b>.           
+        </p>
+        <p>
+            The above is clearly an oversimplification, we assume:
+            <ul>
+                <li>A known, and constant, learning rate</li>
+                <li>A single learning rate across all approaches</li>
+                <li>Constant yearly scaling of capacity (sometimes at massive levels)</li>
+            </ul>
+        </p>
+        <p>
+            Hopefully it can still serve as a useful guide for the order of magnitude we might be expecting to pay at 
+            and how important things like the learning rate are for our calculations.
+        </p>
+
+        <h2 id="portfolio">Portfolios</h2>
+        <p>
+            There are two types of portfolios that we can talk about. 
+        </p>
+        <h3 id=approaches>Portfolio of apporoaches</h3>
+        <p>
+            We can broadly split most CDR approaches into two main camps. 
+            Camp one is nature based solutions. These are things like afforestation & reforestation, soil sequestration, 
+            biochar and ocean interventions. Camp two are technological solutions; these mainly include DAC, enhanced weathering. 
+            Some interventions somewhat fall into both camps such as BECCS or genetically modifying trees/plants/plankton to capture 
+            more CO₂. 
+            <br><br>
+            Again broadly each class of solutions has some common drawbacks that mean using any single intervention would likely 
+            struggle to get to the full scale we need.
+            <br>
+            - Nature based solutions have land and water use as major constraints to how much we can expect them to be able to scale.
+            <br> 
+            - Technological solutions tend to have energy and therefore cost as major barriers to scaling up.
+            <br><br>
+            It should be noted as well that these two groups also tend to differ more in other ways. Nature based solutions tend to 
+            simply impact humans in more ways than technological ones and so have as we mentioned downsides in terms of water/land 
+            usage but also tend to have more co-benefits than technological ones such as improving biodiversity. 
+            <br><br>
+            Another broad difference is in terms of permanence. Nature based solutions tend to have lower levels of permanence guarantees 
+            than technological solutions or BECCS. This is largely because the process is more easily reversible. Trees can be cut or 
+            burnt down, soil or agricultural practices can change, all of which lose some of the benefits from these approaches. 
+            Technological solutions typically involve much more permanent forms of sequestration like injecting carbon underground or 
+            using it to cure cement. These are very difficult to reverse and so are much more likely to keep carbon locked away for a 
+            long time. Long term storage is so difficult to find at the moment that in their recent 
+            <a href="https://query.prod.cms.rt.microsoft.com/cms/api/am/binary/RE4MDlc">2021 report</a> Microsoft said that >99% of their 
+            purchases ended up coming from short term natural solutions.
+        
+            <br><br>
+            Another large difference is additionality. This isn't such a large issue when it comes to looking at theoretical amounts 
+            of CDR that could be created but can be an issue when looking at specifically which things to be funding. For example, we 
+            might know that soils could sequester …. more carbon with certain practices, however, we need to direct funds to specific 
+            soil projects and some of the time it might not be so clear if a particular project would lead to an increase in CDR vs the 
+            counterfactual.
+            <br><br>  
+            Technological solutions again are usually much more clear about their additionality. If you put a big fan somewhere and 
+            it sucks 4000 tons of CO₂ a year you can be pretty sure that this is 4000 more tons of CO₂ removed from the air than if 
+            there was no big fan. This is somewhat of an oversimplification, in reality you need to look at the lifecycle analysis of 
+            the whole cdr system to see what the additionality would be, i.e what carbon was produced to make the system, to power it, 
+            to transport and store the carbon? Still while these things add complexity the counterfactual is much clearer. 
+            <br><br>
+            Despite it seeming like technological solutions have an edge in many different areas, it should be taken from the above to 
+            suggest that they are better. Two things should be made clear. 
+            <br>
+            - We will <b>almost certainly need both</b> technological and nature based solutions
+            <br> 
+            - <b>At the moment technological ones cost a lot</b>. 
+            <br><br>
+            In fact if we look at this table from the <a href="https://www.nap.edu/read/25259/chapter/2#5">NAS report</a> the levels of 
+            “Safe Potential Rate of CO2 Removal Possible Given Current Technology and Understanding and at ≤$100/t CO2” for 
+            DAC is 0, because at the moment it is just so expensive. In a similar vein the rates for carbon mineralisation 
+            are unknown as the tech is simply so untested at scale.
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                You might say that this is an unfair comparison as if we have multiple approaches all starting from the same level
+                as the single approach then the outcome is purely due to the difference in starting tons. This is true but is also 
+                not too disimilar to real life.  
+            </span>
+            This is going to be a bit coarse but one clear benefit of having multiple approaches (and this also holds to some extent 
+            for projects) is that it simply decreases the amount any needs to scale to hit some fixed target. To make this a bit more 
+            concrete say you're trying to scale up from 
+            <r-dynamic class="single_approach_starting_removal" onmouseover="hoverByClass('single_approach_starting_removal','#E4FFED')" 
+            bind="single_approach_starting_removal"  min="1000" max="100000" step="100"></r-dynamic>
+             tons to 10Gt in 30 years. If you only have a single approach then this 
+            approach would need to scale by 
+            <r-display class="single_approach_annual_growth" onmouseover="hoverByClass('single_approach_annual_growth','#E4FFED')" 
+            bind="single_approach_annual_growth" ></r-display>%
+             a year. If however you have
+            <r-dynamic class="num_of_approaches" onmouseover="hoverByClass('num_of_approaches','#E4FFED')" 
+            bind="num_of_approaches"  min="0" max="15" step="1"></r-dynamic>
+            different approaches all starting at 
+            <r-dynamic class="approach_starting_removal" onmouseover="hoverByClass('approach_starting_removal','#E4FFED')" 
+            bind="approach_starting_removal"  min="1000" max="50000" step="100"></r-dynamic>
+            tons today then each approach only needs to scale by
+            <r-display class="approach_annual_growth" onmouseover="hoverByClass('approach_annual_growth','#E4FFED')" 
+            bind="approach_annual_growth" ></r-display>%
+             a year to get you to your target. 
+
+        </p>
+
+        <h3 id="projects">Portfolio of projects</h3>
+        <p>
+            In some ways this serves a similar function to the 
+            portfolio of approaches. Any given project/specific instantiation of an approach, may have certain scale limitations 
+            placed upon it. You might want to scale up a specific type of carbon mineralisation but maybe at some point you will 
+            hit real difficulties obtaining the needed materials. 
+            </br></br>
+            There is of course another reason why you would want a portfolio of approaches within any given category and that is 
+            because many of them will fail. This could be because the science just doesn't end up being able to scale, but we couldn't 
+            know that until we tried. It might be for more normal reasons like founders falling out or simple project financing failures. 
+            It also might be because even though some approaches might get us to scale eventually some will be able to do it faster, and 
+            again we might simply not be able to tell until we try. 
+            </br></br>
+        </p>
+        <blockquote>
+            <p>If we want to achieve a 90 percent probability of success, we must 
+                take into account historical rates of success from publicly available data; doing that suggests that we need to actively 
+                pursue not two or three vaccine candidates, but 15 to 20.</p>
+            <footer><a href="https://www.nytimes.com/2020/05/04/opinion/coronavirus-vaccine.html">Christopher Snyder and 
+                Alex Tabarrok on spreading out investments for a solution to covid 19</a></footer>
+        </blockquote>
+        <p>
+            Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
+            how cheap they can get, and how much carbon they will ultimately be able to remove. Suppose for now though that 
+            any given approach has a 
+            <r-dynamic class="probabilityOfSuccessIndividual" onmouseover="hoverByClass('probabilityOfSuccessIndividual','#E4FFED')" 
+            bind="probabilityOfSuccessIndividual"  min="0" max="100" after="%" step="1"></r-dynamic> 
+            chance of getting to the 10Gt per year target, to have a 
+            <r-dynamic class="probabilityOfSuccessOverall" onmouseover="hoverByClass('probabilityOfSuccessOverall','#E4FFED')" 
+            bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> 
+            chance of getting at least one viable technology we would need to invest in and start scaling up around
+            <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
+            bind="numberOfTries"></r-display> 
+            technologies today. 
+            <br><br>
+            The exact numbers are not really what I want to emphasis here it is more that <b>if we want to have a chance of getting a 
+            working option</b> and we are still at a stage where we have many unknowns around what could work, what could scale, how 
+            quickly things could scale, then this <b>almost certainly requires us to cast a wide net</b> and fund many options in order 
+            to end up backing the handful that do work.   
+        </p>
+
+        <h2 id="allocation">Allocation</h2>
+        <p>
+            This model is meant to show the effects of how we chose to spend money today. Does it matter if we spend all our money on 
+            the cheapest option today waiting until that can't scale anymore before focusing on other solutions. Or, will it help/be 
+            necessary to start spending <b>now</b> in order to give us a reasonable chance of getting various solutions to useful 
+            scales?
+            <br><br>
+            The basic set up is that there will be two scenarios:
+            <br>
+            - <b>Scenario 1</b>: we will look to see how much we would need to scale up each CDR approach every year for them to reach their full capacity
+            in 30 years time and then spend enough every year to make that scale up happen. This is mainly so that we have a budget
+            we know it is possible to use to fully scale these technologies if they were funded in parallel 
+            <br>
+            - <b>Scenario 2</b>: we take the same yearly budget from scenario 1 but this time we spend it entirely on our cheap technology (Tech A)
+            until the yearly budget would mean that that reaches full capacity. We then continue spending this much on it every year but 
+            now spend all the residual budget on what is currently the more expensive option (Tech B) and see how this effects its ability
+            to get to full scale.
+            <br><br>
+            <b style="color:#f97558">Technology A</b> has a low cost per ton for removal (
+            $<r-dynamic class="a_costPerTon" onmouseover="hoverByClass('a_costPerTon','#E4FFED')" 
+            bind="a_costPerTon"  min="0" max="100" step="10"></r-dynamic> 
+            ), but also has a learning rate of <b>0</b>, i.e it won't be getting any cheaper than this as we scale it up. We are 
+            currently removing
+            <r-dynamic class="a_currentTonsRemoval" onmouseover="hoverByClass('a_currentTonsRemoval','#E4FFED')" 
+            bind="a_currentTonsRemoval"  min="0" max="4000000000" step="1000"></r-dynamic> tons a year with this method but it has a 
+            cap it can scale to of 
+            <r-dynamic class="a_scaleCap" onmouseover="hoverByClass('a_scaleCap','#E4FFED')" 
+            bind="a_scaleCap"  min="0" max="10" step="1"></r-dynamic> gigatons. 
+
+            <br><br>
+            <b style="color:#f4be58">Technology B</b> has a high cost per ton for removal (
+            $<r-dynamic class="b_costPerTon" onmouseover="hoverByClass('b_costPerTon','#E4FFED')" 
+            bind="b_costPerTon"  min="0" max="700" step="10"></r-dynamic> 
+            ), but it has a learning rate of 
+            <r-dynamic class="b_learningRate" onmouseover="hoverByClass('b_learningRate','#E4FFED')" 
+            bind="b_learningRate"  min="0" max="100" step="1"></r-dynamic>%. 
+            We are currently removing
+            <r-dynamic class="b_currentTonsRemoval" onmouseover="hoverByClass('b_currentTonsRemoval','#E4FFED')" 
+            bind="b_currentTonsRemoval"  min="0" max="1000000" step="1000"></r-dynamic> tons a year with this technology and it 
+            has a cap it can scale to of 
+            <r-dynamic class="b_scaleCap" onmouseover="hoverByClass('b_scaleCap','#E4FFED')" 
+            bind="b_scaleCap"  min="0" max="10" step="1"></r-dynamic> 
+            gigatons. To allow us to place ourselves on the cost curve we will also 
+            assume that technology B has cumulativly removed 
+            <r-dynamic class="b_currentCumulativeTonsRemoval" onmouseover="hoverByClass('b_currentCumulativeTonsRemoval','#E4FFED')" 
+            bind="b_currentCumulativeTonsRemoval"  min="0" max="10000000" step="1000"></r-dynamic> tons
+            of CO₂ so far in its history. 
+        </p>
+        <p>
+            The graphs below show the total amount of annual CO₂ removal for each approach as well as how much we are spending on each approach
+            every year. You can drag the scenario number below to see how changing from one allocation structure to another effects 
+            the ability for our different approaches to get to full scale. 
+            <br><br>
+            Scenario <r-dynamic bind="portfolio_sliderStep" min="1" max="2" step="1"></r-dynamic>:
+
+            <!-- <r-svg-chart  ylabel="CO2 removal (Mt)" :xlim="[0,30]" :ylim="[0, 8000]"  width="700" height="300"  y-axis-location="origin" >  
+                <r-svg-eqn eqn="myFunction(x)" :listen="[a_C1]" stroke="#f4be58"></r-svg-eqn>
+
+            </r-svg-chart> -->
+
+
+            <!-- Amount of CO₂ removal (Mt) -->
+            <r-svg-chart  ylabel="CO2 removal (Mt)" :xlim="[0,30]" :ylim="[0, 8000]"  width="700" height="300"  y-axis-location="origin" >  
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? (a_currentTonsRemoval*(1+(a_neededAnnualGrowthRate/100))**x)/1000000 : 0" :listen="[sliderStep,a_currentTonsRemoval,a_neededAnnualGrowthRate]" stroke="#f97558"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? (b_currentTonsRemoval*(1+(b_neededAnnualGrowthRate/100))**x)/1000000 : 0" :listen="[sliderStep,b_currentTonsRemoval,b_neededAnnualGrowthRate]" stroke="#f4be58"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? ((b_currentTonsRemoval*(1+(b_neededAnnualGrowthRate/100))**x)+(a_currentTonsRemoval*(1+(a_neededAnnualGrowthRate/100))**x))/1000000 : 0" :listen="[portfolio_sliderStep,b_currentTonsRemoval,b_neededAnnualGrowthRate,a_currentTonsRemoval,a_neededAnnualGrowthRate]" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>
+
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? Math.min((((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/a_C1)/1000000),(a_scaleCap*1000)) : 0" :listen="[portfolio_sliderStep,a_scaleCap,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#f97558"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? ((Math.max((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))-(a_scaleCap*1000000000*a_C1),0))/(b_C1/(b_log2b+1)) + (b_currentCumulativeTonsRemoval)**(b_log2b+1) )**(1/(b_log2b+1))/1000000 : 0" :listen="[portfolio_sliderStep,a_scaleCap,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#f4be58"></r-svg-eqn>               
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? (Math.min((((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/a_C1)/1000000),(a_scaleCap*1000)) + ((Math.max((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))-(a_scaleCap*1000000000*a_C1),0))/(b_C1/(b_log2b+1)) + (b_currentCumulativeTonsRemoval)**(b_log2b+1) )**(1/(b_log2b+1))/1000000) : 0" :listen="[portfolio_sliderStep,a_scaleCap,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>
+
+                <!-- <r-svg-path :data="[[year, 0],[year, 8000]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-node :x="year" :y="4000" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="year > 26? year-2.4 : year+0.4" :y="4400" text="Year:"></r-svg-text>
+                <r-svg-text :x="year > 26? year-0.8 : year+2" :y="4400" :text="(year).toPrecision(2)" ></r-svg-text> -->
+
+            </r-svg-chart>
+
+            <r-svg-chart  ylabel="Cost ($bn)" :xlim="[0,30]" :ylim="[0, 400]"  width="700" height="300"  y-axis-location="10" >
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? (a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x))/1000000000 : 0" :listen="[portfolio_sliderStep,a_C1,a_currentTonsRemoval,a_neededAnnualGrowthRate]" stroke="#f97558"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? ((b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/1000000000 : 0" :listen="[portfolio_sliderStep,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#f4be58" ></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 1? (a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/1000000000 : 0" :listen="[portfolio_sliderStep,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>                
+
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? Math.min((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/1000000000,(a_C1*a_scaleCap)) : 0" :listen="[portfolio_sliderStep,a_scaleCap,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#f97558"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? Math.max(((a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/1000000000)-(a_C1*a_scaleCap),0) : 0" :listen="[portfolio_sliderStep,a_scaleCap,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#f4be58"></r-svg-eqn>
+                <r-svg-eqn eqn="portfolio_sliderStep == 2? (a_C1*a_currentTonsRemoval*((1+(a_neededAnnualGrowthRate/100))**x) + (b_C1/(b_log2b + 1))*(((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**(x+1)))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)**(b_log2b + 1)) - (((b_currentTonsRemoval * ((1-(1+(b_neededAnnualGrowthRate/100))**x))/((1-(1+(b_neededAnnualGrowthRate/100)))) - b_currentTonsRemoval + b_currentCumulativeTonsRemoval)-1)**(b_log2b + 1)) ))/1000000000 : 0" :listen="[portfolio_sliderStep,a_currentTonsRemoval,a_currentCumulativeTonsRemoval,a_neededAnnualGrowthRate,a_C1,a_log2b,b_currentTonsRemoval,b_currentCumulativeTonsRemoval,b_neededAnnualGrowthRate,b_C1,b_log2b]" stroke="#000000" stroke-dasharray="3"></r-svg-eqn>               
+                
+                <!-- <r-svg-path :data="[[year, 0],[year, 400]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
+                <r-svg-node :x="year" :y="200" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
+                <r-svg-text :x="year > 26? year-2.4 : year+0.4" :y="220" text="Year:" ></r-svg-text>
+                <r-svg-text :x="year > 26? year-0.8 : year+2" :y="220" :text="(year).toPrecision(2)" ></r-svg-text> -->
+
+            </r-svg-chart>
+            The picture we see is that given a certain budget if we spend it like in scenario 2 we will not manage to fully scale up 
+            Technology B by our target date. I want to emphasise that this effect is fully an allocation effect. We know if we spent 
+            the money differently (scenario 1) that we could have both technologies at full capacity by this date.
+            <br><br>
+            Why does this effect occur? Largely it is because if we start scaling tech B up starting right now we will have cumulatively
+            made many more units of it and so the unit costs will have fallen much more than if we try to scale it up very quickly. This 
+            means for any given budget if we can start getting the costs down today by starting to ramp up usage we should otherwise we 
+            will find ourselves in the position of having to pay a much higher average unit price for it in the future.
+            <br><br>
+            In the model above then what we see is that in scenario 2 we therefore often don't have enough of a budget to scale this
+            technology all the way up to its full capacity. The news is actually even worse than that. <b>Money and time are not fungible</b>.
+            To some extent we can choose to pay more to do something faster but there are limits to this. 
+            <br><br>
+            In scenario 2 in the model above we often don't start producing technology B until 5 or so years before the deadline. This 
+            turns what is already a hefty scale up rate of … if we start today to something closer to …. a year. There comes a time when 
+            this rate is simply beyond what we are likely to be able to sustain no matter how much we spend. 
+            <br><br>
+            There are two main reasons why we might not, for any amount, be able to buy our way out of this scale up problem. If asked 
+            how you would get to the moon in the 1600's you would maybe have suggested a very large and strong balloon. In reality though
+            no amount of money you could have spent back then would have got you to your objective. You needed multiple breakthroughs 
+            like calculus, orbital mechanics, the theory of propulsion engines, computers, to create the vehicle needed. Similarly if 
+            we wait too long to start scaling up Tech B then we deprive ourselves of the time needed to make unforeseen advances that 
+            might well be needed if we are to actually get to certain massive scales.
+            <br><br>
+            The other reason is more practical. It might simply not be possible to repurpose existing parts of the economy fast enough 
+            or on a large enough scale to reach such a large annual scale up so quickly. It would involve the retraining of millions of 
+            people, the reallocation of vast sections of the chemical and other industries. These things might be only financial issues 
+            in models but they exist as actual constraints in the real world. 
+            <br><br>
+            The outcome of all of this is that <b>it may not just be cheaper to start aggressively scaling things like technology B today, 
+            but it might be our only option if we really want to have it available for us to use in the future at the scales we will need 
+            it in.</b>
+        </p>
+
+        <h2 id="funding">Funding</h2>
+        <p>
+            One general point to make is that obviously this is a two sided market you have companies that are creating a service 
+            (cdr) and buyers who are buying the service (tons of carbon removed) How we think about the two sides though is quite 
+            different. The supply side, for technological solutions, is going to be made up of a handful of firms who need money, 
+            but also talent. The demand side will be made up of buyers who by in large will only be providing money. 
+            <br><br>
+            The supply side will be providing a semi-commodity but the semi distinction is an important one, geologic storage in one 
+            place is to a large extent analogous to geologic storage in another (LCAs being equivalent and all), but geologic storage 
+            in one place and a forest in another really aren't the same, for reasons hopefully made clear by now. The demand side is 
+            providing something much closer to a commodity good, money. Again there are important reasons why it is not a strict 
+            commodity, getting your product brought in a guaranteed way over a long time horizon creates opportunities that selling 
+            one offs to any willing customer doesn't but the point stands that on the scale of commodityness the demand side is much 
+            more fungible. 
+            <br><br>
+            It is also drawing from a much wider area, or in other words there are more dollars that could in principle be spent on 
+            buying CDR than there are scientists and engineers who could work on it. For these reasons it would be exceptionally 
+            unfortunate if the demand side was ever the bottleneck holding up progress. 
+            <br><br>
+            It should, as much as we can, be the case that if something is slowing down the scaling of potentially variable cdr 
+            strategies it is because running and scaling a frontier tech company is difficult, not because no one will buy your 
+            stuff. (and even then we should be trying to make the company bit easier). In a situation as critical as reaching our 
+            cdr targets, missing them because of not having enough money would be the most unfortunate and lamentable reason possible.
+            <br><br>
+            While mentioned earlier that a ton is not a ton is not a ton it is also true to some extent that a dollar is not a dollar 
+            is not a dollar. 
+        </p>
+
+        <h3 id="supply">Supply side</h3>
+        <p>
+            Given the global importance of reducing carbon in the atmosphere you would expect governments to be playing a very 
+            large role in trying to help these technologies become cheaper. The good news is that governments are starting to ramp 
+            up funding for these technologies
+            <br><br>
+            <b>Grants</b>
+            <br>
+            The UK has <a href="https://www.gov.uk/government/publications/direct-air-capture-and-other-greenhouse-gas-removal-technologies-competition/projects-selected-for-phase-1-of-the-direct-air-capture-and-greenhouse-gas-removal-programme">
+            just announced the 24 projects</a> it will be backing for experiments into DAC. They have 
+            <a href="https://www.gov.uk/government/news/pm-a-new-deal-for-britain">also announced up to $100m</a>
+            in new funding for dac R&D.
+            <br><br>
+            The us government similarly has recently put out a request for information from their newly formed department of 
+            fossil energy and carbon management for things to look into funding and they have currently put aside a budget of … 
+            for direct R&D funding for frontier cdr areas.
+            <br><br>
+
+            <b>VC</b>
+            <br>
+            VC money is also rapidly moving into the cdr space. There are a few caveats however. Ultimately vc's aim to make money 
+            from their investments. There are two ways for cdr companies to make money, the first is to sell the actual long term 
+            removal of CO₂ either on a voluntary market or to the government, the other is to use the CO₂ in a product that also 
+            sequesters long term (e.g carbon cure). 
+            <br><br>
+            One issue with the second option is that as Klaus Lacker points out we create far more CO₂ than all the gravel and sand 
+            output in the world so while these types of approaches could scale a lot they will almost certainly not take us enough 
+            of the way.
+            <br><br>
+            An issue with the former, sell to companies/governments, is that the very companies that might need vc dollars the most i.e 
+            high tech not ready for market yet, are also the ones who produce a good at above market rate and so may not be able to 
+            find a steady stream of buyers. To some extent this doesn't seem to have been too bad as companies like carbon engineering 
+            or climeworks have seen large amounts of funding but it still is likely holding back even more money from moving in.
+            <br><br>
+            <b>Project finance</b>
+            <br>
+            Project finance is a typical way by which long term infrastructure projects are able to pay for their 
+            creation/construction which typically involve using the projects expected cashflows for repayments. This kind of 
+            financing is one of the primary vehicles renewable company used to scale projects and will likely be crucial for the 
+            scaling up of various cdr approaches as well. 
+            <br><br>
+            Project finance is intimatly linked to the demand side of the equation as you are typically directly using cashflows to 
+            get the financing in the first place. What this allows is for the scale up of much large infrastructure facilities, and 
+            in a non dilutive way. Many CDR strategies are simply too early and in too much of an immature market to be able to 
+            sell their tons of carbon removed in this way allowing them to scale. 
+            <br><br>
+            Also the more nascent approaches have the added problem of trying to sell tons removed well above 'market rates', which
+            creates the problem of who would buy them → little demand → can't get financing → can't scale → can't get cheaper.
+            <br><br>
+            This is clearly not a totally preventative problem, comapies are still getting government and VC funding but project financing
+            allows access to truly massive scale of capital and in the race to 10Gt even though we have other funding avenues every one 
+            is crucial. 
+            <br><br>
+            <b>Milestone based funding</b>
+            <br>
+            One of the most effective blends of government funding with private companies came from the NASA COTS programme in the 
+            early 2000s. The US was decommissioning the space shuttle and needed a way to run resupply missions to the ISS without 
+            having to pay another country to do it. What they did was to effectively run a request for proposals for any companies 
+            who wanted to propose a launch system. These were then assessed on a number of factors, likelihood of technically working, 
+            cost etc, and then ultimately two companies were chosen.
+            <br><br>
+            There were a few main differences to this kind of process to normal government procurement:
+            <ul>
+                <li> 
+                    The government only gave specifications on what needed to be achieved not the specific methods by which to 
+                    achieve them (result oriented not process oriented)
+                </li>
+                <li> 
+                    They paid out based on milestones rather than a cost plus model. If the company hit a certain technical milestone 
+                    on their roadmap the government gave them a set amount of money. This put more risk onto the individual companies 
+                    as they would be responsible for paying for cost overruns. It also meant the government only paid out as specific 
+                    progress was made. This helped derisk the government from massive cost overruns.
+                </li>
+            </ul>
+        </p>
+        <p>
+            The end result was that one of the companies funded was spacex and the government saw its costs to resupply the ISS plummet 
+            by almost an order of magnitude while at the same time the most successful space company in the world was able to be born.
+            <br><br>
+            This kind of approach seems to lend itself almost perfectly to the position we are in with CDR.   
+        </p>
+
+        <h3 id="demand">Demand</h3>
+        <p>
+            <b>Voluntary carbon market</b>
+            <br>
+            One thing that is happening today are that private companies like stripe, shopify and microsoft, are coming into the carbon 
+            removal space and offering to buy removal capacity far above market rates in order to try to help various companies scale 
+            and move down their cost curves. 
+            <br><br>
+            When stripe started their carbon purchasing they started with $1m, which is an insanely small amount and yet they reported 
+            that this amount of capital was at the time a huge deal for the companies involved. In fact stripe has gone on to be the 
+            literal first customer of a number of the companies they back.
+            <br><br>
+            While the figures are not yet public stripe has also allowed companies on their platform to directly contribute a percentage 
+            of their revenue towards the companies stripe is buying from thus providing what is likely a reasonably sized, and maybe more 
+            importantly recurring, source of funds for these companies. 
+            <br><br>
+            Voluntary carbon markets for frontier cdr approaches are still not very large though. Some of this is a supply issue, 
+            microsoft found it actually impossible given the submissions they had for their spending to find enough long term 
+            sequestration companies to get to their net zero targets. Some of the issue though is demand based. At the moment net-zero 
+            pledges largely treat a ton of carbon removed by a forest the same as one that is injected underground or mineralised. 
+            While we will need to scale up nature based solutions as well what this does is mean that many companies if they are simply 
+            trying to hit their net zero target do not have an incentive currently to buy the well above market priced carbon removal 
+            from the more frontier approaches.   
+            <br><br>
+            <b>Carbon purchase agreements</b>
+            <br>
+            Energy sources such as solar and wind benefitted massively from Power purchase agreements (PPAs) which were long term agreements by companies/governments 
+            to buy energy from specific projects. This enabled these projects to literally take this commitment to the bank where they 
+            could then raise project financing to either expand their portfolio of renewable energy projects or build specific ones using 
+            the agreement.
+            <br><br>
+            Buying a few years worth of RECs from a renewable project does not provide the stable and sizable cash stream that a 
+            renewable project developer needs to get financing to build new green power projects. In a PPA, Google is agreeing to buy 
+            all the power from a project for many years. Google has, in effect, totally accepted the power price risk that the project
+            owner would otherwise face—instead of taking the risk of selling into the power market on a short-term basis, Google is 
+            providing the seller with a guaranteed revenue stream for 20 years. This is something the developer can literally take to 
+            the bank”
+            <br><br>
+            Google emphasises this bankability later in the document as well where they say that if they only brought the RECs this would
+            provide the energy providers with only a fraction of the benefit of going all in with a PPA. It is interesting to contrast 
+            this with the way voluntary carbon markets work today. Currently we are largely in the buying just the REC phase of many 
+            markets, especially for frontier technologies.
+            <br><br>
+            It should be noted that the UK currently has the Woodland Carbon Guarantee which allows for the option to sell captured 
+            carbon to the government at a guaranteed price. This is a great initiative and should probably be copied more around the 
+            world, however, it still doesn't necessarily help frontier companies. If they are likely to produce a tonne of removed 
+            carbon for well above the price guarantee then selling to the government does little to help them gain a positive expected 
+            value with which to finance their projects. In their case they may well need much more specific agreements for buying from 
+            their specific facilities with the expectation that the carbon removed will have a higher price per tonne than other sources
+            but that this will allow these companies to fund more project expansion to move down their cost curves.
+            <br><br>
+            This doesn't really happen at the moment. We see some companies like stripe or shopify that are buying from frontier companies
+            at above market rates but not necessarily in a more formalised long term way. This is not necessarily a bug, at least at 
+            this point. …explore vs exploit …etc
+            <br><br>
+            There are some big differences between what google did and what might/does need to be done with CDR. Google specifically 
+            says that they “always try to buy renewable energy from the most cost-competitive sources within the grids where we operate.” 
+
+            <br><br>
+            <b>Advanced market commitments</b>
+            <br>
+            Advanced market commitments are when some group guarantees to buy a given output as long as a certain set of criteria 
+            is met. For example back in 2009 there was a $1.5bn AMC to buy pneumococcal vaccines for developing countries. The idea was 
+            that the AMC allows both market forces and subsidy like interventions to interact to help create conditions that private 
+            firms would find more favorable to go and try to create a vaccine candidate in. One of the main reasons the AMC is so useful 
+            is that it avoids having to pick which companies to buy from ex-ante and instead lets companies that believe they can make a 
+            profitable candidate self-select. 
+            <br><br>
+            One of the main considerations when designing AMCs is whether the product being brought is technologically close or 
+            technologically distant. What this distinction means in practice is will firms be able to largely use pre-existing R&D 
+            to create the product and the AMC is to incentives capacity increases (technologically close) or will they have to invest 
+            in this R&D as well as invest in capacity increases to create the product (technologically distant). 
+            <br><br>
+            The distant option is more like what we face with many CDR solutions. Things like DAC while in some form of operation 
+            currently are clearly very far away from 
         
         </p>
-        <ol>
-            <li>Forests </li>
-            <li>Direct Air Capture</li>
-            <li>Bioenergy with carbon capture and storage </li>
-            <li>Soil</li>
-            <li>Blue Carbon </li>
-            <li>Enhanced Weathering</li>
-        </ol>
-
+        <h2>Funding issues</h2>
         <p>
-            These all come with different tradeoffs, for example while forests can remove a tonne of carbon much more
-            cheaply than many alternatives if you want to scale them up you run up against actual available land 
-            quantities. DAC doesn't take up much land at all but is currently one of the more expensive options and
-            also requires a lot of energy. 
-            <br><br>
-            The more technological solutions, while typically the more expensive options today are also the ones that 
-            are the most likely to benefit from learning effects helping to reduce their costs over time. Because of
-            these difference in learning rates it doesn't necessarily make sense to put all our money into what is today
-            the cheapest carbon removal options if this means forgoing the chance to build capacity in the sources that 
-            might be the best in the longer run. 
+            If we look at some of the approaches above they all have useful characteristics but at least in the forms they have been used 
+            in are not directly suited to the CDR problem. A large part of this comes from explore vs exploit, urgency, and technology 
+            readiness levels.
+
         </p>
 
-        <h2 id="portfolioExample">Simple portfolio example</h2>
-        <p>
-        Let's say that you have two technologies that can both remove CO₂ from the atmosphere. They differ in two main 
-        ways though, one (<b>Option A</b>) has a low current cost per tonne of <low-cost-tech-cpt></low-cost-tech-cpt> 
-        to remove <low-cost-tech-current-removal></low-cost-tech-current-removal> tonnes but it also 
-        has a very low learning rate of <low-cost-tech-learning-rate></low-cost-tech-learning-rate> i.e it won't see much 
-        decrease from its current cost level as use of it scales up. The other technology (<b>Option B</b>) however is 
-        starting from a higher current cost per tonne of <high-cost-tech-cpt></high-cost-tech-cpt> to remove 
-        <high-cost-tech-current-removal></high-cost-tech-current-removal> tonnes but also has a higher learning rate of 
-        <high-cost-tech-learning-rate></high-cost-tech-learning-rate>. This means that it will see steeper declines in 
-        cost if we scale up its usage. Now let's suppose we ramp up the scale of carbon removal from a 
-        baseline today of <r-dynamic class="carbonRemovalAmount" onmouseover="hoverByClass('carbonRemovalAmount','#E4FFED')" 
-        bind="carbonRemovalAmount" after="Gt" min="0" max="1" step="0.0001"></r-dynamic>
-        by 
-        <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
-        bind="carbonRemovalRate" after="%" min="0" max="100" step="0.01"></r-dynamic>
-         a year. How will changing our mixture between using these different technologies
-        effect costs?
-        <br><br>
-        Suppose we procure <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech> of carbon removal 
-        from technology A and the rest from technology B. Over time then the
-        costs will look like this: (click <b>here</b> to see cumulative tonnes removed, & therefore cost per tonne decreases,
-        by technogy A and <b>here</b> for technology B)
-
-        <!-- cumulative tons for tech A MARGIN note -->
-        <label for="mn-demo" class="margin-toggle">&#8853;</label>
-        <input type="checkbox" id="mn-demo" class="margin-toggle"/>
-        <span class="marginnote" id="yearsUntilTenDollars">
-            <br><br><br><br>
-            % removal from technology A: <perc-carbon-from-low-cost-tech></perc-carbon-from-low-cost-tech>
-            <br>
-            % increase annual carbon removal: 
-            <r-dynamic class="carbonRemovalRate" onmouseover="hoverByClass('carbonRemovalRate','#E4FFED')" 
-            bind="carbonRemovalRate" after="%" min="0" max="100" step="1"></r-dynamic>
-            <br>
-
-            <b>Cumulative tonnes for tech A</b>
-            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
-
-              <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-              <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-              <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-
-              <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-              <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-              <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-              <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
-              " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
-
-              <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
-            </r-svg-chart>
-            <br>
-            <b>Unit cost per tonne for tech A</b>
-            <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="400" x-axis-location="origin" y-axis-location="3">
-
-              <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-              <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-              <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-
-              <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-              <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-              <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+4.8" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-              <r-svg-text :x="year+0.4" :y="4" text="Cumulative Gt:" :listen="maxCostYAxis"></r-svg-text>
-              <r-svg-text :x="year+12.9" :y="4" :text="((carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year))*(percCarbonFromLowCostTech/100)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-              <r-svg-eqn eqn="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100))))*(percCarbonFromLowCostTech/100)
-              " :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn>
-
-              <!-- <r-svg-eqn eqn="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x))*(percCarbonFromLowCostTech/100)" :listen="{carbonRemovalAmount,carbonRemovalRate,percCarbonFromLowCostTech}" stroke="#2ca02c"></r-svg-eqn> -->
-            </r-svg-chart>
-            <br>
-
-        </span>
-
-
-        <!-- portfolio of tech carbon cost timeline chart -->
-        <r-svg-chart xlabel="Time" ylabel="Cost ($bn)" xlim="[0,40]" :ylim="[0, maxCostYAxis]" width="700" height="250" x-axis-location="origin" y-axis-location="3">
-
-            <r-svg-path :data="[[10, 0],[10, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="10" :y="maxCostYAxis*0.8" text="2030" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-path :data="[[20, 0],[20, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="20" :y="maxCostYAxis*0.8" text="2040" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-path :data="[[30, 0],[30, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="30" :y="maxCostYAxis*0.8" text="2050" :listen="maxCostYAxis"></r-svg-text>
-
-            <r-svg-path :data="[[year, 0],[year, maxCostYAxis]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-node :x="year" :y="maxCostYAxis/2" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-            <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*1.1" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-text :x="year+2.4" :y="(maxCostYAxis/2)*1.1" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-            <r-svg-text :x="year+0.4" :y="(maxCostYAxis/2)*0.9" text="Cost ($bn):" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-text :x="year+4.6" :y="(maxCostYAxis/2)*0.9" text="$" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-text :x="year+5.1" :y="(maxCostYAxis/2)*0.9" :text="removalCostInGivenYeaer.toPrecision(4)" ></r-svg-text>
-
-            <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x) * costperton*((1-(dacLearningCurve/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate,costperton,dacLearningCurve}" stroke="#2ca02c"></r-svg-eqn>
-        </r-svg-chart>
-
-        <!-- portfolio of tech ANNUAL carbon removal timeline chart -->
-        <r-svg-chart xlabel="Time" ylabel="Gt Carbon" xlim="[0,40]" :ylim="[0, 15]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
-
-            <r-svg-path :data="[[10, 0],[10, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="10" y="13" text="2030 "></r-svg-text>
-            <r-svg-path :data="[[20, 0],[20, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="20" y="13" text="2040 "></r-svg-text>
-            <r-svg-path :data="[[30, 0],[30, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="30" y="13" text="2050 "></r-svg-text>
-            <r-svg-path :data="[[0, 10],[40, 10]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-text :x="2" y="9" text="10Gt removal "></r-svg-text>
-
-            <r-svg-path :data="[[year, -20],[year, 20]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-            <r-svg-node :x="year" :y="5" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-            <r-svg-text :x="year+0.4" :y="6" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-text :x="year+2.4" :y="6" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-            <r-svg-text :x="year+0.4" :y="4" text="Removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
-            <r-svg-text :x="year+5.7" :y="4" :text="(carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** year)).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-            <r-svg-eqn eqn="carbonRemovalAmount*((1+(carbonRemovalRate/100)) ** x)" :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
-        </r-svg-chart>
-
-        <!-- portfolio of tech CUMULATIVE carbon removal timeline chart -->
-        <r-svg-chart xlabel="Time" ylabel="Cumulative Gt" xlim="[0,40]" :ylim="[0, cumulativeTonsRemovedBy2050*1.2]" width="700" height="200" x-axis-location="origin" y-axis-location="3">
-
-          <r-svg-path :data="[[10, 0],[10, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          <r-svg-text :x="10" :y="cumulativeTonsRemovedBy2050*0.8" text="2030 "></r-svg-text>
-          <r-svg-path :data="[[20, 0],[20, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          <r-svg-text :x="20" :y="cumulativeTonsRemovedBy2050*0.8" text="2040 "></r-svg-text>
-          <r-svg-path :data="[[30, 0],[30, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          <r-svg-text :x="30" :y="cumulativeTonsRemovedBy2050*0.8" text="2050 "></r-svg-text>
-
-          <r-svg-path :data="[[year, -20],[year, cumulativeTonsRemovedBy2050*1.2]]" stroke="#333" stroke-width="1" stroke-dasharray="3"></r-svg-path>
-          <r-svg-node :x="year" :y="cumulativeTonsRemovedBy2050*0.3" :drag="{year: x}" fill="#ff7f0e"></r-svg-node>
-
-          <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.35" text="Year:" :listen="maxCostYAxis"></r-svg-text>
-          <r-svg-text :x="year+2.4" :y="cumulativeTonsRemovedBy2050*0.35" :text="(year+2020).toPrecision(4)" ></r-svg-text>
-
-          <r-svg-text :x="year+0.4" :y="cumulativeTonsRemovedBy2050*0.25" text="Cumulative removal (Gt):" :listen="maxCostYAxis"></r-svg-text>
-          <r-svg-text :x="year+9.7" :y="cumulativeTonsRemovedBy2050*0.25" 
-          :text="(carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(year+1))) / (1-(1+(carbonRemovalRate/100)))).toPrecision(2)" :listen="maxCostYAxis"></r-svg-text>
-
-          <r-svg-eqn eqn="carbonRemovalAmount * (1-((1+(carbonRemovalRate/100))**(x+1))) / (1-(1+(carbonRemovalRate/100)))
-          " :listen="{carbonRemovalAmount,carbonRemovalRate}" stroke="#2ca02c"></r-svg-eqn>
-
-      </r-svg-chart>
-      </p>
-
-        <h2 id="support">Support</h2>
-        <p>
-          While not everyone will be able to get directly involved in this work there are 
-          still things anyone can do to help out to varying degrees. 
-          <br><br>
-          Firstly, carbon removal has had a history of being a somewhat controversial topic 
-          and so hopefully what you've learnt here will help to pursuade you of the undeniable need now for 
-          it to be part of any climate solution. 
-          <br><br>
-          Secondly, if you want to get more supportive you could consider donating to 
-          <a href="https://ourworldindata.org/donate">Our World in Data</a>
-           or <a href="https://stripe.com/gb/climate/contribute">Stripe Climate</a>. While Our World 
-          in Data does not specifically focus on carbon removal it is an absolutly essential 
-          effort to help make the worlds data, including energy and emissions data, as widely
-          visible as possible and so is a hugly beneficial resource for researchers, the media, 
-          and everyone else. Stripe Climate helps carbon removal companies by being their 
-          <a href="https://www.worksinprogress.co/issue/buyers-of-first-resort/">buyer of first resort</a>,
-          allowing them survive at their high current cost of production until
-          they have moved down their cost curves to a more competitive and sustainable level.
-          You can donate as an <a href="https://stripe.com/gb/climate/contribute">individual</a> or, 
-          if you are an online business, you can <a href="https://stripe.com/gb/climate/contribute">directly contribute a percentage</a> 
-           of your revenue to the programme. 
-        </p>
-
-        <h2 id="acknowledgements">Acknowledgements</h2>
-        <p>
-          The design of this site was hugely inspired by Bret Victor's 
-          <a href="http://worrydream.com/ClimateChange/#media-debate">What can a 
-          technologist do about climate change? (a personal view)</a>. The content
-          of Bret's piece is amazing but he also introduces a version of reactive
-          documents which I have tried to replicate here. His thinking, and mine,
-          is that by allowing people to play around with certain values and see them
-          in the context of calculations they can hopefully build a better intuition
-          of what these values mean, what they predict, and also force the writer to 
-          be more open about how they reach some of their own conclusions. 
-          <br><br>
-          Also a huge thank you to <a href="https://ourworldindata.org/co2-and-other-greenhouse-gas-emissions">Our World in Data</a>
-          who have collected the most amazing trove of climate data and formatted it
-          so everyone can get access to, and interact with, it. 
-        </p>
+        
       
       </section>
     </article>
@@ -838,16 +1374,23 @@
     <!-- ##################### sidebar #####################-->
     <div class="sidebar">
       <div >
-        <a href="#top"><p>Scaling carbon removal</p></a>
-        <a href="#measurements"><p>Measurements</p></a>
-        <a href="#scale"><p>Scale</p></a>
-        <a href="#costCurve"><p>Cost curves</p></a>
-        <a href="#netZeroCosts"><p>Net zero costs</p></a>
-        <a href="#wright"><p>Wright's law</p></a>
-        <a href="#portfolio"><p>Portfolio approach</p></a>
-        <a href="#portfolioExample"><p>Portfolio example</p></a>
-        <a href="#support"><p>Support</p></a>
-        <a href="#acknowledgements"><p>Acknowledgements</p></a>
+        <!-- <a href="#top"><p>Scaling carbon removal</p></a> -->
+        <a href="#scale_of_problem" class="menuHeader"><div>Scale of problem</div></a>
+        <a href="#emissions" ><div>&nbsp;&nbsp;&nbsp;Emissions</div></a>
+        <a href="#capacity"><div>&nbsp;&nbsp;&nbsp;Capacity</div></a>
+        <a href="#cost"><div>&nbsp;&nbsp;&nbsp;Cost</div></a>
+        <a href="#intro to cost curves" class="menuHeader"><div>Cost curves</div></a>
+        <a href="#cc_relevance" ><div>&nbsp;&nbsp;&nbsp;Relevance to CDR</div></a>
+        <a href="#moving_down_cc"><div>&nbsp;&nbsp;&nbsp;Moving down the &nbsp;&nbsp;&nbsp;cost curve</div></a>
+        <a href="#portfolio" class="menuHeader"><div>Portfolios</div></a>
+        <a href="#approaches" ><div>&nbsp;&nbsp;&nbsp;Approaches</div></a>
+        <a href="#projects"><div>&nbsp;&nbsp;&nbsp;Projects</div></a>
+        <a href="#allocation" class="menuHeader"><div>Portfolio allocation</div></a>
+        <a href="#funding" class="menuHeader"><div>Funding</div></a>
+        <a href="#supply" ><div>&nbsp;&nbsp;&nbsp;Supply side</div></a>
+        <a href="#demand"><div>&nbsp;&nbsp;&nbsp;Demand side</div></a>
+        <a href="#regulation"><div>&nbsp;&nbsp;&nbsp;Regulation</div></a>
+
       </div>
     </div>
     
