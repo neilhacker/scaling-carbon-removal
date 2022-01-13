@@ -96,12 +96,12 @@
             target = 10,000,000,000
          -->
          <r-var name="single_approach_starting_removal" value="10000" format=",.6"></r-var>
-         <r-var name="single_approach_annual_growth" :value="(((10000000000/single_approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
+         <r-var name="single_approach_annual_growth" :value="((((10000000000/single_approach_starting_removal)**(1/30))-1)*100).toPrecision(3)" format=",.6"></r-var>
 
          <r-var name="num_of_approaches" value="8" format=",.6"></r-var>
          <r-var name="approach_starting_removal" value="10000" format=",.6"></r-var>
          <!-- each approach target in 2050 / amount now gives magnitude increase then look per year -->
-         <r-var name="approach_annual_growth" :value="((((10000000000/num_of_approaches)/approach_starting_removal)**(1/30))-1)*100" format=",.6"></r-var>
+         <r-var name="approach_annual_growth" :value="(((((10000000000/num_of_approaches)/approach_starting_removal)**(1/30))-1)*100).toPrecision(3)" format=",.6"></r-var>
 
         <!-------------------- -------------------------- -------------------------->
         <!-------------------- PORTFOLIO ALLOCATION MODEL ------------------------>
@@ -236,6 +236,31 @@
             scope of anything we have done before or are they 'just merely' a lot?
             <br><br>
 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="co2removalScaleUp">
+                target tons = <r-dynamic class="targetCO2removal" onmouseover="hoverByClass('targetCO2removal','#E4FFED')" 
+                bind="targetCO2removal"  min="0" max="10000000000" step="100"></r-dynamic> 
+                <br><br>
+                current tons = <r-dynamic class="currentCO2removal" onmouseover="hoverByClass('currentCO2removal','#E4FFED')" 
+                bind="currentCO2removal"  min="0" max="1000000" step="10"></r-dynamic> 
+                <br><br>
+                \(\dfrac{target&nbsp; tons}{current&nbsp; tons} =  \) <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
+                bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+            </span> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="co2removalAnnualGrowthRate">
+                Magnitude of scale up = <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
+                bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+                <br><br>
+                Years = 30
+                \((Magnitude&nbsp; of&nbsp; scale&nbsp; up)^{\dfrac{1}{Years}} =  \) <r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
+                bind="co2removalAnnualGrowthRate" onclick="sidebar('co2removalAnnualGrowthRate')"></r-display>%. 
+    
+            </span> 
+
+
             If we consider a CDR strategy that currently removes
             <r-dynamic class="currentCO2removal" onmouseover="hoverByClass('currentCO2removal','#E4FFED')" 
             bind="currentCO2removal"  min="0" max="1000000" step="10"></r-dynamic> 
@@ -244,10 +269,10 @@
             bind="targetCO2removal"  min="0" max="10000000000" step="100"></r-dynamic> 
             tons a year by 2050, i.e in 30 ish years time, then this would mean scaling up our tons removed 
             <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
-            bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+            bind="co2removalScaleUp" onclick="sidebar('co2removalScaleUp')"></r-display>
             time, or a yearly compounded growth rate of 
             <r-display class="co2removalAnnualGrowthRate" onmouseover="hoverByClass('co2removalAnnualGrowthRate','#E4FFED')" 
-            bind="co2removalAnnualGrowthRate" onclick="sidebar('yearsTo10Gt')"></r-display>%. 
+            bind="co2removalAnnualGrowthRate" onclick="sidebar('co2removalAnnualGrowthRate')"></r-display>%. 
             <br><br>
             The bar charts below are meant to show how this growth rate compares with some other industries or products that 
             may have comparable characteristics. 
@@ -1005,6 +1030,42 @@
                 as the single approach then the outcome is purely due to the difference in starting tons. This is true but is also 
                 not too disimilar to real life.  
             </span>
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="single_approach_annual_growth">
+                <br>
+                Target = 10,000,000,000 tons
+                <br><br>
+                Current = <r-dynamic class="single_approach_starting_removal" onmouseover="hoverByClass('single_approach_starting_removal','#E4FFED')" 
+                bind="single_approach_starting_removal"  min="1000" max="100000" step="100"></r-dynamic> tons
+                <br><br>
+                Years = 30
+                <br>
+                \((\dfrac{Target}{Current})^{\dfrac{1}{Years}} = &nbsp; \) <r-display class="single_approach_annual_growth" onmouseover="hoverByClass('single_approach_annual_growth','#E4FFED')" 
+                bind="single_approach_annual_growth" onClick="sidebar('single_approach_annual_growth')"></r-display>%
+            </span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="approach_annual_growth">
+                <br>
+                Total Target = 10,000,000,000 tons
+                <br><br>
+                Current = <r-dynamic class="single_approach_starting_removal" onmouseover="hoverByClass('single_approach_starting_removal','#E4FFED')" 
+                bind="single_approach_starting_removal"  min="1000" max="100000" step="100"></r-dynamic> tons
+                <br><br>
+                Years = 30
+                <br><br>
+                Number of approaches =  <r-dynamic class="num_of_approaches" onmouseover="hoverByClass('num_of_approaches','#E4FFED')" 
+                bind="num_of_approaches"  min="0" max="15" step="1"></r-dynamic>
+                <br><br>
+                Target Per Approach = \((\dfrac{Total}{Num&nbsp; approaches})  \)
+                <br><br>
+                \((\dfrac{Target&nbsp; Per&nbsp; Approach}{Current})^{\dfrac{1}{Years}} =&nbsp;  \)<r-display class="approach_annual_growth" onmouseover="hoverByClass('approach_annual_growth','#E4FFED')" 
+                bind="approach_annual_growth" onClick="sidebar('approach_annual_growth')"></r-display>%
+            </span> 
+
             This is going to be a bit coarse but one clear benefit of having multiple approaches (and this also holds to some extent 
             for projects) is that it simply decreases the amount any needs to scale to hit some fixed target. To make this a bit more 
             concrete say you're trying to scale up from 
@@ -1013,7 +1074,7 @@
              tons to 10Gt in 30 years. If you only have a single approach then this 
             approach would need to scale by 
             <r-display class="single_approach_annual_growth" onmouseover="hoverByClass('single_approach_annual_growth','#E4FFED')" 
-            bind="single_approach_annual_growth" ></r-display>%
+            bind="single_approach_annual_growth" onClick="sidebar('single_approach_annual_growth')"></r-display>%
              a year. If however you have
             <r-dynamic class="num_of_approaches" onmouseover="hoverByClass('num_of_approaches','#E4FFED')" 
             bind="num_of_approaches"  min="0" max="15" step="1"></r-dynamic>
@@ -1022,7 +1083,7 @@
             bind="approach_starting_removal"  min="1000" max="50000" step="100"></r-dynamic>
             tons today then each approach only needs to scale by
             <r-display class="approach_annual_growth" onmouseover="hoverByClass('approach_annual_growth','#E4FFED')" 
-            bind="approach_annual_growth" ></r-display>%
+            bind="approach_annual_growth" onClick="sidebar('approach_annual_growth')"></r-display>%
              a year to get you to your target. 
 
         </p>
@@ -1049,6 +1110,28 @@
                 Alex Tabarrok on spreading out investments for a solution to covid 19</a></footer>
         </blockquote>
         <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="numberOfTries">
+                <br>
+                P(individual success) = <r-dynamic class="probabilityOfSuccessIndividual" onmouseover="hoverByClass('probabilityOfSuccessIndividual','#E4FFED')" 
+                bind="probabilityOfSuccessIndividual"  min="0" max="100" after="%" step="1"></r-dynamic> = p
+                <br><br>
+                P(any success) = <r-dynamic class="probabilityOfSuccessOverall" onmouseover="hoverByClass('probabilityOfSuccessOverall','#E4FFED')" 
+                bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> = X
+                <br><br>
+                P(all fail) = \((1-p)^{Num&nbsp; attempts} \)
+                <br><br>
+                X = 1 - P(all fail)
+                <br><br>
+                \((1-p)^{Num&nbsp; attempts} = 1 - X\)
+                <br><br>
+                Num attempts = \(Log_{1-p}(1-X)\)
+                <br><br>
+                Num attempts = <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
+                bind="numberOfTries" onClick="sidebar('numberOfTries')"></r-display>
+            </span> 
+
             Many carbon removal technologies are pretty nascent in their development and we're not yet certain how far they can scale,
             how cheap they can get, and how much carbon they will ultimately be able to remove. Suppose for now though that 
             any given approach has a 
@@ -1059,7 +1142,7 @@
             bind="probabilityOfSuccessOverall"  min="0" max="100" after="%" step="1"></r-dynamic> 
             chance of getting at least one viable technology we would need to invest in and start scaling up around
             <r-display class="numberOfTries" onmouseover="hoverByClass('numberOfTries','#E4FFED')" 
-            bind="numberOfTries"></r-display> 
+            bind="numberOfTries" onClick="sidebar('numberOfTries')"></r-display> 
             technologies today. 
             <br><br>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
