@@ -355,19 +355,22 @@
                 <r-svg-path :data="[[19, 0],[20, 0]]" stroke="#000000" stroke-width="1" stroke-dasharray="3"></r-svg-path>
 
             </r-svg-chart>
-            Looking at the above rates of scaling we see the extent of the challenge in front of us. <b>We will need to scale 
-            up carbon removal technologies at the rate of some of our fastest growing technologies in the 
-            world today. </b>
-            <br><br>
             Many of the tecnologies above were/are heavily subsidised by governments around the world and recieved billions in funding from 
             governments for R&D. Many, specifically the energy related ones, have the added benefit of being general purpose 
             technologies which means that the demand for them if they get cheap enough is basically infinte. If solar became incredibly cheap
             then the question of who would want to buy it sorts itself out almost instantly. This helped enable a clear path to who would 
             buy the product if you could get it cheap enough, everyone. 
             <br><br>
-            While very much against the traditional definition a clean atmosphere is a pretty good contender for a wholly different 
-            kind of general purpose technology and so if you class cdr strategies as enablers of this then it is a new kind of framing 
-            that adds to their importance.  
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br>
+                ★
+            </span>
+            Looking at the above rates of scaling we see the extent of the challenge in front of us. <b>We will need to scale 
+            up carbon removal technologies at the rate of some of our fastest growing technologies in the 
+            world today. </b>
+    
         </p>
 
         <h3 id="cost">Scale of cost</h3>
@@ -473,6 +476,12 @@
             </ul>
         </p>
         <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br><br>
+                ★
+            </span>
             We will have a look below at these two factors in more detail. The main takeaways I want to leave you with 
             from this section is that <b>this will not be cheap but compared to many other activities it will not be 
             ahistorically expensive. </b>     
@@ -668,6 +677,11 @@
             $68.4 to $190 potential price floor at current energy prices
             If we are at the higher end of this power usage limit then this price floor could prove to be a real obstacle to our ability 
             to scale at an affordable price.
+            <br><br>
+            This issue will depend a lot on the specific approach, energy prices/generation in the futre, as well as R&D to lower a 
+            specific approaches energy usage per ton. For example, DAC may be able to become more efficient at using its energy or may 
+            be able to get access to cheaper and cheaper solar both of which would make the floor price lower. A different approach, such as 
+            what Running Tide are doing with kelp uses energy from the sun which is free and so the floor for them can be a lot lower.
         </p>
 
         <h3 id="moving_down_cc">Moving down the cost curve</h3>
@@ -892,6 +906,13 @@
             bind="totalCostToCbVolExample" onclick="sidebar('CbTo10Gt')"></r-display>.
             
             <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br><br> <br><br><br> <br><br><br> <br><br><br> <br><br>
+                ★
+            </span>
+
             One thing to really emphasise about the example is the effect of changing the amount we are scaling up removal each year.
             Currently this is set to <r-dynamic class="yearlyIncreaseInTonnesPerc" onmouseover="hoverByClass('yearlyIncreaseInTonnesPerc','#E4FFED')" 
             bind="yearlyIncreaseInTonnesPerc"  min="0" max="100" after="%" step="1"></r-dynamic>
@@ -962,6 +983,12 @@
             the whole cdr system to see what the additionality would be, i.e what carbon was produced to make the system, to power it, 
             to transport and store the carbon? Still while these things add complexity the counterfactual is much clearer. 
             <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br><br><br><br>
+                ★
+            </span>
             Despite it seeming like technological solutions have an edge in many different areas, it should be taken from the above to 
             suggest that they are better. Two things should be made clear. 
             <br>
@@ -1038,6 +1065,12 @@
             bind="numberOfTries"></r-display> 
             technologies today. 
             <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br><br>
+                ★
+            </span>
             The exact numbers are not really what I want to emphasis here it is more that <b>if we want to have a chance of getting a 
             working option</b> and we are still at a stage where we have many unknowns around what could work, what could scale, how 
             quickly things could scale, then this <b>almost certainly requires us to cast a wide net</b> and fund many options in order 
@@ -1105,6 +1138,14 @@
             </r-svg-chart> -->
 
 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+               I would love to be able to exlain each step to make these graphs in the margin but there is no way it will fit so if you 
+               want to see how they are constructed you can have a look at the equations 
+               <a href="https://docs.google.com/document/d/1OlBuO_6PLEhBsaV5S1_wI_QdkeWeLopeTJfZXKCQWrI/edit?usp=sharing">here</a>
+            </span>
+
             <!-- Amount of CO₂ removal (Mt) -->
             <r-svg-chart  ylabel="CO2 removal (Mt)" :xlim="[0,30]" :ylim="[0, 8000]"  width="700" height="300"  y-axis-location="origin" >  
                 <r-svg-eqn eqn="portfolio_sliderStep == 1? (a_currentTonsRemoval*(1+(a_neededAnnualGrowthRate/100))**x)/1000000 : 0" :listen="[sliderStep,a_currentTonsRemoval,a_neededAnnualGrowthRate]" stroke="#f97558"></r-svg-eqn>
@@ -1146,6 +1187,12 @@
             means for any given budget if we can start getting the costs down today by starting to ramp up usage we should otherwise we 
             will find ourselves in the position of having to pay a much higher average unit price for it in the future.
             <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br><br><br>
+                ★
+            </span>
             In the model above then what we see is that in scenario 2 we therefore often don't have enough of a budget to scale this
             technology all the way up to its full capacity. The news is actually even worse than that. <b>Money and time are not fungible</b>.
             To some extent we can choose to pay more to do something faster but there are limits to this. 
@@ -1166,6 +1213,12 @@
             people, the reallocation of vast sections of the chemical and other industries. These things might be only financial issues 
             in models but they exist as actual constraints in the real world. 
             <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br>
+                ★
+            </span>
             The outcome of all of this is that <b>it may not just be cheaper to start aggressively scaling things like technology B today, 
             but it might be our only option if we really want to have it available for us to use in the future at the scales we will need 
             it in.</b>
@@ -1210,11 +1263,25 @@
             The UK has <a href="https://www.gov.uk/government/publications/direct-air-capture-and-other-greenhouse-gas-removal-technologies-competition/projects-selected-for-phase-1-of-the-direct-air-capture-and-greenhouse-gas-removal-programme">
             just announced the 24 projects</a> it will be backing for experiments into DAC. They have 
             <a href="https://www.gov.uk/government/news/pm-a-new-deal-for-britain">also announced up to $100m</a>
-            in new funding for dac R&D.
+            in new funding for DAC R&D.
             <br><br>
-            The us government similarly has recently put out a request for information from their newly formed department of 
+            The US government similarly has recently put out a request for information from their newly formed department of 
             fossil energy and carbon management for things to look into funding and they have currently put aside a budget of … 
-            for direct R&D funding for frontier cdr areas.
+            for direct R&D funding for frontier cdr areas. The 
+            <a href="https://www.npr.org/2021/11/17/1056646775/the-infrastructure-bill-could-boost-the-industry-removing-carbon-dioxide-from-th">recent infrastructure bill contains more than</a> 
+            ＄12bn for carbon capture, removal and storage. New York is also putting aside $3.5bn specifically for DAC. The recent 
+            Office for fossile energy and carbon management had a 
+            <a href="https://www.energy.gov/sites/prod/files/2020/02/f71/FY%202021%20Budget%20in%20Brief%20Fact%20Sheet_2.pdf">fiscal year 2021 budget of $123M</a> 
+            for carbon capture, utilization, and storage.
+            It is worth noting though that while part of this funding will likely end up benefiting long term CDR not all of the approaches that 
+            fit in this category are directly related to what we are talking about here. For example point source capture is more a way to 
+            reduce emissions from polluting plants and as such would not typically be regarded as carbon removal even though it is carbon capture.
+            The departments recent <a href="https://www.energy.gov/sites/default/files/2021-07/Budget%20in%20Brief%20Fact%20Sheet%20FY%202022.pdf">2022 budget request</a> 
+            does have a new line item specifically for carbon removal of ＄63m.
+            <br><br>
+            These suggest that governments are starting to really scale up their funding for CDR R&D which will be crucial to help create 
+            the technologies and demonstration plants needed to start to scale up properly. 
+        
             <br><br>
 
             <b>VC</b>
@@ -1358,12 +1425,79 @@
             currently are clearly very far away from 
         
         </p>
-        <h2>Funding issues</h2>
+
+        <h3 id="regulation">Regulation</h3>
+        <p>
+            I'm not going to go too far into regulation in this post as it could easily expand to be just as long as everything else. 
+            What I do want to point out is the virtuous cycle that some regulation could provide. If we start pricing carbon at a higher 
+            rate then we enable companies who at the moment have a very expensive product to effectively get a subsidy towards this. This 
+            would mean that they can become more price competitive which in turn might mean that there will be more and more consistent demand.
+            <br><br>
+            This can help enable these approaches to access more capital and so scale more to meet this demand in the process removing 
+            more and more CO₂ from the atmosphere.
+        </p>
+
+        <h2 id="hybrid">A hybrid funding approach</h2>
         <p>
             If we look at some of the approaches above they all have useful characteristics but at least in the forms they have been used 
-            in are not directly suited to the CDR problem. A large part of this comes from explore vs exploit, urgency, and technology 
-            readiness levels.
-
+            in in the past are not directly suited to the CDR problem. Most of this comes from two factors:
+            <br><br>
+            - Technology readiness levels
+            <br>
+            - Urgency
+            <br><br>
+            The fact that many permenant CDR strategies today have somewhere between small and almost non-existant technological readiness
+            level means that things like project financing are very unlikely to be able to happen in the ways they did for renewables. 
+            In that setting it was pretty clear that a solar farm would generate a certain amount of electricity for a certain price, it was 
+            just that this price was a bit more than market values and that the plants were expensive to make. In the CDR setting it is not clear
+            yet how fast some approaches could scale and even if they do they will be much more expensive than other approaches for a 
+            considerable time. The demand is therefore much less clear and the entities that would provide it would have to be doing so at rates
+            above other, less permanent, approaches. 
+            <br><br>
+            AMCs could pool demand so that funding could be given to approaches that are currently more expensive but could get cheaper
+            over time. There is however another issue we get to here. AMCs of the past have typically only been needed to incentivise 
+            capacity building not R&D efforts. They've also typically been awarded to preexisting larger compnaies who if there is R&D
+            to be done have preexisiting ways to finance it.  
+            <br><br>
+            These present a potential issue with CDR in that many of the companies are not large preexising players but instead many nascent
+            groups all trying slightly different approaches and trying to scale up. This means that there will likely be considerable 
+            cost in the R&D efforts that are much greater than what the traditional AMC model has typically had to try to solve for. 
+            <br><br>
+            Milestone based fuding also suffers as a lever due to the make up of the sector as it is typically a fairly bespoke process.
+            You need to be able to judge how much something is likely to cost and then what a reasonable amount of government funding for 
+            getting to that stage would be. If we think back to the COTS example there were only two companies getting funding from the 
+            entire process. While in this case you can get away with a single company working it is very unlikely this will be the case 
+            for CDR which will likely need a whole portfolio of options deployed. 
+            <br><br>
+            This means it would probably be incredibly difficult for the government to recreate the exact method of milestone based funding
+            it used for COTS in the CDR framework.  
+            <br><br>
+            We could wait to see which technologies look more promising and then buy from those using traditional AMCs when they have 
+            lower costs. We could even by this stage maybe used milestone based funding to help them scale up even more given that there 
+            will be fewer players with more assessable technology and costs. The problem with this is our second factor <b>urgency</b>.
+            While it would be much more convenient to wait for these technologies to become more mature we don't have time to let them do 
+            that in their own course as we need to start scaling things right now. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                Some people will probably say COVID fits this descriptions and I do agree it has a number of lessons we can learn about 
+                funding urgent problems. However, while we didn't know this at the time necessarily, the fact that Mrna vaccines were created 
+                in 2 days from the virus sequence being published suggests that not a whole lot of new R&D was actually needed.
+            </span>
+            This suggests that we will need a hybrid of the approaches above that are created in such a way as to provide huge levels of buying 
+            but also support a diverse number of hetrogeneous R&D efforts. What this might look like specifically is hard to say. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br><br>
+                ★
+            </span>
+            <b>This combination 
+            of having such huge demand for something that doesn't yet exist in any real scale but that needs to exist very very soon is not 
+            something we've come across before.  It will require both buying mechanisms to create more stable demand but also funding mechanisms
+            to help companies actually conduct the R&D that they need to do to even begin to access the scale required to make a dent in the problem.</b>
         </p>
 
         
@@ -1390,6 +1524,7 @@
         <a href="#supply" ><div>&nbsp;&nbsp;&nbsp;Supply side</div></a>
         <a href="#demand"><div>&nbsp;&nbsp;&nbsp;Demand side</div></a>
         <a href="#regulation"><div>&nbsp;&nbsp;&nbsp;Regulation</div></a>
+        <a href="#hybrid" class="menuHeader"><div>A hybrid approach</div></a>
 
       </div>
     </div>
