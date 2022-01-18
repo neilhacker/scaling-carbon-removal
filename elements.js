@@ -5,6 +5,7 @@ function myFunction(x) {
 
 }
 
+
 class ValInWords extends HTMLElement {
   connectedCallback() {
       var thing = this.attributes.title.value

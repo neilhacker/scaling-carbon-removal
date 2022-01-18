@@ -3,15 +3,23 @@
   justify-content: space-between;
 }
 
-.sidebar {
+/* .sidebar {
   padding: 15px;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
-  /* width: 70%; */
   width: 65%;
   height: 25vh;
-}
+} */
+
+/* .sidebar {
+  position: fixed;
+  width: 65%;
+  background-color: red; 
+  overflow-y: scroll;
+  top: 0;
+  bottom: 0;
+} */
 
 .fulldisplay {
   margin-bottom: 20px;

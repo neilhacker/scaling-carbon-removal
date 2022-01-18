@@ -1,21 +1,25 @@
 @charset "UTF-8";
 .sidebar {
-    height: 100%;
-    width: 300px;
-    position: absolute;
+    position: fixed;
+    padding-top: 20px;
+    width: 20%;
+    overflow-y: scroll;
     right: 0;
     top: 0;
-    padding-top: 40px;
-    position:fixed
+    bottom: 0;
     }
-    
-    .sidebar div {
-    padding: 8px;
-    font-size: 20px;
-    display: block;
-    }
-    
 
+.sidebar ul li.active {
+/* background-color: rgb(238, 209, 215);
+border-radius: 3px;
+transition: 0.3s ease background-color; */
+}
+.sidebar ul li.active a {
+color: #c6005c;
+}
+      
+      
+    
 /* Import ET Book styles
    adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
 
@@ -254,9 +258,9 @@ a:visited {
 }
 
 a:link, .tufte-underline, .hover-tufte-underline:hover {
-    text-decoration: none;
+    /* text-decoration: none;
     background: -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(currentColor, currentColor);
-    background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(currentColor, currentColor);
+    background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(currentColor, currentColor); */
     -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
     -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
     background-size: 0.05em 1px, 0.05em 1px, 1px 1px;

@@ -141,19 +141,6 @@
         
         <r-var name="portfolio_sliderStep" value="1" format=".0f"></r-var>
 
-        <!-- Two tech portfolio example -->
-        <!-- <r-var name="portfolio_currentCarbonRemovalAmount" value="500" format=",.6"></r-var>
-        <r-var name="portfolio_cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    
-        <r-var name="portfolio_yearlyIncreaseInTonnesPerc" value="30" format=".5"></r-var>              
-        <r-var name="portfolio_yearsTo10Gt" :value="Math.log(10000000000/portfolio_currentCarbonRemovalAmount)/Math.log(1+portfolio_yearlyIncreaseInTonnesPerc/100)" format=",.6"></r-var> -->
-        <!-- Qb so the cumulativeScaleTo10Gt formula below is the sum of the geometric series up to yearsTo10Gt but then minus tonnes this year + cumulative tonnes to avoid double counting-->
-        <!-- <r-var name="portfolio_cumulativeScaleTo10Gt" :value="(portfolio_currentCarbonRemovalAmount * ( (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))**(portfolio_yearsTo10Gt+1)) / (1-(1+(portfolio_yearlyIncreaseInTonnesPerc/100))) )) - portfolio_currentCarbonRemovalAmount + portfolio_cumulativeCarbonRemovalAmount" format=",.12"></r-var>         -->
-        
-        <!-- this changes we have 2 Cb values 1 for each tech then we add them -->
-        <!-- <r-var name="portfolio_totalCostToCbVolExample" :value="Math.trunc((wrightsLawC1/(log2b+1)) * (portfolio_cumulativeScaleTo10Gt**(log2b+1)-(portfolio_cumulativeCarbonRemovalAmount-1)**(log2b+1)))" format=",.13"></r-var>
-
-        <r-var name="percentOfRemovalFromTechA" value="50" format=",.6"></r-var> -->
-
         <!-- shots on goal -->
         <r-var name="probabilityOfSuccessIndividual" value="5" format=",.2"></r-var>
         <r-var name="probabilityOfSuccessOverall" value="95" format=",.2"></r-var>
@@ -162,9 +149,8 @@
 
 
 
-        <section>
-
-        <h1 id="title">Scaling up carbon removal</h1>
+        <section id="top">
+        <h1 >Scaling up carbon removal</h1>
         <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a></b></h3>
         <p>(For the best experience read this essay fullscreen on a computer)</p>
         <h2>Overview</h2>
@@ -203,15 +189,17 @@
             in the margin.   
 
         </p>
-
-        <h2 id="scale_of_problem">Scale of problem</h2>
+    </section>
+    <section id="scale_of_problem">
+        <h2>Scale of problem</h2>
         <p>
             This section aims to be a short bit of contextualising of how much CO₂ we need to remove, how quickly we 
             need to ramp up our capabilities, and how much this could cost.
     
         </p>
-
-        <h3 id="emissions">Scale of emissions</h3>
+    </section>
+    <section id="emissions">
+        <h3>Scale of emissions</h3>
         <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -239,8 +227,9 @@
 
 
         </p>
-
-        <h3 id="capacity">Scale of capacity</h3>
+    </section>
+    <section id="capacity">
+        <h3>Scale of capacity</h3>
         <p>
             To reach our 10Gt target will require absolutely huge scale ups in current methods of CDR. 
             One question to ask is what would these scale ups resemble? Are they literally out of the 
@@ -405,8 +394,9 @@
             world today. </b>
     
         </p>
-
-        <h3 id="cost">Scale of cost</h3>
+    </section>
+    <section id="cost">
+        <h3>Scale of cost</h3>
         <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -531,8 +521,9 @@
         </p>
 
         
-
-        <h2 id="intro to cost curves">Introduction to cost curves</h2>
+    </section>
+    <section id="intro_to_cost_curves">
+        <h2>Introduction to cost curves</h2>
         <p>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -605,8 +596,9 @@
             </r-svg-chart>
 
         </p>
-
-        <h3 id="cc_relevance">Relevance to CDR</h3>
+    </section>
+    <section id="cc_relevance">
+        <h3>Relevance to CDR</h3>
         <p>
             How might we expect things like DAC to scale down their costs? The short answer is we really aren't too sure 
             at the moment. This is one of the reasons why we need to be funding multiple shots at various approaches so we 
@@ -727,8 +719,9 @@
             be able to get access to cheaper and cheaper solar both of which would make the floor price lower. A different approach, such as 
             what Running Tide are doing with kelp uses energy from the sun which is free and so the floor for them can be a lot lower.
         </p>
-
-        <h3 id="moving_down_cc">Moving down the cost curve</h3>
+    </section>
+    <section id="moving_down_cc">
+        <h3>Moving down the cost curve</h3>
         <p>
             <b>Scaling down costs</b>
             <br>
@@ -981,12 +974,12 @@
             Hopefully it can still serve as a useful guide for the order of magnitude we might be expecting to pay at 
             and how important things like the learning rate are for our calculations.
         </p>
-
-        <h2 id="portfolio">Portfolios</h2>
-        <p>
-            There are two types of portfolios that we can talk about. 
-        </p>
-        <h3 id=approaches>Portfolio of apporoaches</h3>
+    </section>
+    <section id="portfolio">
+        <h2>Portfolios</h2>
+    </section>
+    <section id="approaches">
+        <h3>Portfolio of apporoaches</h3>
         <p>
             We can broadly split most CDR approaches into two main camps. 
             Camp one is nature based solutions. These are things like afforestation & reforestation, soil sequestration, 
@@ -1109,8 +1102,9 @@
              a year to get you to your target. 
 
         </p>
-
-        <h3 id="projects">Portfolio of projects</h3>
+    </section>
+    <section id="projects">
+        <h3>Portfolio of projects</h3>
         <p>
             In some ways this serves a similar function to the 
             portfolio of approaches. Any given project/specific instantiation of an approach, may have certain scale limitations 
@@ -1178,8 +1172,9 @@
             quickly things could scale, then this <b>almost certainly requires us to cast a wide net</b> and fund many options in order 
             to end up backing the handful that do work.   
         </p>
-
-        <h2 id="allocation">Allocation</h2>
+    </section>
+    <section id="allocation">
+        <h2>Allocation</h2>
         <p>
             This model is meant to show the effects of how we chose to spend money today. Does it matter if we spend all our money on 
             the cheapest option today waiting until that can't scale anymore before focusing on other solutions. Or, will it help/be 
@@ -1243,7 +1238,7 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="cost comparison graph">
-               I would love to be able to exlain each step to make these graphs in the margin but there is no way it will fit so if you 
+               I would love to be able to explain each step to make these graphs in the margin but there is no way it will fit so if you 
                want to see how they are constructed you can have a look at the equations 
                <a href="https://docs.google.com/document/d/1OlBuO_6PLEhBsaV5S1_wI_QdkeWeLopeTJfZXKCQWrI/edit?usp=sharing">here</a>
             </span>
@@ -1325,8 +1320,9 @@
             but it might be our only option if we really want to have it available for us to use in the future at the scales we will need 
             it in.</b>
         </p>
-
-        <h2 id="funding">Funding</h2>
+    </section>
+    <section id="funding">
+        <h2>Funding</h2>
         <p>
             One general point to make is that obviously this is a two sided market you have companies that are creating a service 
             (cdr) and buyers who are buying the service (tons of carbon removed) How we think about the two sides though is quite 
@@ -1353,8 +1349,9 @@
             While mentioned earlier that a ton is not a ton is not a ton it is also true to some extent that a dollar is not a dollar 
             is not a dollar. 
         </p>
-
-        <h3 id="supply">Supply side</h3>
+    </section>
+    <section id="supply">
+        <h3>Supply side</h3>
         <p>
             Given the global importance of reducing carbon in the atmosphere you would expect governments to be playing a very 
             large role in trying to help these technologies become cheaper. The good news is that governments are starting to ramp 
@@ -1449,8 +1446,9 @@
             <br><br>
             This kind of approach seems to lend itself almost perfectly to the position we are in with CDR.   
         </p>
-
-        <h3 id="demand">Demand</h3>
+    </section>
+    <section id="demand">
+        <h3>Demand</h3>
         <p>
             <b>Voluntary carbon market</b>
             <br>
@@ -1527,8 +1525,9 @@
             currently are clearly very far away from 
         
         </p>
-
-        <h3 id="regulation">Regulation</h3>
+    </section>
+    <section id="regulation">
+        <h3>Regulation</h3>
         <p>
             I'm not going to go too far into regulation in this post as it could easily expand to be just as long as everything else. 
             What I do want to point out is the virtuous cycle that some regulation could provide. If we start pricing carbon at a higher 
@@ -1539,7 +1538,9 @@
             more and more CO₂ from the atmosphere.
         </p>
 
-        <h2 id="hybrid">A hybrid funding approach</h2>
+    </section>
+    <section id="hybrid">
+        <h2>A hybrid funding approach</h2>
         <p>
             If we look at some of the approaches above they all have useful characteristics but at least in the forms they have been used 
             in in the past are not directly suited to the CDR problem. Most of this comes from two factors:
@@ -1602,35 +1603,51 @@
             to help companies actually conduct the R&D that they need to do to even begin to access the scale required to make a dent in the problem.</b>
         </p>
 
-        
-      
       </section>
     </article>
 
     <!-- ##################### sidebar #####################-->
     <div class="sidebar">
-      <div >
-        <!-- <a href="#top"><p>Scaling carbon removal</p></a> -->
-        <a href="#scale_of_problem" class="menuHeader"><div>Scale of problem</div></a>
-        <a href="#emissions" ><div>&nbsp;&nbsp;&nbsp;Emissions</div></a>
-        <a href="#capacity"><div>&nbsp;&nbsp;&nbsp;Capacity</div></a>
-        <a href="#cost"><div>&nbsp;&nbsp;&nbsp;Cost</div></a>
-        <a href="#intro to cost curves" class="menuHeader"><div>Cost curves</div></a>
-        <a href="#cc_relevance" ><div>&nbsp;&nbsp;&nbsp;Relevance to CDR</div></a>
-        <a href="#moving_down_cc"><div>&nbsp;&nbsp;&nbsp;Moving down the &nbsp;&nbsp;&nbsp;cost curve</div></a>
-        <a href="#portfolio" class="menuHeader"><div>Portfolios</div></a>
-        <a href="#approaches" ><div>&nbsp;&nbsp;&nbsp;Approaches</div></a>
-        <a href="#projects"><div>&nbsp;&nbsp;&nbsp;Projects</div></a>
-        <a href="#allocation" class="menuHeader"><div>Portfolio allocation</div></a>
-        <a href="#funding" class="menuHeader"><div>Funding</div></a>
-        <a href="#supply" ><div>&nbsp;&nbsp;&nbsp;Supply side</div></a>
-        <a href="#demand"><div>&nbsp;&nbsp;&nbsp;Demand side</div></a>
-        <a href="#regulation"><div>&nbsp;&nbsp;&nbsp;Regulation</div></a>
-        <a href="#hybrid" class="menuHeader"><div>A hybrid approach</div></a>
+        <ul style="list-style: none; padding: 0;">
+            <li class="top active"><a href="#top" style="text-decoration:none; font-weight: bold;" >Scaling carbon removal</a></li>
+            
+            <li class="scale_of_problem"><a href="#scale_of_problem" style="text-decoration:none; font-weight: bold;" >Scale of problem</a></li>
+            <ul style="list-style: none;">
+                <li class="emissions"><a href="#emissions" style="text-decoration:none" >Emissions</a></li>
+                <li class="capacity"><a href="#capacity" style="text-decoration:none">Capacity</a></li>
+                <li class="cost"><a href="#cost" style="text-decoration:none">Cost</a></li>
+            </ul>
 
-      </div>
+            <li class="intro_to_cost_curves"><a href="#intro_to_cost_curves" style="text-decoration:none; font-weight: bold;" >Cost curves</a></li>
+            <ul style="list-style: none;">
+                <li class="cc_relevance"><a href="#cc_relevance" style="text-decoration:none" >Relevance to CDR</a></li>
+                <li class="moving_down_cc"><a href="#moving_down_cc" style="text-decoration:none">Moving down the cost curve</a></li>
+            </ul>
+
+            <li class="portfolio"><a href="#portfolio" style="text-decoration:none; font-weight: bold;" >Portfolios</a></li>
+            <ul style="list-style: none;">
+                <li class="approaches"><a href="#approaches" style="text-decoration:none" >Approaches</a></li>
+                <li class="projects"><a href="#projects" style="text-decoration:none">Projects</a></li>
+            </ul>
+
+            <li class="allocation"><a href="#allocation" style="text-decoration:none; font-weight: bold;" >Portfolio allocation</a></li>
+
+            <li class="funding"><a href="#funding" style="text-decoration:none; font-weight: bold;" >Funding</a></li>
+            <ul style="list-style: none;">
+                <li class="supply"><a href="#supply" style="text-decoration:none" >Supply side</a></li>
+                <li class="demand"><a href="#demand" style="text-decoration:none">Demand side</a></li>
+                <li class="regulation"><a href="#regulation" style="text-decoration:none">Regulation</a></li>
+            </ul>
+
+            <li class="hybrid"><a href="#hybrid" style="text-decoration:none; font-weight: bold;" >A hybrid approach</a></li>
+
+            
+        </ul>
+              
     </div>
     
   </div>  <!-- end of wrapper div -->
+  <script src="./main.js"></script>
+
   </body>
 </html>
