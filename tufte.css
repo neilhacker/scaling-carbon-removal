@@ -1,24 +1,180 @@
+
 @charset "UTF-8";
-.sidebar {
+
+/* ------------------------------ DROPDOWN ------------------------------*/
+/* Style the button that is used to open and close the collapsible content */
+.collapsible {
+    cursor: pointer;
+    width: 60%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    background-color: #ffffff;
+    border: 2px solid #ecece5
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .collapsible.active, .collapsible:hover {
+    background-color: #ecece5;
+  }
+  
+  /* Style the collapsible content. Note: hidden by default */
+  .content {
+    /* padding: 0 18px; */
+    width: 60%;
+    display: none;
+    overflow: hidden;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    padding: 6px;
+  }
+/* ------------------------------ DROPDOWN ------------------------------*/
+
+nav {
+    align-items: center;
+    justify-content: space-between;
+
     position: fixed;
+    font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    font-size: 2.6rem;
+    z-index: 1;
+    width: 100%;
+    height: 9%;    
+    top: 0;
+    background-color: white;
+    display: none;
+
+}
+
+nav > ul {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration:none;
+}
+
+nav > ul > li {
+    margin: 0 3rem;
+    text-decoration:none;
+}
+
+  /* #header {
+
+    position: fixed;
+    font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
+    font-size: 2.6rem;
+    z-index: 1;
+    width: 100%;
+    height: 9%;    
+    top: 0;
+    background-color: white;
+    display: none;
+
+  } */
+
+  #header_text {
+    font-size: 2.6rem;
+  }
+
+  #header_menu {
+    font-size:4rem; 
+    cursor:pointer; 
+    padding-right: 0px; 
+
+  }
+
+  .sidebar_thin .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 5.2rem;
+    margin-left: 50px;
+  }
+  
+  
+  /* this is for the narrow screen expandable version */
+.sidebar_thin {
+    height: 100%;
+    display: inline-block;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: 0.2s;
+    padding-top: 60px;
+    padding-left: 5px;
+}
+.sidebar_thin ul li.active a {
+    color: #c6005c;
+    }
+    
+
+/* this is for the normal  version */
+.sidebar_main {
+    position: fixed;
+    z-index: 1;
     padding-top: 20px;
     width: 20%;
+    min-width: 300px;
     overflow-y: scroll;
+    margin-right: 10px;
+    padding-left: 20px;
     right: 0;
     top: 0;
     bottom: 0;
     }
 
-.sidebar ul li.active {
-/* background-color: rgb(238, 209, 215);
-border-radius: 3px;
-transition: 0.3s ease background-color; */
-}
-.sidebar ul li.active a {
+.sidebar_main ul li.active a {
 color: #c6005c;
 }
+
+
+blockquote {
+    border-left: 3px solid black;
+    padding-left: 3%;
+}
+
+@media screen and (max-width: 1060px) {
+    nav {
+        display: flex!important;
+    }
+    .sidebar_main {
+        display: none!important;
+    }
+    .main_content {
+        margin-top: 14%; ;
+        width: 90%!important;
+      }
+ }
+ @media screen and (max-width: 540px) {
+    nav {
+        height: 8%!important;
+        font-size: 2rem;
+    }
+    #header_menu {
+        font-size:3.2rem; 
+      }
+    
+}
+
+   
+
+
+.main_content {
+    width: -webkit-calc(100% - 350px);
+
+  margin-left: 5%;
+}
       
-      
+
+/* ---------------------------------------------------------------------------------------------- */
     
 /* Import ET Book styles
    adapted from https://github.com/edwardtufte/et-book/blob/gh-pages/et-book.css */
@@ -65,14 +221,14 @@ html {
 }
 
 body {
-    width: 87.5%;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 5%;
+    /* width: 87.5%; */
+    /* margin-left: auto;
+    margin-right: auto; */
+    /* padding-left: 5%; */
     font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-    background-color: #fffff8;
+    /* background-color: #fffff8; */
     color: #111;
-    max-width: 1400px;
+    /* max-width: 1400px; */
     counter-reset: sidenote-counter;
 }
 
@@ -134,7 +290,7 @@ p.subtitle {
 
 article {
     /* padding: 5rem 0rem; */
-    max-width: 80%;
+    /* max-width: 80%; */
     border: none;
 }
 
@@ -187,7 +343,7 @@ blockquote {
 }
 
 blockquote p {
-    width: 55%;
+    width: 60%;
     margin-right: 40px;
 }
 
@@ -310,10 +466,12 @@ img {
     /* background-color: green; */
     float: right;
     clear: right;
+    width: 50%;
+
     margin-right: -60%;  /* higher this is more to the right sidenote edge is */
-    width: 55%;
     margin-top: 0.3rem;
     margin-bottom: 0;
+    border-right: 1px solid black;
     font-size: 1rem;
     line-height: 1.2;
     vertical-align: baseline;
@@ -441,9 +599,17 @@ label.margin-toggle:not(.sidenote-number) {
     height: 100%;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 660px) {
+    .collapsible {
+        width:100%;
+    }
+
+    .content {
+        width:100%;
+    }
+
     body {
-        width: 84%;
+        /* width: 84%; */
         padding-left: 8%;
         padding-right: 8%;
     }
@@ -520,4 +686,21 @@ label.margin-toggle:not(.sidenote-number) {
     img {
         width: 100%;
     }
+
+    /* .marginnote-reactive {
+        left: 1rem;
+        width: 95%;
+        margin: 1rem 2.5%;
+    } */
 }
+
+/* .marginnote-reactive {
+    display: block;
+    float: left;
+    left: 1rem;
+    clear: both;
+    width: 95%;
+    margin: 1rem 2.5%;
+    vertical-align: baseline;
+    position: relative;
+} */

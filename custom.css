@@ -1,33 +1,12 @@
 .wrapper {
-  display: flex;
+  /* display: flex; */
   justify-content: space-between;
 }
-
-/* .sidebar {
-  padding: 15px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  width: 65%;
-  height: 25vh;
-} */
-
-/* .sidebar {
-  position: fixed;
-  width: 65%;
-  background-color: red; 
-  overflow-y: scroll;
-  top: 0;
-  bottom: 0;
-} */
 
 .fulldisplay {
   margin-bottom: 20px;
   /* color: #e2d8f1 */
 }
 
-.menuHeader {
-  font-weight: bold;
-}
 
 

@@ -1,0 +1,46 @@
+<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote" id="growth base rates">  
+    For a bit of scale: 
+    <br>
+    - The USA's emissions in 2019 were <usa-emissions></usa-emissions> tonnes.
+    <br>
+    - China's 2019 emissions were <china-emissions></china-emissions> tonnes.
+    <br>
+    - Worldwide 2019 CO₂ emissions from coal were <world-coal-emissions></world-coal-emissions> tonnes.
+</span> 
+
+<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote-reactive" id="co2removalScaleUp">
+    target tons = <r-dynamic class="targetCO2removal" onmouseover="hoverByClass('targetCO2removal','#E4FFED')" 
+    bind="targetCO2removal"  min="0" max="10000000000" step="100"></r-dynamic> 
+    <br><br>
+    current tons = <r-dynamic class="currentCO2removal" onmouseover="hoverByClass('currentCO2removal','#E4FFED')" 
+    bind="currentCO2removal"  min="0" max="1000000" step="10"></r-dynamic> 
+    <br><br>
+    \(\dfrac{target&nbsp; tons}{current&nbsp; tons} =  \) <r-display class="co2removalScaleUp" onmouseover="hoverByClass('co2removalScaleUp','#E4FFED')" 
+    bind="co2removalScaleUp" onclick="sidebar('yearsTo10Gt')"></r-display>
+</span> 
+
+
+<label for="mn-demo" class="margin-toggle">&#8853;</label>
+<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+<span class="marginnote" id="cost comparison graph">
+    <br><br><br>
+    ★
+</span>
+
+<blockquote>
+    <p>If we want to achieve a 90 percent probability of success, we must 
+        take into account historical rates of success from publicly available data; doing that suggests that we need to actively 
+        pursue not two or three vaccine candidates, but 15 to 20.</p>
+    <footer><a href="https://www.nytimes.com/2020/05/04/opinion/coronavirus-vaccine.html">Christopher Snyder and 
+        Alex Tabarrok on spreading out investments for a solution to covid 19</a></footer>
+</blockquote>
+
+
+<button type="button" class="collapsible"><p>Disclaimers </p></button>
+<div class="content">
+    <p></p>
+</div>
