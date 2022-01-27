@@ -585,6 +585,12 @@
                 If you want more info you can run through an example below or or <b style="cursor:pointer" onclick="sidebar('hi')">click here</b> to see how 
                 we calculate the curve. 
                 <br><br>
+
+                <label for="mn_2_1" class="margin-toggle">&#8853;</label>
+                <input type="checkbox" id="mn_2_1" class="margin-toggle"/>
+                <span class="marginnote" id="growth base rates">  
+                    You can click and drag the step value to learn more about how cost curves are created.
+                </span> 
                 Step <r-dynamic bind="sliderStep" min="1" max="4" step="1"></r-dynamic>:
                 
                 <r-visible :visible="sliderStep == 1" hidden="">
@@ -1262,6 +1268,8 @@
                 <label for="mn_4_1" class="margin-toggle">&#8853;</label>
                 <input type="checkbox" id="mn_4_1" class="margin-toggle"/>
                 <span class="marginnote" id="cost comparison graph">
+                Click and drag on the scenario number to see how moving from scenario 1 to scenario 2 changes CDR levels.
+                <br><br>
                    I would love to be able to explain each step to make these graphs in the margin but there is no way it will fit so if you 
                    want to see how they are constructed you can have a look at the equations 
                    <a href="https://docs.google.com/document/d/1OlBuO_6PLEhBsaV5S1_wI_QdkeWeLopeTJfZXKCQWrI/edit?usp=sharing">here</a>
