@@ -89,7 +89,7 @@
             <r-var name="wrightLearningCurve" value="15" format=".5"></r-var>                 <!-- L -->
             <r-var name="costperton" value="600" format=".5"></r-var>                         <!-- Ca -->
             <r-var name="costpertonLow" value="100" format=".5"></r-var>                      <!-- Cb -->
-            <r-var name="cumulativeCarbonRemovalAmount" value="1000" format=",.6"></r-var>    <!-- Qa -->
+            <r-var name="cumulativeCarbonRemovalAmount" value="10000" format=",.6"></r-var>    <!-- Qa -->
             <r-var name="wrightsLawC1" :value="costperton /cumulativeCarbonRemovalAmount ** Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
             <r-var name="log2b" :value="Math.log2(1-(wrightLearningCurve/100))" format=",.6"></r-var>
             <!-- Qb see Qb margin note for calculation detail if this is hard to decode -->
