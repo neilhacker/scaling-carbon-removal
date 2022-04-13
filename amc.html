@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Buying down the cost of carbon removal</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <link rel="stylesheet" href="curvenote.css">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scaling carbon removal">
+    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/">
+    <meta name="twitter:description" content="How much might it cost and how do funding decisions 
+    today change our future ability to scale carbon removal">
+    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/preview.png">
+
+
+
+    <script type="text/javascript" src="helpers.js"></script>
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+    <script type="module" src="https://js.withorbit.com/orbit-web-component.js"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMP9ER69T0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+    
+            gtag('config', 'G-DMP9ER69T0');
+        </script>    
+  </head>
+  <body>
+    <div class="main_content">
+        <article>
+            <h1>Buying down the cost of carbon removal</h1>
+            <p>
+                One thing we really care about for the future of CDR is how expensive it will be to remove a ton of CO₂ permanently. Suppose we’re trying to remove 10Gt of CO₂ a year, if this costs us ＄300t then we will be spending more than we spent on all oil purchases in a year, if it is ＄100t then we will be spending about 50% more than the US annual military budget, if we get this down to ＄50t then we’re looking at about 2x the revenue of FAANG. All of these are large numbers but some are much much larger than others.
+                <br></br>
+                What actually makes up this price though? My initial thoughts would have basically been CAPEX (i.e those really big fans) and OPEX (i.e all the energy to run those really big fans), what is not included in either of these though is servicing capital costs.
+                <br></br>
+                You might be thinking how much can servicing capital costs actually matter determine the end result here? The answer is a fair amount. <a href="https://www.lazard.com/media/450337/lazard-levelized-cost-of-energy-version-110.pdf">This analysis</a> from Lazard puts the costs of debt at 8% and the cost of equity at 12% among renewable energy projects throughout the world. With nuclear energy the terms one services the debt on can be one of the most important factors in determining whether the project is <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1470903">financially viable</a> at all.
+                <br></br>
+                CDR has a lot of risks, technical but also market based. You may have a great DAC system but if you start pulling out serious amounts of CO₂ who is going to buy from you and how dependable will your cash flows be? There are industry uses but this still obviously introduces a risk, and if what you are doing is riskier you will pay more on your loans and your investors will expect a higher rate of return, if these values rise the final cost per ton of CO₂ will increase. This is bad.
+                <br></br>
+                This has been a bit handwavey so I’m going to adapt some of the slides from <a href="https://youtu.be/fCqHqcZDIto?t=618">Dr Clea Kolster’s presentation</a> to give this a bit more formality. Before I dive in as a warning there will be quite a few equations and some terms you will likely not have come across if you don’t spend your time nerding out on energy stuff. If you don’t want to bother with any of these you can skip to the last bolded line of “The Model” section for the punchline. I don’t recommend doing that though as these nerdy equations are what you’ve come here to read about, but still, your choice.
+
+            </p>
+            <h2>Levelized costs</h2>
+            <p>
+                What do we ultimately care about? We care about the <b>Levelized Cost (LC)</b>. This is a measure of the average net present cost of some activity over the useful lifetime of a system. In power plants this would be the average net present cost of producing electricity over the useful lifetime of the plant. It’s basically how much we have to charge for our output every year to be able to pay back our lenders at a rate they find suitable. Suitable for them, we would of course like them to give us all this money for free, but alas.
+                <br></br>
+                Okay so this seems like a sensible thing to care about. How do we actually find what this value is? We can use this formula:
+                <br><br>
+                LC[＄/tCO2 yr] = CAPEX[＄/tCO2] * CRF[1/yr] + OPEX[＄/tCO2 yr]
+                <br><br>
+                I’ve added in the units of each term so you can see they track properly. CAPEX is stuff like your fixed infrastructure, OPEX is things like your energy inputs, but what is CRF? CRF stands for Capital Recovery Factor which is “the ratio of a constant annuity to the present value of receiving that annuity for a given length of time”, I know you’re leaping out of your chair with the excitement of all this. In lovely equation form this is:
+
+
+
+            </p>
+        </article>
+    </div>
+  </body>
+</html>
