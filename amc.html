@@ -48,7 +48,7 @@
 
                 One thing we really care about for the future of CDR is how expensive it will be to remove a ton of CO₂ permanently. Suppose we’re trying to remove 10Gt of CO₂ a year, if this costs us ＄300t then we will be spending more than we spent on all oil purchases in a year, if it is ＄100t then we will be spending about 50% more than the US annual military budget, if we get this down to ＄50t then we’re looking at about 2x the revenue of FAANG. All of these are large numbers but some are much much larger than others.
                 <br></br>
-                What actually makes up this price though? My initial thoughts would have basically been CAPEX (i.e those really big fans) and OPEX (i.e all the energy to run those really big fans), what is not included in either of these though is servicing capital costs.
+                What actually makes up this price though? My initial thoughts would have basically been CAPEX (i.e a new DAC plant) and OPEX (i.e all the energy to run your new DAC plant), what is not included in either of these though is servicing capital costs.
                 <br></br>
                 You might be thinking how much can servicing capital costs actually matter determine the end result here? The answer is a fair amount. <a href="https://www.lazard.com/media/450337/lazard-levelized-cost-of-energy-version-110.pdf">This analysis</a> from Lazard puts the costs of debt at 8% and the cost of equity at 12% among renewable energy projects throughout the world. With nuclear energy the terms one services the debt on can be one of the most important factors in determining whether the project is <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1470903">financially viable</a> at all.
                 <br></br>
@@ -75,6 +75,12 @@
                 <br></br>
                 A higher CRF can largely be caused by two things. One, you have a shorter duration with which to pay off the loan, i.e if you only have 3 years to pay a loan back vs 10 years then you will probably be needing to pay back a higher percentage every year in the first example by nature of just having fewer years. The second factor that can lead to you having a higher CRF is to have a higher real interest rate i. As we can see in the formulas above this is determined by the expected rate of inflation (which we’re going to assume you can’t control), and by the nominal interest rate.
                 <br></br>
+                <label for="mn-demo" class="margin-toggle">&#8853;</label>
+                <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+                <span class="marginnote" id="id_option">
+                For simplicity we're not going to have any differences between the cost of debt or the cost of equity.
+                </span> 
+
                 This is where we start to be able to fiddle with things. We can ask ourselves what determines this interest rate. It is basically determined by the expected rate of return (\(R_E\)) the lender wants. If we break this down further using a CAPM structure we can instead write this value as being:
                 <br></br>
                 \(R_E=R_F+\beta(R_M-R_F)\)
@@ -130,7 +136,7 @@
                     <br></br>
                     \(LC_L=＄15,000,000*0.086+＄400,000=＄1,690,000\)
                     <br></br>
-                    If we want our cost per ton and we are imagining our plant to remove 4,000t/yr we would have the Levelized Cost per ton (LCT) as LC/4,000 giving \(LCT_H=＄550\) , \(LCT_L=＄420\).
+                    If we want our annual cost per ton and we are imagining our plant to remove 4,000t/yr we would have the Levelized Cost per ton (LCT) as LC/4,000 giving \(LCT_H=＄550\) , \(LCT_L=＄420\).
                     <br></br>
                     So by lowering the risk of a CDR project we have lowered the cost per ton by 25%. We can contrast this with the learning by doing and economies of scale effects we might also expect to see as we build more of the same type of CDR systems. While most systems are deep in their infancy it is not crazy to think they may have learning rates similar to that of some renewables due to their often rather modular design and other factors. This might mean we could see learning rates of 15%-20% or in other words a doubling of installed capacity would lead to a cost reduction of between 15%-20%. This would suggest that <b>our de-risking of the CDR project could have a similar effect on the end price as doubling the total installed capacity</b>.
                 </p>
@@ -158,6 +164,14 @@
                     It's worth mentioning that this scale up can by itself reduce perceived financial risk as well. As Clea writes “We may also consider that while CCS goes from FOAK to NOAK conditions the investment risk is associated with it transitions from ‘High Risk’ to ‘Low Risk’”. This is largely because investors can just get more used to the kinds of timelines, cashflows and basically any other detail which when they first finance something are all relatively unknown.
                     <br></br>
                     One related idea which is just, and I mean just, starting to get going is having policy around CDR and eventually even direct governmental buying. The policies can act as a way to increase demand though regulatory means, like what the 45Q credit is doing, and the direct government purchases would obviously bring in incredibly well funded and long term buyers to the market. The Frontier AMC is basically acting as a bridge until hopefully these two areas get strengthened from where they are today.
+                    <br></br>
+                    <label for="mn-demo" class="margin-toggle">&#8853;</label>
+                    <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+                    <span class="marginnote" id="id_option">
+                        Just want to emphasise that yes the cross-chain risks are not why this isn't happening at the moment I know. It's not happening because we're not actaully removing much CO₂ yet, however, again, this kind of risk will show up in the future. 
+                    </span> 
+
+                    In the same vein another idea, although again one for down the road, would be to have deeper investments, possibly by governments to create a larger set of supporting infrastructure like transport or storage facilities. In the CCS world this is called reducing cross-chain risk and relates to different parts of the value chain relying on infrastructure that it might be economically unviable for them to go out and produce themselves. At the moment most DAC efforts if they want permanent removal have to co-locate the DAC plant, a source of renewable energy, and some storage medium, typically geological. This trio of considerations reduces the potential locations that are feasible for DAC and makes the risk of creating, say, a large centralized sequestration plant unappetising.       
                     <br></br>
                     Not all risks are to do with demand, virtually all CDR projects today also have large doses of technical risk in whether they can scale to various levels of operation. This technical risk will obviously play a large role in determining the value capital providers have in their minds. The great thing about an AMC is that it can be staggered to match the current costs of suppliers and then fall over time as they start to reduce these technical risks. A well designed AMC can therefore be one of the most impactful vehicles for reducing perceived financial risk both at a given point and over time as it helps companies scale.
 
