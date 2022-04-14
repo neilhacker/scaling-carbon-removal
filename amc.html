@@ -2,21 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Buying down the cost of carbon removal</title>
     <link rel="stylesheet" href="tufte.css"/>
     <link rel="stylesheet" href="curvenote.css">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Scaling carbon removal">
-    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/">
-    <meta name="twitter:description" content="How much might it cost and how do funding decisions 
-    today change our future ability to scale carbon removal">
-    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/preview.png">
+    <meta name="twitter:title" content="Buying down the cost of carbon removal">
+    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/amc.html">
+    <meta name="twitter:description" content="A look at what reducing the financial risk of carbon removal has on the end price per ton">
+    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/preview_amc.png">
 
 
-
+    <!-- ＄ -->
     <script type="text/javascript" src="helpers.js"></script>
     <script async src="https://unpkg.com/@curvenote/article"></script>
     <script type="module" src="https://js.withorbit.com/orbit-web-component.js"></script>
@@ -32,10 +29,23 @@
         </script>    
   </head>
   <body>
+    <nav>
+        <ul>
+            <li><div id="header_text" > Header </div></li>
+        </ul>
+        <ul>
+            <li><div id="header_menu" onclick="openNav()">&#9776;</div></li>
+        </ul>
+      </nav>
+
     <div class="main_content">
         <article>
+            <section>
             <h1>Buying down the cost of carbon removal</h1>
+            <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a></b></h3>
+
             <p>
+
                 One thing we really care about for the future of CDR is how expensive it will be to remove a ton of CO₂ permanently. Suppose we’re trying to remove 10Gt of CO₂ a year, if this costs us ＄300t then we will be spending more than we spent on all oil purchases in a year, if it is ＄100t then we will be spending about 50% more than the US annual military budget, if we get this down to ＄50t then we’re looking at about 2x the revenue of FAANG. All of these are large numbers but some are much much larger than others.
                 <br></br>
                 What actually makes up this price though? My initial thoughts would have basically been CAPEX (i.e those really big fans) and OPEX (i.e all the energy to run those really big fans), what is not included in either of these though is servicing capital costs.
@@ -53,13 +63,106 @@
                 <br></br>
                 Okay so this seems like a sensible thing to care about. How do we actually find what this value is? We can use this formula:
                 <br><br>
-                LC[＄/tCO2 yr] = CAPEX[＄/tCO2] * CRF[1/yr] + OPEX[＄/tCO2 yr]
+                LC = CAPEX * CRF + OPEX
                 <br><br>
-                I’ve added in the units of each term so you can see they track properly. CAPEX is stuff like your fixed infrastructure, OPEX is things like your energy inputs, but what is CRF? CRF stands for Capital Recovery Factor which is “the ratio of a constant annuity to the present value of receiving that annuity for a given length of time”, I know you’re leaping out of your chair with the excitement of all this. In lovely equation form this is:
+                CAPEX is stuff like your fixed infrastructure, OPEX is things like your energy inputs, but what is CRF? CRF stands for <b>Capital Recovery Factor</b> which is “the ratio of a constant annuity to the present value of receiving that annuity for a given length of time”, I know you’re leaping out of your chair with the excitement of all this. In lovely equation form this is:
+                <br></br>
+                \(CRF=\dfrac{i(1+i)^{N}}{(1+i)^{N}-1}\) &nbsp; & &nbsp; \(i=\dfrac{i'-f}{1+f}\)
+                <br></br>
+                Here \(i'\) is the nominal interest rate i.e the rate you can borrow money at, \(f\) is the expected rate of inflation (which you can also think of as the discount rate applied to money in the future), these give us the real discount rate \(i\) (which you can also call the real interest rate), \(N\) is the number of payments received (or if payments are annual the lifetime of the project).
+                <br></br>
+                If it is not clear why this matters at all it is because it gives us a sense of how much we need to charge every year so that the stream of annual payments meets the desired rate of return our lenders are seeking. A higher CRF means that we need to pay back a higher percentage of the total lending every year, which obviously means we need to charge more for our end output. Just to give an example, if you have a CRF of 0.5 on a loan then you need to pay back 50% of the loan amount every year, with a CRF of 0.1 you would pay back 10% of the loan value every year.
+                <br></br>
+                A higher CRF can largely be caused by two things. One, you have a shorter duration with which to pay off the loan, i.e if you only have 3 years to pay a loan back vs 10 years then you will probably be needing to pay back a higher percentage every year in the first example by nature of just having fewer years. The second factor that can lead to you having a higher CRF is to have a higher real interest rate i. As we can see in the formulas above this is determined by the expected rate of inflation (which we’re going to assume you can’t control), and by the nominal interest rate.
+                <br></br>
+                This is where we start to be able to fiddle with things. We can ask ourselves what determines this interest rate. It is basically determined by the expected rate of return (\(R_E\)) the lender wants. If we break this down further using a CAPM structure we can instead write this value as being:
+                <br></br>
+                \(R_E=R_F+\beta(R_M-R_F)\)
+                <br></br>
+                So we have the risk free rate (\(R_F\)) which we assume we have no control over, the expected market return (\(R_M\)) again we will assume we can’t control this, and finally the systematic risk of our project (β). This is basically how risky our project is perceived to be compared to the broader market, a β=1 would mean our project is just as risky as the market and so the lender would want \(R_E = R_M\) i.e they would just want the expected market rate of return.
+                <br></br>
+                If we have a riskier project then this will increase β which will in turn increase RE which means our nominal interest rate will increase and this feeds all the way forward to us having a higher CRF. If you remember the relationship between the CRF and the LC (because you love the math behind fixed duration annuity payments) then you will remember that having a higher CRF means we need to recoup more of our loan amount each year and so we will need to have a higher levelized cost, which in our context means that our CDR method will cost more, not good.
+                <br></br>
+                By suring up demand through pre-committed buying, while you don’t reduce technical risk, you hugely de-risk cash flows. The effect this can have is to drastically reduce your β term. Below is a toy model to see the effect this might have
+                </p>
 
+                <h2>The Model</h2>
+                <p>
+                    <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                I’ve used the new Orca plant by climeworks to try to get my numbers for the toy model. For CAPEX the plant cost around ＄15m so I’m just using that and for OPEX I’m only assuming electricity cost (may be unreasonable). To get this I estimate the kWh to remove 4,000t, which is the capacity of the plant, I use a value a bit under 10,000MJ/t, and then estimate the cost per kWh which gives me around ＄400,000.
 
+                <!-- Current estimates for DAC put it maybe around 2,500kWh/t (just under 10,000MJ/t) → Remove 4,000t/yr → 10,000,000 kWh → Cost of kWh of solar in US is $0.06-0.08/kWh plant actually using geothermal so I’m gonna take a lower value of $0.04/kWh → $400,000 -->
+                
+                
+			</span> 
 
-            </p>
+                    We’re going to look at financing a plant with the capacity to remove 4,000t of CO₂ a year. This plant will cost ＄15m to build, ＄400k a year to run and will operate for 15 years. We’re going to assume the risk free rate is treasury bills and the expected market rate of return is 15%. This is obviously much higher than something like the S&P but is about right for energy sector infrastructure investments on a risk adjusted basis. Also we’ll assume inflation of 3% a year. All that information gives us these values:
+                    <br></br>
+                    \(R_F\)=2.7%, \(R_M\)=15%, N=15, f=3%, CAPEX=＄15,000,000, OPEX=＄400,000
+                    <br></br>
+                    We will then have two values of β a high risk value of 1.4 and a low risk value of 0.6 (\(\beta_H\)=1.4, \(\beta_L\)=0.6). With these values we can now calculate the expected return, real interest rate and hence the capital recovery factor in our high and low risk scenarios:
+                    <br></br>
+                    <b>High risk</b>
+                    <br></br>
+                    \(R_E^{H}=R_F+\beta_H(R_M + R_F)\)
+                    <br></br>
+                    \(R_E^{H}=1.027+1.4(1.15 + 1.027) \approx 1.2\)
+                    <br></br>
+                    \(i_H = 0.084\)
+                    <br></br>
+                    \(CRF_H=0.12\)
+                    <br></br>
+                    <b>Low risk</b>
+                    <br></br>
+                    \(R_E^{L}=R_F+\beta_L(R_M + R_F)\)
+                    <br></br>
+                    \(R_E^{H}=1.027+0.6(1.15 + 1.027) \approx 1.1\)
+                    <br></br>
+                    \(i_H = 0.034\)
+                    <br></br>
+                    \(CRF_H=0.086\)
+                    <br></br>
+                    This means that in our high risk situation we will need to be repaying 12% of our loan back every year vs 8.6% in our low risk situation. How much will we need to earn each year to be able to do this?
+                    <br></br>
+                    \(LC_H=＄15,000,000*0.12+＄400,000=＄2,200,000\)
+                    <br></br>
+                    \(LC_L=＄15,000,000*0.086+＄400,000=＄1,690,000\)
+                    <br></br>
+                    If we want our cost per ton and we are imagining our plant to remove 4,000t/yr we would have the Levelized Cost per ton (LCT) as LC/4,000 giving \(LCT_H=＄550\) , \(LCT_L=＄420\).
+                    <br></br>
+                    So by lowering the risk of a CDR project we have lowered the cost per ton by 25%. We can contrast this with the learning by doing and economies of scale effects we might also expect to see as we build more of the same type of CDR systems. While most systems are deep in their infancy it is not crazy to think they may have learning rates similar to that of some renewables due to their often rather modular design and other factors. This might mean we could see learning rates of 15%-20% or in other words a doubling of installed capacity would lead to a cost reduction of between 15%-20%. This would suggest that <b>our de-risking of the CDR project could have a similar effect on the end price as doubling the total installed capacity</b>.
+                </p>
+                <h2>A note on learning by doing and economies of scale</h2>
+                <p>
+                    There are a number of reasons something gets cheaper as you do more of it, one class is economies of scale, i.e you can negotiate better rates from suppliers if you’re making more stuff, the other reasons fall under the heading of learning by doing. These are basically all the ways you just get better at your process through having more and more experience actually doing it.
+                    <br></br>
+                    These will play a huge role in making CDR cheaper, probably the main role, but they are not what I’m talking about here. I’m talking purely about the perceived financial risk of a project and the effect this has on equity and debt partner perceptions and thus the rate of return they demand.
+                    <br></br>
+                    One of the main reasons I'm not talking about these even though they are crucial is because they have just been discussed a lot more by others whereas the financial risk I believe has received less attention, while still having an important role to play.
+
+                </p>
+                <h2>How do we actually de-risk?</h2>
+                <p>
+                    We've seen that if we can de-risk the investment in CDR then this could have a very material impact on the final cost per ton of CO₂. So how do we do it?
+                    <br></br>
+                    The method I'm putting forward in this piece is the advance market commitment (AMC). These are when some entity pre-commits to buying something under certain conditions. These can take a few forms but it is basically about guaranteeing that there will be market demand if you can make something good enough, or to use the slogan from the recently announced <a href="https://frontierclimate.com/">Frontier Climate AMC</a> “Build it and we will buy”. (side note the Frontier Climate AMC is amazing go check it out)
+                    <br></br>
+                    This kind of action has a whole host of goals, it is (1) aiming to get more entries into the CDR space, (2) letting those already in the space know that there will be demand for their output as they scale and (3) letting people who provide project financing know that there will be demand for the outputs of CDR companies as they scale.
+                    <br></br>
+                    At the moment (1) and (2) are probably the most important given the still rather undeveloped nature of the CDR ecosystem. However, over time, hopefully soon, (3) will grow in importance. Traditional renewables benefited enormously from so called power purchasing agreements which just specified up front that a buyer would be willing to pay a certain amount per kWh for the electricity generated by the product. You could then literally take this commitment to the bank or to potential investors to get financing.
+                    <br></br>
+                    The main benefit of AMCs is to help scale up production, i.e moving from a first of a kind (FOAK) system to a Nth of a kind (NOAK) system. In this scale up the hope is that you capture the benefits of economies of scale and learning by doing to bring the cost down. The AMC effect I’m mentioning here though is different, it relates to the perceived risk of a project at a given level of scale. Basically the more credible the pre-commitment to buy tons of CO₂ removed is the more certain capital providers can be there will be cash flows and the lower their needed rate of return will be.
+                    <br></br>
+                    It's worth mentioning that this scale up can by itself reduce perceived financial risk as well. As Clea writes “We may also consider that while CCS goes from FOAK to NOAK conditions the investment risk is associated with it transitions from ‘High Risk’ to ‘Low Risk’”. This is largely because investors can just get more used to the kinds of timelines, cashflows and basically any other detail which when they first finance something are all relatively unknown.
+                    <br></br>
+                    One related idea which is just, and I mean just, starting to get going is having policy around CDR and eventually even direct governmental buying. The policies can act as a way to increase demand though regulatory means, like what the 45Q credit is doing, and the direct government purchases would obviously bring in incredibly well funded and long term buyers to the market. The Frontier AMC is basically acting as a bridge until hopefully these two areas get strengthened from where they are today.
+                    <br></br>
+                    Not all risks are to do with demand, virtually all CDR projects today also have large doses of technical risk in whether they can scale to various levels of operation. This technical risk will obviously play a large role in determining the value capital providers have in their minds. The great thing about an AMC is that it can be staggered to match the current costs of suppliers and then fall over time as they start to reduce these technical risks. A well designed AMC can therefore be one of the most impactful vehicles for reducing perceived financial risk both at a given point and over time as it helps companies scale.
+
+                </p>
+        </section>
         </article>
     </div>
   </body>
