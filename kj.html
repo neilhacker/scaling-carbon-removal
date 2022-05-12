@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Buying down the cost of carbon removal</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <link rel="stylesheet" href="curvenote.css">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Buying down the cost of carbon removal">
+    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/amc.html">
+    <meta name="twitter:description" content="A look at what reducing the financial risk of carbon removal does to the end price per ton">
+    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/amc_twitter.png">
+
+
+    <!-- ＄ -->
+    <script type="text/javascript" src="helpers.js"></script>
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+    <script type="module" src="https://js.withorbit.com/orbit-web-component.js"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMP9ER69T0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+    
+            gtag('config', 'G-DMP9ER69T0');
+        </script>    
+  </head>
+  <body>
+    <div class="main_content">
+        <article>
+            <section>
+                <r-var name="x" value="" type="number"></r-var>
+                <r-var name="y" :value="x*6.31313889" type="number"></r-var>
+                <r-var name="cdr_cost1" :value="electricity_cost*y" type="number" format=",.3"></r-var>
+
+                <r-var name="z" value="" type="number"></r-var>
+                <r-var name="q" :value="z/6.31313889" type="number"></r-var>
+                <r-var name="cdr_cost2" :value="electricity_cost*z" type="number" format=",.3"></r-var>
+
+                <r-var name="electricity_cost" value="0.05" type="number" format=",.3"></r-var>
+
+
+
+
+            <h1>Brief notes on CDR energy use</h1>
+            <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a></b></h3>
+
+           <p>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                Electricity cost = $ <r-dynamic bind="electricity_cost"  min="0" max="0.5" step="0.005"></r-dynamic>kWh
+                
+                <br><br>
+                <r-input bind="x" label="Question?!" class></r-input>kJ/mol → <r-display bind="y">NaN</r-display>kWh/t 
+                <br>
+                → $<r-display bind="cdr_cost1"></r-display>/t
+                
+                <br></br>
+                <r-input bind="z" label="Question?!"></r-input>kWh/t → <r-display bind="q">NaN</r-display>kJ/mol 
+                <br>→ $<r-display bind="cdr_cost2"></r-display>/t
+    
+                <br></br>
+	            The two values you need to do the conversion with are:
+                <br>
+                • 1mol of CO₂ ≈ 44g so there are 22727.3 moles of CO₂ in a ton
+                <br>
+                • 1kJ = 1/3600 kWh
+
+			</span> 
+            This post started life as just a unit converter so I'm going to leave that at the top here. These notes only deal with methods that require energy input, at some point, from the grid and so is not applicable for things like ocean alkalinity enhancement etc. 
+
+
+            <br></br>
+            Bits and bobs on energy use:
+            <br></br>
+            MacKay has put the minimum energy to seperate CO₂ from the air at around 30kJ/mol and in reality we might only expect ≈ 35% efficiency taking our best outcome close to 90kJ/mol. This is basically our best case scenario.  
+            <br></br>
+            The actual energy needed by a CDR solution may vary a lot though. While this is the value for seperating CO₂ from the air this isn't necessarily the same as the energy to remove CO₂ 
+            from whatever binding agent you used to catch it. For example, some methods use approaches like mineral looping where you don't necessarily need to provide the upfront energy to seperate the CO₂ from the air
+            just to seperate it from the binding agent later on. 
+            <br><br>
+            Even here the potential end energy amounts differ a lot. Heirloom will need to provide energy directly to the calcium carbonate in their system to get it to decompose, whereas other companies like Parallel Carbon need energy to run electrolysis and then use the results from this to seperate CO₂ out at ambient temperature and pressure.        
+            <br><br>
+            The end levelised cost of energy will be massively determined by how a CDR method can deal with intermittency. This is something I hope to write more about in the near future. If your approach requires 24/7 energy, for example because there are very high costs to getting the system up to opperating conditions, then you absolutly will not get something like the sticker price of $0.04/kWh some renewables are being priced at. 
+            If you need 24/7 power then you have a few options, either you will need storage infrastructure for your renewables like batteries or thermal storage, or you would need to connect to the grid (which would probably wreck your life cycle analysis). 
+            <br><br>
+            If you go for the storage infrastructure even if you only need it to get that last 5-10% of uptime it could easily massively inflate your levalised costs. 
+            <br><br>
+            This also brings us to biotech. At the moment there aren't a whole lot of options that utilise natural/enhanced biology in the CDR process, and no trees don't count (unless you're living carbon, you guys are very cool). My guess is that some of the CDR methods 
+            that we will see in the near future will leverage biologies ability to use energy from the sun as a way to drastically reduce costs. I don't know exactly what this might look like but there is a lot of free energy there if you use biology to catch it. 
+
+        </p>
+        </section>
+        </article>
+    </div>
+  </body>
+</html>
