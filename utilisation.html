@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Brief notes on CDR energy use</title>
+    <title>How much should you utilise a DAC plant?</title>
     <link rel="stylesheet" href="tufte.css"/>
     <link rel="stylesheet" href="curvenote.css">
 
@@ -156,10 +156,37 @@
 
 
 
-            <h1>Effects of utilisation rates on DAC</h1>
+            <h1>How much should you utilise a DAC plant?</h1>
             <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a></b></h3>
 
            <p>
+            A utilisation rate is basically the percentage of time you are actually doing something. For example, with a DAC plant a 100% 
+            utilisation rate would suggest you are actively using energy 24/7 to pull CO₂ out of the sky/separate it from your sorbent, 
+            whereas a 50% utilisation rate would suggest you are only actively using energy for half of the day in order to remove CO₂.¹ 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ¹ This doesn't actually mean you are only able to create a stream of removed CO₂ for 50% of the day, just that you don’t need to actively be putting energy into your system for more than 50% of the day to remove CO₂
+			</span> 
+            <br><br>
+            Some systems will work much better with very high utilisation rates, for example, systems that rely on using very high temperatures or pressures may find that unless they have high utilisation rates the wind up costs/time of getting back up to operating conditions become pretty much prohibitive. 
+            <br><br>
+            Other systems, like Parallel Carbon, could use energy for 50% of the day electrolyse water, but then they could shut off their energy inputs for the other 50% of the day and just drip feed the alkaline cations they’ve created into their CO₂ solution to separate it out. 
+            <br><br>
+            Why does this matter? It matters because if you only need power for say 50% of the day this can radically change the way you are able to generate the power vs if you need power 100% of the day. If you only need power 50% of the day you can get there basically with renewables like solar or wind. If you need power above say 80% of the day you start needing to either use large scale battery storage, clean firm solutions like geothermal²
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="id_option">
+                ²  If you need really very high utilisation rates even something like geothermal has drawbacks. Mainly because to convert into electricity, which even temperature-swing sorbent DAC need for 10–25% of their power demand, it ends up costing around <a href="https://www.lazard.com/perspective/levelized-cost-of-energy-levelized-cost-of-storage-and-levelized-cost-of-hydrogen/">3x more</a> for those MWh than intermittent renewables
+            </span> 
+            , or you have to tap into the grid (I’m sure you can tell why this would not be a great option from a life cycle analysis standpoint).
+            <br><br>
+            Let's have a look at an example to see how different energy costs can change what the optimal utilisation rate is.
+
+            </p>
+            <h2>Model</h2>
+            <p>
+
                In this example we have a certain power schedule where we have different costs for MWh depending on how much utilisation 
                we're getting. I'm going to start with the default schedule below but you can either drag the values around or use the 
                sidebar to try some other pre-set options.  
@@ -219,22 +246,20 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
-                Pick a pre-set option or put in your own values below:
-                <br>
                 <r-action :click="{
                     proj_1_cost: 10000000,
                     proj_1_capacity: 4000,
                     proj_1_crf: 10, 
                     proj_1_power_intensity: 1.8,
-                }">Plant options 1 </r-action>
+                }">Plant 1 </r-action>
                 <br>
                 <r-action :click="{
                     proj_1_cost: 150000000,
                     proj_1_capacity: 1000000,
                     proj_1_crf: 12, 
                     proj_1_power_intensity: 1.8,
-                }">Plant options 2 </r-action>
-                <br><br>
+                }">Plant 2 </r-action>
+                <br><br>        
                 Cost: 
                 <br>
                 <r-input bind="proj_1_cost" label="Question?!"></r-input>
@@ -251,8 +276,11 @@
                 <br><r-input bind="proj_1_power_intensity" label="Question?!"></r-input>
 
 			</span> 
-            Next we're going to have some summary stats for a DAC plant. Specifically for a given plant we'll have:
-            <br>
+            Next suppose we have a DAC plant that costs $<r-display bind="proj_1_cost"></r-display> to build, has an annual removal
+            capacity of <r-display bind="proj_1_capacity"></r-display> tons, requires <r-display bind="proj_1_power_intensity"></r-display> MWh
+            to remove a ton of CO₂ and has a capital recovery factor of <r-display bind="proj_1_crf"></r-display>%. 
+            (You can either customise these values or pick from default options to the left.) 
+            <!-- <br>
 
             Cost: $<r-display bind="proj_1_cost"></r-display>
             <br>
@@ -260,7 +288,7 @@
             <br>
             CRF: <r-display bind="proj_1_crf"></r-display>%
             <br>
-            Power intensity: <r-display bind="proj_1_power_intensity"></r-display> MWh/t
+            Power intensity: <r-display bind="proj_1_power_intensity"></r-display> MWh/t -->
             <br> <br>
             From these values we can calculate the cost of power which we get from mulitplying 
             power intensity by the cost per MWh (at whichever utilisation rate we are looking at). 
@@ -364,8 +392,62 @@
 
             </r-svg-chart>
             If you have kept the default power costs and are using plant 1 then you will probably see that the lowest cost per ton
-            very close to 100% capacity.  
+            very close to 100% capacity. This is basically because you have such little capacity to recover your large CAPEX expenditure from 
+            you just need to churn out tons. 
+            <br><br>
+            However, if you select plant 2 you will see that in this case the lowest levelised cost per ton is actually only around the 55%
+            utilisation mark. What does this mean? It means that if you as the seller want to be able to charge the lowest price per ton (while still
+            achieving some expected rate of return) you only want to run energy to your plant 55% of the time.
+
         </p>
+        <h2>Theoretical consequences</h2>
+        <p>
+            This outcome has some pretty big consequences for both buyers and sellers. From the seller point of view if they want to be most 
+            competitive and be able to charge the lowest price then it would benefit them if they could lower there utilisation rate to the range 
+            with the lowest levelised DAC costs, i.e well below 100%. 
+            <br><br>
+            The consequence for the buyers though is much much more profound I think. To see why it is worth taking a moment to restate what the 
+            goal of buyers is in the CDR sector. To some it is meeting annual net-zero targets, but as a group it is to maximise the speed with which we 
+            can scale up CDR capacity. Even if we are only utilising our DAC plants at 50% in a given year, while this might seem to be leaving capacity on the table 
+            if by doing so it allows us to scale the whole sector more quickly then that is by far preferable. What I'm saying here is that this is indeed very likley to be the case.
+            <br><br>
+            Why? Well consider plant 2 again. If it was operating at 50% capacity it would be selling 500,000 tons at ＄80/t, this would put the buyer
+            on the hook for ＄40,000,000 a year. If however it was operating at 100% capacity it would be selling 1,000,000 tons at ＄180/t putting the annual cost to buyers at 
+            ＄180,000,000 or 4.5x more.
+            <br><br>
+            This difference is incredibly important because in many ways that money is just wasted. You're not buying any more ability to scale capacity with that money, 
+            we've already established that from the sellers point of view these two options actually give them the exact same expected rate of return so neither on would be any more prefereable. 
+            <br><br>
+            You're therefore not buying any more learning with your money either which could help the technology get cheaper in the future. While we might (and I have) thougth about learning rates 
+            as a product of cumulatve tons removed this isn't really true. Once you've built the DAC modules/plant it doesn't really matter if it runs at 50% utilisation or 100% the "learning" so to speak has been 
+            achieved already by making the thing itself. 
+            <br><br>
+            What this means is that all that extra money you're spending on the plant at 100% utilisation could instead be used to pay for 4 more plants all running at 50% utilisation. If you use your money in this way 
+            you get much much more leverage out of it in speeding up the overal increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
+            is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above woudl suggest that this could be 
+            achieved with over 4x less money if a plant was able to run at lower utilisation rates vs needing to run almost all of the time. 
+        </p>
+        <h2>Practical consequences</h2>
+        <p>
+            What this means in practice is that companies that can take advantage of intermittent energy supply rather than running at very high utilisation rates have a huge advantage 
+            as you try to scale up the industry.
+            <br><br>
+            There's a reason we don't really care about the utilisation of any plant in any given year and that is that the output the are making until you reach any real scale doesn't really have any value except 
+            in so far as it allows the compnaies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time whic we might want to harness. No in this case all we care about
+            is getting more capacity installed and if the model above has much to say on the matter the best way to do that is to find DAC sources that can run at lower utilisation rates.
+        </p>
+
+        <h2>Addendums</h2>
+        <p>
+            The first addendum is to say that above I've kind of made the assumption that companies that need to operate at very high utilisation rates and those that don't have similar learning rates all else considered. 
+            If, for example, approaches with very high utilisation rates also had higher learning rates then this might make up for things. As it stands I find this hard to believe. Mainly because if you have a very high utilisation 
+            rate that would suggest some structural complicated feature of your DAC set up which are typically systems that exhibit lower learning rates anyway.
+            <br><br>
+            The second addendum is that the above doesn't really hold if you can utilise your captured CO₂ in a way that makes you not reliant on voluntary payments. If this is the case then absolutly by all means it would probably make sense to
+            churn out as many tons per year as you can.
+        </p>
+
+
         </section>
         </article>
     </div>
