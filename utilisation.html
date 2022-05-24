@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Brief notes on CDR energy use</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <link rel="stylesheet" href="curvenote.css">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Brief notes on CDR energy use">
+    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/kj.html">
+    <meta name="twitter:description" content="CDR energy converter and some other thoughts on energy use and prices.">
+    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/kj_twitter.png">
+
+
+    <!-- ＄ -->
+    <script type="text/javascript" src="helpers.js"></script>
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+    <script type="module" src="https://js.withorbit.com/orbit-web-component.js"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMP9ER69T0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+    
+            gtag('config', 'G-DMP9ER69T0');
+        </script>    
+  </head>
+  <body>
+    <div class="main_content">
+        <article>
+            <section>
+                <r-var name="x" value="" type="number"></r-var>
+                <r-var name="y" :value="x*6.31313889" type="number"></r-var>
+                <r-var name="cdr_cost1" :value="electricity_cost*y" type="number" format=",.3"></r-var>
+
+                <r-var name="z" value="" type="number"></r-var>
+                <r-var name="q" :value="z/6.31313889" type="number"></r-var>
+                <r-var name="cdr_cost2" :value="electricity_cost*z" type="number" format=",.3"></r-var>
+
+                <r-var name="electricity_cost" value="0.05" type="number" format=",.3"></r-var>
+
+                <!-- POWER 1 -->
+                <r-var name="mwh_cost_5" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_10" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_15" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_20" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_25" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_30" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_35" value="31" type="number"></r-var>
+                <r-var name="mwh_cost_40" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_45" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_50" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_55" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_60" value="36" type="number"></r-var>
+                <r-var name="mwh_cost_65" value="43" type="number"></r-var>
+                <r-var name="mwh_cost_70" value="43" type="number"></r-var>
+                <r-var name="mwh_cost_75" value="49" type="number"></r-var>
+                <r-var name="mwh_cost_80" value="55" type="number"></r-var>
+                <r-var name="mwh_cost_85" value="63" type="number"></r-var>
+                <r-var name="mwh_cost_90" value="71" type="number"></r-var>
+                <r-var name="mwh_cost_95" value="81" type="number"></r-var>
+                <r-var name="mwh_cost_100" value="91" type="number"></r-var>
+
+                <!-- PROJECT 1 -->
+                <r-var name="proj_1_cost" value="10000000" format=","></r-var>
+                <r-var name="proj_1_capacity" value="4000" format=","></r-var>
+                <r-var name="proj_1_specific_capacity_cost" :value="proj_1_cost/4000" type="number"></r-var>
+                <r-var name="proj_1_crf" value="10" type="number"></r-var>
+                <r-var name="proj_1_power_intensity" value="1.8" type="number"></r-var>
+
+
+                <!-- Results -->
+                <r-var name="crf_5" :value="proj_1_cost*(proj_1_crf/100)/(0.05*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_5" :value="proj_1_power_intensity*mwh_cost_5" type="number"></r-var>
+                <r-var name="total_5" :value="crf_5+power_5" type="number"></r-var>
+
+                <r-var name="crf_10" :value="proj_1_cost*(proj_1_crf/100) / (0.10*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_10" :value="proj_1_power_intensity*mwh_cost_10" type="number"></r-var>
+                <r-var name="total_10" :value="crf_10+power_10" type="number"></r-var>
+
+                <r-var name="crf_15" :value="proj_1_cost*(proj_1_crf/100) / (0.15*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_15" :value="proj_1_power_intensity*mwh_cost_15" type="number"></r-var>
+                <r-var name="total_15" :value="crf_15+power_15" type="number"></r-var>
+
+                <r-var name="crf_20" :value="proj_1_cost*(proj_1_crf/100) / (0.20*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_20" :value="proj_1_power_intensity*mwh_cost_20" type="number"></r-var>
+                <r-var name="total_20" :value="crf_20+power_20" type="number"></r-var>
+
+                <r-var name="crf_25" :value="proj_1_cost*(proj_1_crf/100) / (0.25*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_25" :value="proj_1_power_intensity*mwh_cost_25" type="number"></r-var>
+                <r-var name="total_25" :value="crf_25+power_25" type="number"></r-var>
+
+                <r-var name="crf_30" :value="proj_1_cost*(proj_1_crf/100) / (0.30*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_30" :value="proj_1_power_intensity*mwh_cost_30" type="number"></r-var>
+                <r-var name="total_30" :value="crf_30+power_30" type="number"></r-var>
+
+                <r-var name="crf_35" :value="proj_1_cost*(proj_1_crf/100) / (0.35*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_35" :value="proj_1_power_intensity*mwh_cost_35" type="number"></r-var>
+                <r-var name="total_35" :value="crf_35+power_35" type="number"></r-var>
+
+                <r-var name="crf_40" :value="proj_1_cost*(proj_1_crf/100) / (0.40*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_40" :value="proj_1_power_intensity*mwh_cost_40" type="number"></r-var>
+                <r-var name="total_40" :value="crf_40+power_40" type="number"></r-var>
+
+                <r-var name="crf_45" :value="proj_1_cost*(proj_1_crf/100) / (0.45*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_45" :value="proj_1_power_intensity*mwh_cost_45" type="number"></r-var>
+                <r-var name="total_45" :value="crf_45+power_45" type="number"></r-var>
+
+                <r-var name="crf_50" :value="proj_1_cost*(proj_1_crf/100) / (0.50*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_50" :value="proj_1_power_intensity*mwh_cost_50" type="number"></r-var>
+                <r-var name="total_50" :value="crf_50+power_50" type="number"></r-var>
+
+                <r-var name="crf_55" :value="proj_1_cost*(proj_1_crf/100) / (0.55*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_55" :value="proj_1_power_intensity*mwh_cost_55" type="number"></r-var>
+                <r-var name="total_55" :value="crf_55+power_55" type="number"></r-var>
+
+                <r-var name="crf_60" :value="proj_1_cost*(proj_1_crf/100) / (0.60*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_60" :value="proj_1_power_intensity*mwh_cost_60" type="number"></r-var>
+                <r-var name="total_60" :value="crf_60+power_60" type="number"></r-var>
+
+                <r-var name="crf_65" :value="proj_1_cost*(proj_1_crf/100) / (0.65*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_65" :value="proj_1_power_intensity*mwh_cost_65" type="number"></r-var>
+                <r-var name="total_65" :value="crf_65+power_65" type="number"></r-var>
+
+                <r-var name="crf_70" :value="proj_1_cost*(proj_1_crf/100) / (0.70*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_70" :value="proj_1_power_intensity*mwh_cost_70" type="number"></r-var>
+                <r-var name="total_70" :value="crf_70+power_70" type="number"></r-var>
+
+                <r-var name="crf_75" :value="proj_1_cost*(proj_1_crf/100) / (0.75*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_75" :value="proj_1_power_intensity*mwh_cost_75" type="number"></r-var>
+                <r-var name="total_75" :value="crf_75+power_75" type="number"></r-var>
+
+                <r-var name="crf_80" :value="proj_1_cost*(proj_1_crf/100) / (0.80*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_80" :value="proj_1_power_intensity*mwh_cost_80" type="number"></r-var>
+                <r-var name="total_80" :value="crf_80+power_80" type="number"></r-var>
+
+                <r-var name="crf_85" :value="proj_1_cost*(proj_1_crf/100) / (0.85*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_85" :value="proj_1_power_intensity*mwh_cost_85" type="number"></r-var>
+                <r-var name="total_85" :value="crf_85+power_85" type="number"></r-var>
+
+                <r-var name="crf_90" :value="proj_1_cost*(proj_1_crf/100) / (0.90*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_90" :value="proj_1_power_intensity*mwh_cost_90" type="number"></r-var>
+                <r-var name="total_90" :value="crf_90+power_90" type="number"></r-var>
+
+                <r-var name="crf_95" :value="proj_1_cost*(proj_1_crf/100) / (0.95*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_95" :value="proj_1_power_intensity*mwh_cost_95" type="number"></r-var>
+                <r-var name="total_95" :value="crf_95+power_95" type="number"></r-var>
+
+                <r-var name="crf_100" :value="proj_1_cost*(proj_1_crf/100) / (1*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_100" :value="proj_1_power_intensity*mwh_cost_100" type="number"></r-var>
+                <r-var name="total_100" :value="crf_100+power_100" type="number"></r-var>
+
+
+
+
+            <h1>Effects of utilisation rates on DAC</h1>
+            <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a></b></h3>
+
+           <p>
+               In this example we have a certain power schedule where we have different costs for MWh depending on how much utilisation 
+               we're getting. I'm going to start with the default schedule below but you can either drag the values around or use the 
+               sidebar to try some other pre-set options.  
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <r-action :click="{
+                    mwh_cost_5: 39, 
+                    mwh_cost_10: 39,
+                    mwh_cost_15: 39,
+                    mwh_cost_20: 39,
+                    mwh_cost_25: 39,
+                    mwh_cost_30: 39,
+                    mwh_cost_35: 31,
+                    mwh_cost_40: 24,
+                    mwh_cost_45: 24,
+                    mwh_cost_50: 24,
+                    mwh_cost_55: 24,
+                    mwh_cost_60: 36,
+                    mwh_cost_65: 43,
+                    mwh_cost_70: 43,
+                    mwh_cost_75: 49,
+                    mwh_cost_80: 55,
+                    mwh_cost_85: 63,
+                    mwh_cost_90: 71,
+                    mwh_cost_95: 81,
+                    mwh_cost_100: 91,
+                }">Power scenario 1</r-action>
+
+
+			</span> 
+            <r-svg-chart  xlabel="Utilisation rate" ylabel="$/MWh" :xlim="[0,110]" :ylim="[0, 130]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-node :x="5" :y="mwh_cost_5" :drag="{mwh_cost_5: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="10" :y="mwh_cost_10" :drag="{mwh_cost_10: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="15" :y="mwh_cost_15" :drag="{mwh_cost_15: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="20" :y="mwh_cost_20" :drag="{mwh_cost_20: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="25" :y="mwh_cost_25" :drag="{mwh_cost_25: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="30" :y="mwh_cost_30" :drag="{mwh_cost_30: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="35" :y="mwh_cost_35" :drag="{mwh_cost_35: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="40" :y="mwh_cost_40" :drag="{mwh_cost_40: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="45" :y="mwh_cost_45" :drag="{mwh_cost_45: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="50" :y="mwh_cost_50" :drag="{mwh_cost_50: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="55" :y="mwh_cost_55" :drag="{mwh_cost_55: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="60" :y="mwh_cost_60" :drag="{mwh_cost_60: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="65" :y="mwh_cost_65" :drag="{mwh_cost_65: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="70" :y="mwh_cost_70" :drag="{mwh_cost_70: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="75" :y="mwh_cost_75" :drag="{mwh_cost_75: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="80" :y="mwh_cost_80" :drag="{mwh_cost_80: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="85" :y="mwh_cost_85" :drag="{mwh_cost_85: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="90" :y="mwh_cost_90" :drag="{mwh_cost_90: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="95" :y="mwh_cost_95" :drag="{mwh_cost_95: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="100" :y="mwh_cost_100" :drag="{mwh_cost_100: y}" fill="#e24444"></r-svg-node>
+
+
+            </r-svg-chart>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                Pick a pre-set option or put in your own values below:
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 10000000,
+                    proj_1_capacity: 4000,
+                    proj_1_crf: 10, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant options 1 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant options 2 </r-action>
+                <br><br>
+                Cost: 
+                <br>
+                <r-input bind="proj_1_cost" label="Question?!"></r-input>
+                <br><br>
+                Capacity: 
+                <br>
+                <r-input bind="proj_1_capacity" ></r-input>
+                <br><br>
+                CRF: 
+                <br>
+                <r-input bind="proj_1_crf" label="Question?!"></r-input>
+                <br><br>
+                Power intensity: 
+                <br><r-input bind="proj_1_power_intensity" label="Question?!"></r-input>
+
+			</span> 
+            Next we're going to have some summary stats for a DAC plant. Specifically for a given plant we'll have:
+            <br>
+
+            Cost: $<r-display bind="proj_1_cost"></r-display>
+            <br>
+            Capacity: <r-display bind="proj_1_capacity"></r-display>
+            <br>
+            CRF: <r-display bind="proj_1_crf"></r-display>%
+            <br>
+            Power intensity: <r-display bind="proj_1_power_intensity"></r-display> MWh/t
+            <br> <br>
+            From these values we can calculate the cost of power which we get from mulitplying 
+            power intensity by the cost per MWh (at whichever utilisation rate we are looking at). 
+           <br> <br>
+           \( Power &nbsp; cost = Power&nbsp; intensity * cost&nbsp; per&nbsp; MWh \)
+            <br> <br>
+
+            We can also calculate the cost of the CRF. To do this we get the project cost mulitply it by the CRF value and then
+            divide this by the number of tons we're removing at a specific utilisation rate. 
+            <br><br>
+            \( CRF &nbsp; cost = \dfrac{Project&nbsp; cost * CRF}{Project&nbsp; capacity * utilisation&nbsp; rate} \)
+            <br><br>
+            Adding these values then gives us our total cost.
+            <br><br>
+            \( Total &nbsp; cost = Power&nbsp; cost + CRF &nbsp; cost \)
+
+            <br><br>
+            We can see these values plotted below.
+            
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                
+                
+                <r-action :click="{
+                    proj_1_cost: 10000000,
+                    proj_1_capacity: 4000,
+                    proj_1_crf: 10, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant options 1 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant options 2 </r-action>
+			</span> 
+
+            <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-path :data="[[5,power_5 ],[10, power_10]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, power_15 ],[20, power_20]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, power_10 ],[15, power_15]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, power_20 ],[25, power_25]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, power_25 ],[30, power_30]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, power_30 ],[35, power_35]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, power_35 ],[40, power_40]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, power_40 ],[45, power_45]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, power_45 ],[50, power_50]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, power_50 ],[55, power_55]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, power_55 ],[60, power_60]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, power_60 ],[65, power_65]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, power_65 ],[70, power_70]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, power_70 ],[75, power_75]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, power_75 ],[80, power_80]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, power_80 ],[85, power_85]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, power_85 ],[90, power_90]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, power_90 ],[95, power_95]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, power_95 ],[100, power_100]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+
+                <r-svg-path :data="[[5,crf_5 ],[10, crf_10]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, crf_10 ],[15, crf_15]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, crf_15 ],[20, crf_20]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, crf_20 ],[25, crf_25]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, crf_25 ],[30, crf_30]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, crf_30 ],[35, crf_35]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, crf_35 ],[40, crf_40]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, crf_40 ],[45, crf_45]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, crf_45 ],[50, crf_50]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, crf_50 ],[55, crf_55]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, crf_55 ],[60, crf_60]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, crf_60 ],[65, crf_65]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, crf_65 ],[70, crf_70]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, crf_70 ],[75, crf_75]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, crf_75 ],[80, crf_80]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, crf_80 ],[85, crf_85]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, crf_85 ],[90, crf_90]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, crf_90 ],[95, crf_95]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, crf_95 ],[100, crf_100]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart>
+            If you have kept the default power costs and are using plant 1 then you will probably see that the lowest cost per ton
+            very close to 100% capacity.  
+        </p>
+        </section>
+        </article>
+    </div>
+  </body>
+</html>

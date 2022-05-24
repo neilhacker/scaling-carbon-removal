@@ -44,3 +44,15 @@
 <div class="content">
     <p></p>
 </div>
+
+<r-svg-chart  ylabel="Annual growth rate (%)" :xlim="[0,24]" :ylim="[0, 85]"  width="700" height="400"  y-axis-location="10" x-axis-location="hidden" >
+    <!-- solar -->
+    <r-svg-text :x="1" :y="40.2" text="40.2%"></r-svg-text>
+    <r-svg-path :data="[[1, 0],[1, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+    <r-svg-path :data="[[2, 0],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+    <r-svg-path :data="[[1, 40.2],[2, 40.2]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+    <r-svg-path :data="[[1, 0],[2, 0]]" stroke="#5de28b" stroke-width="1" ></r-svg-path>
+
+    <r-svg-eqn eqn="sliderStep == 4 ? wrightLearningCurveStartVal *(x ** (Math.log(1-(wrightLearningCurve/100))/Math.log(2))): 0" :listen="{wrightLearningCurveStartVal,wrightLearningCurve,sliderStep}" stroke="#2ca02c"></r-svg-eqn>
+
+</r-svg-chart>
