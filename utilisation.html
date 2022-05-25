@@ -48,10 +48,10 @@
                 <r-var name="mwh_cost_70" value="43" type="number"></r-var>
                 <r-var name="mwh_cost_75" value="49" type="number"></r-var>
                 <r-var name="mwh_cost_80" value="55" type="number"></r-var>
-                <r-var name="mwh_cost_85" value="63" type="number"></r-var>
-                <r-var name="mwh_cost_90" value="71" type="number"></r-var>
-                <r-var name="mwh_cost_95" value="81" type="number"></r-var>
-                <r-var name="mwh_cost_100" value="91" type="number"></r-var>
+                <r-var name="mwh_cost_85" value="60" type="number"></r-var>
+                <r-var name="mwh_cost_90" value="65" type="number"></r-var>
+                <r-var name="mwh_cost_95" value="70" type="number"></r-var>
+                <r-var name="mwh_cost_100" value="75" type="number"></r-var>
 
                 <!-- PROJECT 1 -->
                 <r-var name="proj_1_cost" value="10000000" format=","></r-var>
@@ -201,11 +201,41 @@
                     mwh_cost_70: 43,
                     mwh_cost_75: 49,
                     mwh_cost_80: 55,
-                    mwh_cost_85: 63,
-                    mwh_cost_90: 71,
-                    mwh_cost_95: 81,
-                    mwh_cost_100: 91,
+                    mwh_cost_85: 60,
+                    mwh_cost_90: 65,
+                    mwh_cost_95: 70,
+                    mwh_cost_100: 75,
                 }">Power scenario 1</r-action>
+
+                <br>
+                <!-- this schedule has const reneweable prices then at 65% utilisation you use the grid with a cost of 60 so the avge price slowly rises -->
+                <r-action :click="{
+                    mwh_cost_5: 39, 
+                    mwh_cost_10: 39,
+                    mwh_cost_15: 39,
+                    mwh_cost_20: 39,
+                    mwh_cost_25: 39,
+                    mwh_cost_30: 39,
+                    mwh_cost_35: 39,
+                    mwh_cost_40: 39,
+                    mwh_cost_45: 39,
+                    mwh_cost_50: 39,
+                    mwh_cost_55: 39,
+                    mwh_cost_60: 39,
+                    mwh_cost_65: 42, 
+                    mwh_cost_70: 43,
+                    mwh_cost_75: 44,
+                    mwh_cost_80: 45,
+                    mwh_cost_85: 47,
+                    mwh_cost_90: 47,
+                    mwh_cost_95: 48,
+                    mwh_cost_100: 49,
+                }">Power scenario 2</r-action>
+                <br>
+                The second scenario uses renewables at ＄40/MWh until 65% utilisation then gets electricity from the grid at 
+                ＄60/MWh, the reason it is an upward slope not a new flat line is because these costs represent the average of all tons 
+                removed at a given utilisation. (Just to say this undersells the actual costs becuase you would be removing less net CO₂ if you 
+                connect the grid)
 
 
 			</span> 
