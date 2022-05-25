@@ -205,10 +205,19 @@
                     mwh_cost_90: 65,
                     mwh_cost_95: 70,
                     mwh_cost_100: 75,
-                }">Power scenario 1</r-action>
+                }">Power scenario 1</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule1')">(?)</i>
 
-                <br>
-                <!-- this schedule has const reneweable prices then at 65% utilisation you use the grid with a cost of 60 so the avge price slowly rises -->
+			</span> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule1">
+                This schedule uses only renewables and then off-grid battery storage, this approach gets very very expensive as you try 
+                to get to full utilisation. 
+            </span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
                 <r-action :click="{
                     mwh_cost_5: 39, 
                     mwh_cost_10: 39,
@@ -230,15 +239,56 @@
                     mwh_cost_90: 47,
                     mwh_cost_95: 48,
                     mwh_cost_100: 49,
-                }">Power scenario 2</r-action>
-                <br>
-                The second scenario uses renewables at ＄40/MWh until 65% utilisation then gets electricity from the grid at 
+                }">Power scenario 2</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule2')">(?)</i>
+
+			</span> 
+
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule2">
+                The schedule uses renewables at ＄40/MWh until 65% utilisation then gets electricity from the grid at 
                 ＄60/MWh, the reason it is an upward slope not a new flat line is because these costs represent the average of all tons 
                 removed at a given utilisation. (Just to say this undersells the actual costs becuase you would be removing less net CO₂ if you 
                 connect the grid)
+            </span> 
 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <r-action :click="{
+                    mwh_cost_5: 50, 
+                    mwh_cost_10: 50,
+                    mwh_cost_15: 50,
+                    mwh_cost_20: 50,
+                    mwh_cost_25: 50,
+                    mwh_cost_30: 50,
+                    mwh_cost_35: 50,
+                    mwh_cost_40: 50,
+                    mwh_cost_45: 50,
+                    mwh_cost_50: 50,
+                    mwh_cost_55: 50,
+                    mwh_cost_60: 50,
+                    mwh_cost_65: 50, 
+                    mwh_cost_70: 50,
+                    mwh_cost_75: 50,
+                    mwh_cost_80: 50,
+                    mwh_cost_85: 50,
+                    mwh_cost_90: 50,
+                    mwh_cost_95: 50,
+                    mwh_cost_100: 50,
+                }">Power scenario 3</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule3')">(?)</i>
 
 			</span> 
+
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule3">
+                The schedule demonstrates the effect of a constant price at every utilisation level.
+            </span> 
+
+
             <r-svg-chart  xlabel="Utilisation rate" ylabel="$/MWh" :xlim="[0,110]" :ylim="[0, 130]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
 
                 <r-svg-node :x="5" :y="mwh_cost_5" :drag="{mwh_cost_5: y}" fill="#e24444"></r-svg-node>
