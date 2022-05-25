@@ -32,17 +32,6 @@
     <div class="main_content">
         <article>
             <section>
-                <r-var name="x" value="" type="number"></r-var>
-                <r-var name="y" :value="x*6.31313889" type="number"></r-var>
-                <r-var name="cdr_cost1" :value="electricity_cost*y" type="number" format=",.3"></r-var>
-
-                <r-var name="z" value="" type="number"></r-var>
-                <r-var name="q" :value="z/6.31313889" type="number"></r-var>
-                <r-var name="cdr_cost2" :value="electricity_cost*z" type="number" format=",.3"></r-var>
-
-                <r-var name="electricity_cost" value="0.05" type="number" format=",.3"></r-var>
-
-                <!-- POWER 1 -->
                 <r-var name="mwh_cost_5" value="39" type="number"></r-var>
                 <r-var name="mwh_cost_10" value="39" type="number"></r-var>
                 <r-var name="mwh_cost_15" value="39" type="number"></r-var>
@@ -68,7 +57,7 @@
                 <r-var name="proj_1_cost" value="10000000" format=","></r-var>
                 <r-var name="proj_1_capacity" value="4000" format=","></r-var>
                 <r-var name="proj_1_specific_capacity_cost" :value="proj_1_cost/4000" type="number"></r-var>
-                <r-var name="proj_1_crf" value="10" type="number"></r-var>
+                <r-var name="proj_1_crf" value="14" type="number"></r-var>
                 <r-var name="proj_1_power_intensity" value="1.8" type="number"></r-var>
 
 
@@ -171,7 +160,7 @@
             <br><br>
             Some systems will work much better with very high utilisation rates, for example, systems that rely on using very high temperatures or pressures may find that unless they have high utilisation rates the wind up costs/time of getting back up to operating conditions become pretty much prohibitive. 
             <br><br>
-            Other systems, like Parallel Carbon, could use energy for 50% of the day electrolyse water, but then they could shut off their energy inputs for the other 50% of the day and just drip feed the alkaline cations they’ve created into their CO₂ solution to separate it out. 
+            Other systems, like Parallel Carbon, could use energy for 50% of the day to electrolyse water, but then they could shut off their energy inputs for the other 50% of the day and just drip feed the alkaline ions they’ve created into their CO₂ solution to separate it out. 
             <br><br>
             Why does this matter? It matters because if you only need power for say 50% of the day this can radically change the way you are able to generate the power vs if you need power 100% of the day. If you only need power 50% of the day you can get there basically with renewables like solar or wind. If you need power above say 80% of the day you start needing to either use large scale battery storage, clean firm solutions like geothermal²
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
@@ -193,6 +182,8 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
+                Note that the prices in this chart denote the average cost of all MWh at a certain utilisation rate not the incremental cost increase.
+                <br><br>
                 <r-action :click="{
                     mwh_cost_5: 39, 
                     mwh_cost_10: 39,
@@ -246,10 +237,16 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
+                ³ You can find out more about captial recovery factors at another post of mine <a href="https://www.scalingcarbonremoval.com/amc.html">here</a>. 
+			</span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
                 <r-action :click="{
                     proj_1_cost: 10000000,
                     proj_1_capacity: 4000,
-                    proj_1_crf: 10, 
+                    proj_1_crf: 14, 
                     proj_1_power_intensity: 1.8,
                 }">Plant 1 </r-action>
                 <br>
@@ -276,10 +273,11 @@
                 <br><r-input bind="proj_1_power_intensity" label="Question?!"></r-input>
 
 			</span> 
+
             Next suppose we have a DAC plant that costs $<r-display bind="proj_1_cost"></r-display> to build, has an annual removal
             capacity of <r-display bind="proj_1_capacity"></r-display> tons, requires <r-display bind="proj_1_power_intensity"></r-display> MWh
-            to remove a ton of CO₂ and has a capital recovery factor of <r-display bind="proj_1_crf"></r-display>%. 
-            (You can either customise these values or pick from default options to the left.) 
+            to remove a ton of CO₂ and has a capital recovery factor³ of <r-display bind="proj_1_crf"></r-display>%. 
+            (You can either customise these values or pick from default options to the right.) 
             <!-- <br>
 
             Cost: $<r-display bind="proj_1_cost"></r-display>
@@ -316,16 +314,16 @@
                 <r-action :click="{
                     proj_1_cost: 10000000,
                     proj_1_capacity: 4000,
-                    proj_1_crf: 10, 
+                    proj_1_crf: 14, 
                     proj_1_power_intensity: 1.8,
-                }">Plant options 1 </r-action>
+                }">Plant 1 </r-action>
                 <br>
                 <r-action :click="{
                     proj_1_cost: 150000000,
                     proj_1_capacity: 1000000,
                     proj_1_crf: 12, 
                     proj_1_power_intensity: 1.8,
-                }">Plant options 2 </r-action>
+                }">Plant 2 </r-action>
 			</span> 
 
             <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
@@ -395,7 +393,7 @@
             very close to 100% capacity. This is basically because you have such little capacity to recover your large CAPEX expenditure from 
             you just need to churn out tons. 
             <br><br>
-            However, if you select plant 2 you will see that in this case the lowest levelised cost per ton is actually only around the 55%
+            However, if you select plant 2 you will see that in this case the lowest levelised cost per ton is actually      around the 55%
             utilisation mark. What does this mean? It means that if you as the seller want to be able to charge the lowest price per ton (while still
             achieving some expected rate of return) you only want to run energy to your plant 55% of the time.
 
@@ -424,7 +422,7 @@
             <br><br>
             What this means is that all that extra money you're spending on the plant at 100% utilisation could instead be used to pay for 4 more plants all running at 50% utilisation. If you use your money in this way 
             you get much much more leverage out of it in speeding up the overal increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
-            is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above woudl suggest that this could be 
+            is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above would suggest that this could be 
             achieved with over 4x less money if a plant was able to run at lower utilisation rates vs needing to run almost all of the time. 
         </p>
         <h2>Practical consequences</h2>
@@ -432,8 +430,8 @@
             What this means in practice is that companies that can take advantage of intermittent energy supply rather than running at very high utilisation rates have a huge advantage 
             as you try to scale up the industry.
             <br><br>
-            There's a reason we don't really care about the utilisation of any plant in any given year and that is that the output the are making until you reach any real scale doesn't really have any value except 
-            in so far as it allows the compnaies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time whic we might want to harness. No in this case all we care about
+            There's a reason we don't really care about the utilisation of any plant in any given year and that is that the output they are making until you reach any real scale doesn't really have any value except 
+            in so far as it allows the companies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time which we might want to harness. No in this case all we care about
             is getting more capacity installed and if the model above has much to say on the matter the best way to do that is to find DAC sources that can run at lower utilisation rates.
         </p>
 
@@ -443,7 +441,7 @@
             If, for example, approaches with very high utilisation rates also had higher learning rates then this might make up for things. As it stands I find this hard to believe. Mainly because if you have a very high utilisation 
             rate that would suggest some structural complicated feature of your DAC set up which are typically systems that exhibit lower learning rates anyway.
             <br><br>
-            The second addendum is that the above doesn't really hold if you can utilise your captured CO₂ in a way that makes you not reliant on voluntary payments. If this is the case then absolutly by all means it would probably make sense to
+            The second addendum is that the above doesn't really hold if you can utilise your captured CO₂ in a way that makes you not reliant on voluntary payments (i.e sell it as an input). If this is the case then absolutly by all means it would probably make sense to
             churn out as many tons per year as you can.
         </p>
 
