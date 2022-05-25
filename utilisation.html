@@ -354,6 +354,14 @@
                     proj_1_crf: 12, 
                     proj_1_power_intensity: 1.8,
                 }">Plant 2 </r-action>
+
+                <br><br>
+                <span style="color: #36db52">&#9473; Total cost/t</span>
+                <br>
+                <span style="color: #449be2">&#9473; CRF cost/t</span>
+                <br>
+                <span style="color: #e24444">&#9473; Power cost/t</span>
+
 			</span> 
 
             <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
@@ -454,6 +462,7 @@
             you get much much more leverage out of it in speeding up the overal increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
             is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above would suggest that this could be 
             achieved with over 4x less money if a plant was able to run at lower utilisation rates vs needing to run almost all of the time. 
+
         </p>
         <h2>Practical consequences</h2>
         <p>
@@ -465,6 +474,187 @@
             is getting more capacity installed and if the model above has much to say on the matter the best way to do that is to find DAC sources that can run at lower utilisation rates.
         </p>
 
+        <h2>Taking these ideas to their extremes</h2>
+        <p>
+            Let's take another quick look at the chart from above, this time only showing the total cost per ton. What would be best from the 
+            buyers point of view is to pick a point on this line where the area under that point is smallest. 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ⁴ Note this box is not necessarily the lowest cost to the buyer and is just illustrative of the area we are looking for.
+			</span> 
+
+            In other words we're looking for the area of the box below⁴, for each level of utilisation.
+            <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-node :x="50" :y="total_50" fill="#36db52"></r-svg-node>
+                <r-svg-path :data="[[50, 0 ],[50, total_50]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[0, total_50 ],[50, total_50]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
+
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                I've called the y axis 'normalised' becuase it doesn't show the actual total cost to remove tons at given utilisation levels
+                but displays the same shape of total costs you would get if you were to do that mulitplication. 
+			</span> 
+ 
+            One quick way to get this for all values on the chart is to multiply the levlised cost of DAC per ton by the utilisation rate which would give us 
+            this chart. 
+            <r-svg-chart  xlabel="Utilisation" ylabel="Normalised total cost of DAC" :xlim="[0,100]" :ylim="[0, total_100*100]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+                <r-svg-path :data="[[5,total_5*5 ],[10, total_10*10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10*10 ],[15, total_15*15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15*15 ],[20, total_20*20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20*20 ],[25, total_25*25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25*25 ],[30, total_30*30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30*30 ],[35, total_35*35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35*35 ],[40, total_40*40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40*40 ],[45, total_45*45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45*45 ],[50, total_50*50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50*50 ],[55, total_55*55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55*55 ],[60, total_60*60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60*60 ],[65, total_65*65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65*65 ],[70, total_70*70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70*70 ],[75, total_75*75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75*75 ],[80, total_80*80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80*80 ],[85, total_85*85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85*85 ],[90, total_90*90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90*90 ],[95, total_95*95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95*95 ],[100, total_100*100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart>
+            What you will find is that in virtually every case of pairing up plant stats with power costs this line is lowest at the lowest level of utilisation. 
+            <br><br>
+            What does this suggest? It suggests that if the buyer is primarily concerned with paying the least amount of money to a DAC plant so that it 
+            hits some needed rate of return to allow follow on scale ups then they should basically have it produce no units of carbon removal at all and just pay the fixed CAPEX costs.
+            <br><br>
+            You can kind of understand why this is the case, CDR (for voluntary markets) is basically doing something that has no economic value and also once the plant is built 
+            is providing very little in the way of learning effects. But it still seems like the above is pretty divorced from what we might have thought initially as the best path forward. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                I don't want to stretch an analogy too much but this is similar to a number of probability games where how you maximise the expected return on any given play and 
+                how you maximise the expected growth of wealth over time end up being different strategies. 
+			</span> 
+
+            It's worth asking ourselves seriously when do we actually want to be pulling CO₂ out of the atmosphere. The above would suggest that doing so now actually imposes a very large 
+            tradeoff with how quickly we can scale the sector as a whole. Of course you eventually want to turn on the taps to get things rolling but given how the entire sector will likely 
+            have very little impact at all until decades from now in terms of how much it can remove there is a case to be made that tons today is the wrong metric to be maximising.  
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ⁵ This point of knowing a company can pull tons out properly ends up being quite important. 
+			</span> 
+
+            If you take the ideas above to their extremes it would suggest buyers basically instantly pay the CAPEX costs for CDR plants that 
+            would be able to⁵ pull CO₂ out of the sky and then have them sit idle while the company simply makes more plants that will similarly sit idle.             
+        </p>
+        <h2>What's wrong with the above</h2>
+        <p>
+            That last paragraph was kind of written to sound almost offensively against what you'd expect to be the case. But I want to stress again that based on the set up we have 
+            above really does lead to us maximising many of the things we truly care about (i.e capacity and learning rates). It also seems clearly stupid, so what's up?
+            <br><br>
+            There are some prgamatic reasons to reject my analysis above out of hand. Firstly can you even imagine the PR it would get, especially given how CDR has struggled 
+            for any kind of acceptance for so long anyway. "US government pays weremovecarbon $100m to make some stuff and then throw it in a ditch"....not ideal.
+            <br><br>
+            The second pragmatic reason is that the buyers of CDR while being unusually forward looking compared to the norm would still probably find it difficult to sell to their 
+            finance teams that they're buying future capacity increases and that alone and that no the money they've spent has not as of yet removed any tons from the 
+            atmosphere that the company could use to reach their net-zero targets.
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ⁶ or at least far fewer tons removed every year than you could feasibly do. 
+			</span> 
+
+            This highlights how important exactly who is doing the paying is. The closer you get to some fully altruistic leviathan the closer you can implement the 
+            strategy above as you can basically internalise the fact that you won't see many actual tons⁶ for a while. The closer you are to a group of buyers who 
+            very much want to see large utilisation of CDR assets the less able you will be to do the above. 
+            <br><br>
+            Okay those are pretty pragmatic, and very much not to be ignored, but there's a critique that actaully exists within the model itself that 
+            I think is very important here. It is that one of the main driving forces behind the end cost of all this is the learning rate these technologies 
+            have. Above I've analysed things for a single plant at a single point in time but then argued that we shoudl take this conclusion and apply it as the best 
+            thing to do over time as well. 
+            <br><br>
+            If for some reason we think that doing what I suggest above would in fact lead to lower learning rates then this effect would probably dwarf the money you save to re-invest. 
+            So the question is would it reduce learning rates?
+            <br><br>
+            On one had the answer seems like no, you're still making the stuff so you should still be getting the learning-by-doing effects. However, 
+            if you actually make plants produce more and then basically try to offer the lowest cost per ton possible this acts as a really good, and legibile,
+             fitness function for them to optimise against. It also allows a much easier comparisson across multiple different projects. Now to be fair 
+             if you know the CAPEX of a plant and the operating costs in terms of energy and what not you could figure this value out for youself. 
+             So instead of having plants sell tons you get their financials figure out what they would be able to sell tons for and then reward them based on lowering that.
+            <br><br>
+            While in theory this might have the same fitness function role it seems unlikely to me that that would be the case in reality. There's also the fact that you need to know that 
+            when it came down to it the tech you're funding could in fact pull out the capacity it says it could, if you are using very low utilisation rates this might well be 
+            harder to tell. This by no way means impossible, for example if you have multiple DAC modules that all operate in very similar ways you could imagine running a few at close to full 
+            capacity to see how well they work but again, it seems like while this approach could work in theory in practice it would have drawbacks. 
+            <br><br>
+            Another reason why the above may not work so well is that it considers a DAC plant in isolation, but what if it uses a different company to acutally 
+            sequesture the CO₂, you would now have to also pay that company money to...not sequester stuff(?). What if they have different cost structures? 
+            <br><br>
+            We might also want to consider MRV, which we might be able to get better at the more actual tons we are removing, although again with this it would seem like
+            you wouldn't have to be removing millions of tons a year before we get better at this.  
+            <br><br>
+            Market confidence also does start to play a roll if we take this thinking to the extremes. If companies are removing reasonable amounts of CO₂ from all of their DAC plants and buyers 
+            are buying these tons then it is more easy to believe that the market itself is healthy and balanced. If buyers go to the extreme of paying at very 
+            low utilisation rates compnaies might wonder if there will eventually be enough money when we do seriously start to consider turning on the taps and removing CO₂. 
+            <br><br>
+            The above might well be less true today than down the line a bit. At the moment when so many companies are trying to get the FOAK plant level, it will likely 
+            lead to the fastest learning to actually be using DAC plants to full capacity to see how they opperate. However, the arguments above about buyers having heavy preferences
+            towards very low utilisation rates becomes more true once we move to NOAK plants where there is quickly diminishing returns to learning by running all plants at high capacity. 
+            In these situations we may really want to  
+
+        </p>
+        <h2>Where does this leave us?</h2>
+        <p>
+            There are two counterveiling forces we've talked about above. The first is that from the buyers side it might be in their interests to 
+            pay out at lower utilisation rates. There are probably some pragmatic reasons we discussed above that would mean you couldn't go incredibly low like 10% utilisation.   
+            Buyers would also want to consider what kind of utilisation rate is best for learning rates. If you penny pinch now by going for low utilisation rates and that shaves a few 
+            percentage points off the learning rate companies will experience this will almost certainly come back to bite you. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                This bit is just talking about which utilisation rate corresponds to the lowest point on the green total cost line. 
+			</span> 
+
+            Another force pushing for higher (although by no means full) utilisation rates is that at these rates you might find the actual cheapest cost per tons a plant is 
+            able to produce which is probably the simplest and easiest to understand metric for companies to try to directly maximise (or minimise I guess).
+            <br><br>
+            Where I think I come out on this is that you probably really want to try to support technologies that would be capable of operating at the utilisation rates with 
+            the lowest cost per ton, but that as a buyer you might want to consider having companies go even lower than this, although how much lower remains to be seen for practical reasons. 
+            <br><br>
+            At the very least I hope this challenges people to think about what it is we actually want to maximise and what the most efficient way of achieving that is. We tend to 
+            talk a lot about maximising tons removed which makes sense if you only think about 100% utilisation situations but if you go beyond those situations you may realise you want 
+            to have a different strategy. 
+            <br><br>
+            A lot of this comes down to the fact these situations all seem very far away. At the moment we can kind of think of tons removed and DAC modules interchangably as all of the 
+            volumes are so small. This means we haven't started to really think about how important the distinction between number of tons and number of modules is yet, and how important the 
+            actual targets you are trying to hit from a project finance perspective are. 
+        </p>
         <h2>Addendums</h2>
         <p>
             The first addendum is to say that above I've kind of made the assumption that companies that need to operate at very high utilisation rates and those that don't have similar learning rates all else considered. 
