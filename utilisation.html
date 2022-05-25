@@ -568,7 +568,42 @@
                 I've called the y axis 'normalised' becuase it doesn't show the actual total cost to remove tons at given utilisation levels
                 but displays the same shape of total costs you would get if you were to do that mulitplication. 
 			</span> 
- 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <br>
+                One other consequence of this type of thinking is that even if the lowest levelised cost of DAC occurs at 100% utilisation (i.e
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 2 </r-action> & 
+                <r-action :click="{
+                    mwh_cost_5: 50, 
+                    mwh_cost_10: 50,
+                    mwh_cost_15: 50,
+                    mwh_cost_20: 50,
+                    mwh_cost_25: 50,
+                    mwh_cost_30: 50,
+                    mwh_cost_35: 50,
+                    mwh_cost_40: 50,
+                    mwh_cost_45: 50,
+                    mwh_cost_50: 50,
+                    mwh_cost_55: 50,
+                    mwh_cost_60: 50,
+                    mwh_cost_65: 50, 
+                    mwh_cost_70: 50,
+                    mwh_cost_75: 50,
+                    mwh_cost_80: 50,
+                    mwh_cost_85: 50,
+                    mwh_cost_90: 50,
+                    mwh_cost_95: 50,
+                    mwh_cost_100: 50,
+                }">Power scenario 3</r-action>
+                ) it might still be better to try to have the plant go under full utilisation as this can be much cheaper for the buyer and the seller is indifferent.
+			</span> 
+
             One quick way to get this for all values on the chart is to multiply the levlised cost of DAC per ton by the utilisation rate which would give us 
             this chart. 
             <r-svg-chart  xlabel="Utilisation" ylabel="Normalised total cost of DAC" :xlim="[0,100]" :ylim="[0, total_100*100]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
