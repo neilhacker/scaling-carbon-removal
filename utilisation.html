@@ -749,47 +749,50 @@
         <h2>What is the best level of utilisation?</h2>
         <p>
             There are broadly 3 zones of utilisation we might now want to consider.
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+	        <b style="color: #36B287">Zone 1</b> is low utilisation levels. Here a buyer would be paying a very high cost per ton but the overall amount they have to actually spend per year is the lowest.
+            <br><br>
+            <b style="color: #009dff">Zone 2</b> is around whichever utilisation level leads to the cheapest cost per ton.
+            <br><br>
+            <b style="color: #e24444">Zone 3</b> is around 100% utilisation. 
+			</span> 
 
             <r-svg-chart   ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
 
-                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#000" stroke-width="2" ></r-svg-path>
 
-                <r-svg-path :data="[[35, 0 ],[35, total_35]]" stroke="#e24444" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-text :x="25" :y="total_35/2" text="Zone 1" fill="#e24444"></r-svg-text>
+                <r-svg-path :data="[[35, 0 ],[35, total_35]]" stroke="#36B287" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="25" :y="total_35/2" text="Zone 1" fill="#36B287"></r-svg-text>
 
                 <r-svg-path :data="[[min_cost_utilisation, 0 ],[min_cost_utilisation, min_cost_value]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
                 <r-svg-path :data="[[min_cost_utilisation+20, 0 ],[min_cost_utilisation+20, min_cost_value_high]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
                 <r-svg-text :x="min_cost_utilisation+2" :y="(min_cost_value/2)*1.2" text="Zone 2" fill="#009dff"></r-svg-text>
 
-                <r-svg-path :data="[[90, 0 ],[90, total_90]]" stroke="#ce9823" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-text :x="92" :y="(total_90/2)/4" text="Zone 3" fill="#ce9823"></r-svg-text>
+                <r-svg-path :data="[[90, 0 ],[90, total_90]]" stroke="#e24444" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="92" :y="(total_90/2)/4" text="Zone 3" fill="#e24444"></r-svg-text>
 
-                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
-                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#000" stroke-width="2" ></r-svg-path>
 
             </r-svg-chart> 
-            Zone 1 is low utilisation levels. Here a buyer would be paying a very high cost per ton but the overall amount they have to actually spend per year is the lowest.
-            <br>
-            Zone 2 is around whichever utilisation level leads to the cheapest cost per ton.
-            <br>
-            Zone 3 is around 100% utilisation. 
-            <br><br>
             Sometimes zone 2 and 3 coincide for example if you have <r-action :click="{
                 mwh_cost_5: 39, 
                 mwh_cost_10: 39,
