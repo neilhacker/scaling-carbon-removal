@@ -160,9 +160,14 @@
             <br><br>
             Some systems will work much better with very high utilisation rates, for example, systems that rely on using very high temperatures or pressures may find that unless they have high utilisation rates the wind up costs/time of getting back up to operating conditions become pretty much prohibitive. 
             <br><br>
-            Other systems, like Parallel Carbon, could use energy for 50% of the day to electrolyse water, but then they could shut off their energy inputs for the other 50% of the day and just drip feed the alkaline ions they’ve created into their CO₂ solution to separate it out. 
+            Other systems, like Parallel Carbon, could use energy for 50% of the day to electrolyse water, but then they could shut off their energy inputs for the other 50% of the day and 
+            just drip feed the acid they’ve created into their carbonate mixture to separate out CO₂.
             <br><br>
-            Why does this matter? It matters because if you only need power for say 50% of the day this can radically change the way you are able to generate the power vs if you need power 100% of the day. If you only need power 50% of the day you can get there basically with renewables like solar or wind. If you need power above say 80% of the day you start needing to either use large scale battery storage, clean firm solutions like geothermal²
+            Why does this matter? It matters because 
+            if you only need power for say 50% of the day this can radically change the way you are able to generate the power vs if you need power 100% of the day. 
+            If you only need power 50% of the day you can get there basically with renewables like solar or wind. 
+            If you need power up to around 70% of the time you can add a couple hours of battery energy storage at little additional cost to get you that last little bit.
+            If you need power above say 80% of the day you start needing to either use large scale battery storage, clean firm solutions like geothermal²
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
             <span class="marginnote" id="id_option">
@@ -317,7 +322,7 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
-                ³ You can find out more about captial recovery factors at another post of mine <a href="https://www.scalingcarbonremoval.com/amc.html">here</a>. 
+                ³ You can find out more about capital recovery factors at another post of mine <a href="https://www.scalingcarbonremoval.com/amc.html">here</a>. 
 			</span> 
 
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
@@ -358,23 +363,14 @@
             capacity of <r-display bind="proj_1_capacity"></r-display> tons, requires <r-display bind="proj_1_power_intensity"></r-display> MWh
             to remove a ton of CO₂ and has a capital recovery factor³ of <r-display bind="proj_1_crf"></r-display>%. 
             (You can either customise these values or pick from default options to the right.) 
-            <!-- <br>
-
-            Cost: $<r-display bind="proj_1_cost"></r-display>
-            <br>
-            Capacity: <r-display bind="proj_1_capacity"></r-display>
-            <br>
-            CRF: <r-display bind="proj_1_crf"></r-display>%
-            <br>
-            Power intensity: <r-display bind="proj_1_power_intensity"></r-display> MWh/t -->
             <br> <br>
-            From these values we can calculate the cost of power which we get from mulitplying 
+            From these values we can calculate the cost of power which we get from multiplying 
             power intensity by the cost per MWh (at whichever utilisation rate we are looking at). 
            <br> <br>
            \( Power &nbsp; cost = Power&nbsp; intensity * cost&nbsp; per&nbsp; MWh \)
             <br> <br>
 
-            We can also calculate the cost of the CRF. To do this we get the project cost mulitply it by the CRF value and then
+            We can also calculate the cost of the CRF. To do this we get the project cost, multiply it by the CRF value and then
             divide this by the number of tons we're removing at a specific utilisation rate. 
             <br><br>
             \( CRF &nbsp; cost = \dfrac{Project&nbsp; cost * CRF}{Project&nbsp; capacity * utilisation&nbsp; rate} \)
@@ -414,7 +410,7 @@
 
 			</span> 
 
-            <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+            <r-svg-chart  xlabel="Utilisation" ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
 
                 <r-svg-path :data="[[5,power_5 ],[10, power_10]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
                 <r-svg-path :data="[[15, power_15 ],[20, power_20]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
@@ -477,11 +473,10 @@
                 <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
 
             </r-svg-chart>
-            If you have kept the default power costs and are using plant 1 then you will probably see that the lowest cost per ton
-            very close to 100% capacity. This is basically because you have such little capacity to recover your large CAPEX expenditure from 
+            If you have kept the default power costs and are using plant 1 then you will probably see that the lowest cost per ton is very close to 100% capacity. This is basically because you have such little capacity to recover your large CAPEX expenditure from 
             you just need to churn out tons. 
             <br><br>
-            However, if you select plant 2 you will see that in this case the lowest levelised cost per ton is actually      around the 55%
+            However, if you select plant 2 you will see that in this case the lowest levelized cost per ton is actually      around the 55%
             utilisation mark. What does this mean? It means that if you as the seller want to be able to charge the lowest price per ton (while still
             achieving some expected rate of return) you only want to run energy to your plant 55% of the time.
 
@@ -489,27 +484,27 @@
         <h2>Theoretical consequences</h2>
         <p>
             This outcome has some pretty big consequences for both buyers and sellers. From the seller point of view if they want to be most 
-            competitive and be able to charge the lowest price then it would benefit them if they could lower there utilisation rate to the range 
-            with the lowest levelised DAC costs, i.e well below 100%. 
+            competitive and be able to charge the lowest price then it would benefit them if they could lower their utilisation rate to the range 
+            with the lowest levelized DAC costs, i.e well below 100%. 
             <br><br>
             The consequence for the buyers though is much much more profound I think. To see why it is worth taking a moment to restate what the 
             goal of buyers is in the CDR sector. To some it is meeting annual net-zero targets, but as a group it is to maximise the speed with which we 
             can scale up CDR capacity. Even if we are only utilising our DAC plants at 50% in a given year, while this might seem to be leaving capacity on the table 
-            if by doing so it allows us to scale the whole sector more quickly then that is by far preferable. What I'm saying here is that this is indeed very likley to be the case.
+            if by doing so it allows us to scale the whole sector more quickly then that is by far preferable. What I'm saying here is that this is indeed very likely to be the case.
             <br><br>
             Why? Well consider plant 2 again. If it was operating at 50% capacity it would be selling 500,000 tons at ＄80/t, this would put the buyer
             on the hook for ＄40,000,000 a year. If however it was operating at 100% capacity it would be selling 1,000,000 tons at ＄180/t putting the annual cost to buyers at 
             ＄180,000,000 or 4.5x more.
             <br><br>
             This difference is incredibly important because in many ways that money is just wasted. You're not buying any more ability to scale capacity with that money, 
-            we've already established that from the sellers point of view these two options actually give them the exact same expected rate of return so neither on would be any more prefereable. 
+            we've already established that from the sellers point of view these two options actually give them the exact same expected rate of return so neither one would be any more preferable. 
             <br><br>
-            You're therefore not buying any more learning with your money either which could help the technology get cheaper in the future. While we might (and I have) thougth about learning rates 
-            as a product of cumulatve tons removed this isn't really true. Once you've built the DAC modules/plant it doesn't really matter if it runs at 50% utilisation or 100% the "learning" so to speak has been 
+            You're therefore not buying any more learning with your money either which could help the technology get cheaper in the future. While we might think about learning rates 
+            as a product of cumulative tons removed this isn't really true. Once you've built the DAC modules/plant it doesn't really matter if it runs at 50% utilisation or 100% the "learning" so to speak has been 
             achieved already by making the thing itself. 
             <br><br>
             What this means is that all that extra money you're spending on the plant at 100% utilisation could instead be used to pay for 4 more plants all running at 50% utilisation. If you use your money in this way 
-            you get much much more leverage out of it in speeding up the overal increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
+            you get much much more leverage out of it in speeding up the overall increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
             is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above would suggest that this could be 
             achieved with over 4x less money if a plant was able to run at lower utilisation rates vs needing to run almost all of the time. 
 
@@ -520,14 +515,14 @@
             as you try to scale up the industry.
             <br><br>
             There's a reason we don't really care about the utilisation of any plant in any given year and that is that the output they are making until you reach any real scale doesn't really have any value except 
-            in so far as it allows the companies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time which we might want to harness. No in this case all we care about
+            in so far as it allows the companies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time which we might want to harness. No, in this case all we care about
             is getting more capacity installed and if the model above has much to say on the matter the best way to do that is to find DAC sources that can run at lower utilisation rates.
         </p>
 
         <h2>Taking these ideas to their extremes</h2>
         <p>
             Let's take another quick look at the chart from above, this time only showing the total cost per ton. What would be best from the 
-            buyers point of view is to pick a point on this line where the area under that point is smallest. 
+            buyer's point of view is to pick a point on this line where the area under that point is smallest. 
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
@@ -535,7 +530,7 @@
 			</span> 
 
             In other words we're looking for the area of the box below⁴, for each level of utilisation.
-            <r-svg-chart  xlabel="Utilisation" ylabel="Levelised cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+            <r-svg-chart  xlabel="Utilisation" ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
 
                 <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
                 <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
@@ -565,14 +560,14 @@
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
-                I've called the y axis 'normalised' becuase it doesn't show the actual total cost to remove tons at given utilisation levels
-                but displays the same shape of total costs you would get if you were to do that mulitplication. 
+                I've called the y axis 'normalised' because it doesn't show the actual total cost to remove tons at given utilisation levels
+                but displays the same shape of total costs you would get if you were to do that multiplication. 
 			</span> 
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
 			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
 			<span class="marginnote" id="id_option">
                 <br>
-                One other consequence of this type of thinking is that even if the lowest levelised cost of DAC occurs at 100% utilisation (i.e
+                One other consequence of this type of thinking is that even if the lowest levelized cost of DAC occurs at 100% utilisation (i.e
                 <r-action :click="{
                     proj_1_cost: 150000000,
                     proj_1_capacity: 1000000,
@@ -663,7 +658,7 @@
             <br><br>
             <b>Pragmatic issues</b>
             <br>
-            There are some prgamatic reasons to reject my analysis above out of hand. Firstly can you even imagine the PR it would get, especially given how CDR has struggled 
+            There are some pragmatic reasons to reject my analysis above out of hand. Firstly can you even imagine the PR it would get, especially given how CDR has struggled 
             for any kind of acceptance for so long anyway. "US government pays weremovecarbon $100m to make some stuff and then throw it in a ditch"....not ideal.
             <br><br>
             The second pragmatic reason is that the buyers of CDR while being unusually forward looking compared to the norm would still probably find it difficult to sell to their 
@@ -682,23 +677,23 @@
             <br><br>
             <b>Learning effects</b>
             <br>
-            Okay those are pretty pragmatic, and very much not to be ignored, but there's a critique that actaully exists within the model itself that 
+            Okay those are pretty pragmatic, and very much not to be ignored, but there's a critique that actually exists within the model itself that 
             I think is very important here. It is that one of the main driving forces behind the end cost of all this is the learning rate these technologies 
-            have. Above I've analysed things for a single plant at a single point in time but then argued that we shoudl take this conclusion and apply it as the best 
+            have. Above I've analysed things for a single plant at a single point in time but then argued that we should take this conclusion and apply it as the best 
             thing to do over time as well. 
             <br><br>
             If for some reason we think that doing what I suggest above would in fact lead to lower learning rates then this effect would probably dwarf the money you save to re-invest. 
             So the question is would it reduce learning rates?
             <br><br>
             On one hand the answer seems like no, you're still making the stuff so you should still be getting the learning-by-doing effects. However, 
-            if you actually make plants produce more and then basically try to offer the lowest cost per ton possible this acts as a really good, and legibile,
-            fitness function for companies to optimise against. It also allows a much easier comparisson across multiple different projects. 
+            if you actually make plants produce more and then basically try to offer the lowest cost per ton possible this acts as a really good, and legible,
+            fitness function for companies to optimise against. It also allows a much easier comparison across multiple different projects. 
             <br><br>
             <b>Legibility and incentives</b>
             <br>
             Now to be fair 
-            if you know the CAPEX of a plant and the operating costs in terms of energy and what not you could figure this value out for youself. 
-            So instead of having plants sell tons you get their financials figure out what they would be able to sell tons for and then reward them based on lowering that.
+            if you know the CAPEX of a plant and the operating costs in terms of energy and what not you could figure this value out for yourself. 
+            So instead of having plants sell tons you get their financials, figure out what they would be able to sell tons for and then reward them based on lowering that.
             <br><br>
             While in theory this might have the same fitness function role it seems unlikely to me that that would be the case in reality. There's also the fact that you need to know that 
             when it came down to it the tech you're funding could in fact pull out the capacity it says it could, if you are using very low utilisation rates this might well be 
@@ -707,13 +702,13 @@
             <br><br>
             <b>Supporting infrastructure</b>
             <br>
-            Another reason why the above may not work so well is that it considers a DAC plant in isolation, but what if it uses a different company to acutally 
-            sequesture the CO₂, you would now have to also pay that company money to...not sequester stuff(?). What if they have different cost structures? 
+            Another reason why the above may not work so well is that it considers a DAC plant in isolation, but what if it uses a different company to actually sequester
+             the CO₂, you would now have to also pay that company money to...not sequester stuff(?). What if they have different cost structures? 
             <br><br>
             This also applies to renewable infrastructure, let's say you get down to 1.5MWh/t for removal, if we get to the stage of having the capacity to remove 1Gt/yr this would take 1500TWh. This is about 10 times larger
             than the current worldwide solar capacity of <a href="https://www.iea.org/reports/solar-pv">156 TWh</a> in 2020. At certain scales if you are only deploying 
-            DAC plants but not actaully drawing the energy to run them given that they would end up being such a large part of the energy mix you risk not sufficiently 
-            pulling solar production forward as well which means when the time comes you may have a lot of plants you can build cheaply but not enough renewables to actually opperate them.  
+            DAC plants but not actually drawing the energy to run them given that they would end up being such a large part of the energy mix you risk not sufficiently 
+            pulling solar production forward as well which means when the time comes you may have a lot of plants you can build cheaply but not enough renewables to actually operate them.  
             <br><br>
             <b>MRV</b>
             <br>
@@ -722,29 +717,29 @@
             <br><br>
             <b>Market confidence</b>
             <br>
-            Market confidence also does start to play a roll if we take this thinking to the extremes. If companies are removing reasonable amounts of CO₂ from all of their DAC plants and buyers 
-            are buying these tons then it is more easy to believe that the market itself is healthy and balanced. If buyers go to the extreme of paying at very 
-            low utilisation rates compnaies might wonder if there will eventually be enough money when we do seriously start to consider turning on the taps and removing CO₂. 
+            Market confidence also does start to play a role if we take this thinking to the extremes. If companies are removing reasonable amounts of CO₂ from all of their DAC plants and buyers 
+            are buying these tons then it is easier to believe that the market itself is healthy and balanced. If buyers go to the extreme of paying at very 
+            low utilisation rates companies might wonder if there will eventually be enough money when we do seriously start to consider turning on the taps and removing CO₂. 
             <br><br>
             <b>Industry stage</b>
             <br>
             The above might well be less true today than down the line a bit. At the moment when so many companies are trying to get the FOAK plant level, it will likely 
-            lead to the fastest learning to actually be using DAC plants to full capacity to see how they opperate. However, the arguments above about buyers having heavy preferences
+            lead to the fastest learning to actually be using DAC plants to full capacity to see how they operate. However, the arguments above about buyers having heavy preferences
             towards very low utilisation rates becomes more true once we move to NOAK plants where there is quickly diminishing returns to learning by running all plants at high capacity. 
             In these situations we may really want to  
             <br><br>
             <b>Market for CO₂</b>
             <br>
-            This analysis is also not so correct if you are selling on your CO₂ as an input for some process. In that case you there is much less pressure from the buyer side to minimise how much they need 
-            to spend to make your DAC plant achieve a return on investment. In the case above the buyer was being altruisitc and really just wants more CDR capacity in the future. If you're 
-            selling CO₂ then you actually care a lot more about producing more tons of it today not just in the future, and so do the people who are buying it from you. These factors would
+            This analysis is also not so correct if you are selling on your CO₂ as an input for some process. In that case there is much less pressure from the buyer side to minimise how much they need 
+            to spend to make your DAC plant achieve a return on investment. In the case above the buyer was being altruistic and really just wants more CDR capacity in the future. If you're 
+            selling CO₂ then you actually care a lot more about producing more tons of it today, not just in the future, and so do the people who are buying it from you. These factors would
             push you much more heavily towards higher utilisation rates. 
 
 
         </p>
         <h2>Where does this leave us?</h2>
         <p>
-            There are two counterveiling forces we've talked about above. The first is that from the buyers side it might be in their interests to 
+            There are two countervailing forces we've talked about above. The first is that from the buyers side it might be in their interests to 
             pay out at lower utilisation rates. There are probably some pragmatic reasons we discussed above that would mean you couldn't go incredibly low like 10% utilisation.   
             Buyers would also want to consider what kind of utilisation rate is best for learning rates. If you penny pinch now by going for low utilisation rates and that shaves a few 
             percentage points off the learning rate companies will experience this will almost certainly come back to bite you. 
@@ -758,7 +753,7 @@
             Another force pushing for higher (although by no means full) utilisation rates is that at these rates you might find the actual cheapest cost per tons a plant is 
             able to produce which is probably the simplest and easiest to understand metric for companies to try to directly maximise (or minimise I guess). And while 
             it may be best from the perspective of the cost of DAC plants to go for even lower utilisation rates as you scale them up this might leave you 
-            without the needed supporting infrastructure like renewables if you do evenentually want to start upping the tons removed. 
+            without the needed supporting infrastructure like renewables if you do eventually want to start upping the tons removed. 
             <br><br>
             <label for="mn-demo" class="margin-toggle">&#8853;</label>
             <input type="checkbox" id="mn-demo" class="margin-toggle"/>
@@ -776,7 +771,7 @@
             talk a lot about maximising tons removed which makes sense if you only think about 100% utilisation situations but if you go beyond those situations you may realise you want 
             to have a different strategy. 
             <br><br>
-            A lot of this comes down to the fact these situations all seem very far away. At the moment we can kind of think of tons removed and DAC modules interchangably as all of the 
+            A lot of this comes down to the fact these situations all seem very far away. At the moment we can kind of think of tons removed and DAC modules interchangeably as all of the 
             volumes are so small. This means we haven't started to really think about how important the distinction between number of tons and number of modules is yet, and how important the 
             actual targets you are trying to hit from a project finance perspective are. 
         </p>
