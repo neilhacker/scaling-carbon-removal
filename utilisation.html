@@ -265,6 +265,8 @@
 			<span class="marginnote" id="id_option">
                 Note that the prices in this chart denote the average cost of all MWh at a certain utilisation rate not the incremental cost increase.
                 <br><br>
+                ← You can click and drag the energy prices up and down on the chart to the left to set custom price schedules. 
+                <br><br>
                 <r-action :click="{
                     mwh_cost_5: 39, 
                     mwh_cost_10: 39,
@@ -761,15 +763,15 @@
                 <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
                 <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
 
-                <r-svg-path :data="[[35, 0 ],[35, total_35]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-text :x="25" :y="total_35/2" text="Zone 1"></r-svg-text>
+                <r-svg-path :data="[[35, 0 ],[35, total_35]]" stroke="#e24444" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="25" :y="total_35/2" text="Zone 1" fill="#e24444"></r-svg-text>
 
-                <r-svg-path :data="[[min_cost_utilisation, 0 ],[min_cost_utilisation, min_cost_value]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-path :data="[[min_cost_utilisation+20, 0 ],[min_cost_utilisation+20, min_cost_value_high]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-text :x="min_cost_utilisation+2" :y="(min_cost_value/2)*1.2" text="Zone 2"></r-svg-text>
+                <r-svg-path :data="[[min_cost_utilisation, 0 ],[min_cost_utilisation, min_cost_value]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[min_cost_utilisation+20, 0 ],[min_cost_utilisation+20, min_cost_value_high]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="min_cost_utilisation+2" :y="(min_cost_value/2)*1.2" text="Zone 2" fill="#009dff"></r-svg-text>
 
-                <r-svg-path :data="[[90, 0 ],[90, total_90]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
-                <r-svg-text :x="92" :y="(total_90/2)/4" text="Zone 3"></r-svg-text>
+                <r-svg-path :data="[[90, 0 ],[90, total_90]]" stroke="#ce9823" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="92" :y="(total_90/2)/4" text="Zone 3" fill="#ce9823"></r-svg-text>
 
                 <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
                 <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
