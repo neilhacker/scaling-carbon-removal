@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>How much should you utilise a DAC plant?</title>
+    <link rel="stylesheet" href="tufte.css"/>
+    <link rel="stylesheet" href="curvenote.css">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="How much should you utilise a DAC plant?">
+    <meta name="twitter:site" content="https://www.scalingcarbonremoval.com/utilisation.html">
+    <meta name="twitter:description" content="An interactive explanation of why you might not always want to run a DAC plant at 100% utilisation">
+    <meta name="twitter:image" content="https://www.scalingcarbonremoval.com/img/utilisation_twitter.png">
+
+
+    <!-- ＄ -->
+    <script type="text/javascript" src="helpers.js"></script>
+    <script async src="https://unpkg.com/@curvenote/article"></script>
+    <script type="module" src="https://js.withorbit.com/orbit-web-component.js"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMP9ER69T0"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+    
+            gtag('config', 'G-DMP9ER69T0');
+        </script>    
+        <script src="./functions.js"></script>
+
+  </head>
+  <body>
+    <div class="main_content">
+        <article>
+            <section>
+                <r-var name="target_tonnes" value="1000" type="number"></r-var>
+
+                <r-var name="start_date" value="0" type="number"></r-var>
+                <r-var name="num_spreads" value="0" type="number"></r-var>
+
+                <r-var name="mwh_cost_5" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_10" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_15" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_20" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_25" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_30" value="39" type="number"></r-var>
+                <r-var name="mwh_cost_35" value="31" type="number"></r-var>
+                <r-var name="mwh_cost_40" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_45" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_50" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_55" value="24" type="number"></r-var>
+                <r-var name="mwh_cost_60" value="36" type="number"></r-var>
+                <r-var name="mwh_cost_65" value="43" type="number"></r-var>
+                <r-var name="mwh_cost_70" value="43" type="number"></r-var>
+                <r-var name="mwh_cost_75" value="49" type="number"></r-var>
+                <r-var name="mwh_cost_80" value="55" type="number"></r-var>
+                <r-var name="mwh_cost_85" value="60" type="number"></r-var>
+                <r-var name="mwh_cost_90" value="65" type="number"></r-var>
+                <r-var name="mwh_cost_95" value="70" type="number"></r-var>
+                <r-var name="mwh_cost_100" value="75" type="number"></r-var>
+
+                <!-- PROJECT 1 -->
+                <r-var name="proj_1_cost" value="10000000" format=","></r-var>
+                <r-var name="proj_1_capacity" value="4000" format=","></r-var>
+                <r-var name="proj_1_specific_capacity_cost" :value="proj_1_cost/4000" type="number"></r-var>
+                <r-var name="proj_1_crf" value="14" type="number"></r-var>
+                <r-var name="proj_1_power_intensity" value="1.8" type="number"></r-var>
+
+
+                <!-- Results -->
+                <r-var name="crf_5" :value="proj_1_cost*(proj_1_crf/100)/(0.05*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_5" :value="proj_1_power_intensity*mwh_cost_5" type="number"></r-var>
+                <r-var name="total_5" :value="crf_5+power_5" type="number"></r-var>
+
+                <r-var name="crf_10" :value="proj_1_cost*(proj_1_crf/100) / (0.10*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_10" :value="proj_1_power_intensity*mwh_cost_10" type="number"></r-var>
+                <r-var name="total_10" :value="crf_10+power_10" type="number"></r-var>
+
+                <r-var name="crf_15" :value="proj_1_cost*(proj_1_crf/100) / (0.15*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_15" :value="proj_1_power_intensity*mwh_cost_15" type="number"></r-var>
+                <r-var name="total_15" :value="crf_15+power_15" type="number"></r-var>
+
+                <r-var name="crf_20" :value="proj_1_cost*(proj_1_crf/100) / (0.20*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_20" :value="proj_1_power_intensity*mwh_cost_20" type="number"></r-var>
+                <r-var name="total_20" :value="crf_20+power_20" type="number"></r-var>
+
+                <r-var name="crf_25" :value="proj_1_cost*(proj_1_crf/100) / (0.25*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_25" :value="proj_1_power_intensity*mwh_cost_25" type="number"></r-var>
+                <r-var name="total_25" :value="crf_25+power_25" type="number"></r-var>
+
+                <r-var name="crf_30" :value="proj_1_cost*(proj_1_crf/100) / (0.30*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_30" :value="proj_1_power_intensity*mwh_cost_30" type="number"></r-var>
+                <r-var name="total_30" :value="crf_30+power_30" type="number"></r-var>
+
+                <r-var name="crf_35" :value="proj_1_cost*(proj_1_crf/100) / (0.35*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_35" :value="proj_1_power_intensity*mwh_cost_35" type="number"></r-var>
+                <r-var name="total_35" :value="crf_35+power_35" type="number"></r-var>
+
+                <r-var name="crf_40" :value="proj_1_cost*(proj_1_crf/100) / (0.40*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_40" :value="proj_1_power_intensity*mwh_cost_40" type="number"></r-var>
+                <r-var name="total_40" :value="crf_40+power_40" type="number"></r-var>
+
+                <r-var name="crf_45" :value="proj_1_cost*(proj_1_crf/100) / (0.45*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_45" :value="proj_1_power_intensity*mwh_cost_45" type="number"></r-var>
+                <r-var name="total_45" :value="crf_45+power_45" type="number"></r-var>
+
+                <r-var name="crf_50" :value="proj_1_cost*(proj_1_crf/100) / (0.50*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_50" :value="proj_1_power_intensity*mwh_cost_50" type="number"></r-var>
+                <r-var name="total_50" :value="crf_50+power_50" type="number"></r-var>
+
+                <r-var name="crf_55" :value="proj_1_cost*(proj_1_crf/100) / (0.55*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_55" :value="proj_1_power_intensity*mwh_cost_55" type="number"></r-var>
+                <r-var name="total_55" :value="crf_55+power_55" type="number"></r-var>
+
+                <r-var name="crf_60" :value="proj_1_cost*(proj_1_crf/100) / (0.60*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_60" :value="proj_1_power_intensity*mwh_cost_60" type="number"></r-var>
+                <r-var name="total_60" :value="crf_60+power_60" type="number"></r-var>
+
+                <r-var name="crf_65" :value="proj_1_cost*(proj_1_crf/100) / (0.65*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_65" :value="proj_1_power_intensity*mwh_cost_65" type="number"></r-var>
+                <r-var name="total_65" :value="crf_65+power_65" type="number"></r-var>
+
+                <r-var name="crf_70" :value="proj_1_cost*(proj_1_crf/100) / (0.70*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_70" :value="proj_1_power_intensity*mwh_cost_70" type="number"></r-var>
+                <r-var name="total_70" :value="crf_70+power_70" type="number"></r-var>
+
+                <r-var name="crf_75" :value="proj_1_cost*(proj_1_crf/100) / (0.75*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_75" :value="proj_1_power_intensity*mwh_cost_75" type="number"></r-var>
+                <r-var name="total_75" :value="crf_75+power_75" type="number"></r-var>
+
+                <r-var name="crf_80" :value="proj_1_cost*(proj_1_crf/100) / (0.80*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_80" :value="proj_1_power_intensity*mwh_cost_80" type="number"></r-var>
+                <r-var name="total_80" :value="crf_80+power_80" type="number"></r-var>
+
+                <r-var name="crf_85" :value="proj_1_cost*(proj_1_crf/100) / (0.85*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_85" :value="proj_1_power_intensity*mwh_cost_85" type="number"></r-var>
+                <r-var name="total_85" :value="crf_85+power_85" type="number"></r-var>
+
+                <r-var name="crf_90" :value="proj_1_cost*(proj_1_crf/100) / (0.90*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_90" :value="proj_1_power_intensity*mwh_cost_90" type="number"></r-var>
+                <r-var name="total_90" :value="crf_90+power_90" type="number"></r-var>
+
+                <r-var name="crf_95" :value="proj_1_cost*(proj_1_crf/100) / (0.95*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_95" :value="proj_1_power_intensity*mwh_cost_95" type="number"></r-var>
+                <r-var name="total_95" :value="crf_95+power_95" type="number"></r-var>
+
+                <r-var name="crf_100" :value="proj_1_cost*(proj_1_crf/100) / (1*proj_1_capacity)" type="number"></r-var>
+                <r-var name="power_100" :value="proj_1_power_intensity*mwh_cost_100" type="number"></r-var>
+                <r-var name="total_100" :value="crf_100+power_100" type="number"></r-var>
+
+            
+
+
+
+
+
+
+
+
+            <h1>How much should you utilise a DAC plant?</h1>
+            <h3><b>By <a href="https://twitter.com/_neilhacker">Neil Hacker</a> & <a href="https://www.linkedin.com/in/ryanderson581/">Ryan Anderson</a></b></h3>
+            <p><a href="./posts.html">More posts ➚ </a></p>
+
+           <p>
+            <r-range bind="num_spreads" max="10"></r-range> number of spreads <r-display bind="num_spreads">NaN</r-display>
+
+            <r-svg-chart  xlabel="Date" ylabel="tonnes" :xlim="[0,30]" :ylim="[0, 100]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-eqn eqn="100-(100-0)*Math.exp(-0.1*x)" :listen="" stroke="#f97558"></r-svg-eqn>
+
+
+            </r-svg-chart>
+            </p>
+            <h2>Model</h2>
+            <p>
+
+               In this example we have a certain power schedule where we have different costs for MWh depending on how much utilisation 
+               we're getting. I'm going to start with the default schedule below but you can either drag the values around or use the 
+               sidebar to try some other pre-set options.  
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                Note that the prices in this chart denote the average cost of all MWh at a certain utilisation rate not the incremental cost increase.
+                <br><br>
+                ← You can click and drag the energy prices up and down on the chart to the left to set custom price schedules. 
+                <br><br>
+                <r-action :click="{
+                    mwh_cost_5: 39, 
+                    mwh_cost_10: 39,
+                    mwh_cost_15: 39,
+                    mwh_cost_20: 39,
+                    mwh_cost_25: 39,
+                    mwh_cost_30: 39,
+                    mwh_cost_35: 31,
+                    mwh_cost_40: 24,
+                    mwh_cost_45: 24,
+                    mwh_cost_50: 24,
+                    mwh_cost_55: 24,
+                    mwh_cost_60: 36,
+                    mwh_cost_65: 43,
+                    mwh_cost_70: 43,
+                    mwh_cost_75: 49,
+                    mwh_cost_80: 55,
+                    mwh_cost_85: 60,
+                    mwh_cost_90: 65,
+                    mwh_cost_95: 70,
+                    mwh_cost_100: 75,
+                }">Power scenario 1</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule1')">(?)</i>
+
+			</span> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule1">
+                This schedule uses only renewables and then off-grid battery storage, this approach gets very very expensive as you try 
+                to get to full utilisation. 
+            </span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <r-action :click="{
+                    mwh_cost_5: 39, 
+                    mwh_cost_10: 39,
+                    mwh_cost_15: 39,
+                    mwh_cost_20: 39,
+                    mwh_cost_25: 39,
+                    mwh_cost_30: 39,
+                    mwh_cost_35: 39,
+                    mwh_cost_40: 39,
+                    mwh_cost_45: 39,
+                    mwh_cost_50: 39,
+                    mwh_cost_55: 39,
+                    mwh_cost_60: 39,
+                    mwh_cost_65: 42, 
+                    mwh_cost_70: 43,
+                    mwh_cost_75: 44,
+                    mwh_cost_80: 45,
+                    mwh_cost_85: 47,
+                    mwh_cost_90: 47,
+                    mwh_cost_95: 48,
+                    mwh_cost_100: 49,
+                }">Power scenario 2</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule2')">(?)</i>
+
+			</span> 
+
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule2">
+                The schedule uses renewables at ＄40/MWh until 65% utilisation then gets electricity from the grid at 
+                ＄60/MWh, the reason it is an upward slope not a new flat line is because these costs represent the average of all tons 
+                removed at a given utilisation. (Just to say this undersells the actual costs becuase you would be removing less net CO₂ if you 
+                connect the grid)
+            </span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <r-action :click="{
+                    mwh_cost_5: 50, 
+                    mwh_cost_10: 50,
+                    mwh_cost_15: 50,
+                    mwh_cost_20: 50,
+                    mwh_cost_25: 50,
+                    mwh_cost_30: 50,
+                    mwh_cost_35: 50,
+                    mwh_cost_40: 50,
+                    mwh_cost_45: 50,
+                    mwh_cost_50: 50,
+                    mwh_cost_55: 50,
+                    mwh_cost_60: 50,
+                    mwh_cost_65: 50, 
+                    mwh_cost_70: 50,
+                    mwh_cost_75: 50,
+                    mwh_cost_80: 50,
+                    mwh_cost_85: 50,
+                    mwh_cost_90: 50,
+                    mwh_cost_95: 50,
+                    mwh_cost_100: 50,
+                }">Power scenario 3</r-action> <i style="cursor: pointer;" onclick="sidebar('powerSchedule3')">(?)</i>
+
+			</span> 
+
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote-reactive" id="powerSchedule3">
+                The schedule demonstrates the effect of a constant price at every utilisation level.
+            </span> 
+
+
+            <r-svg-chart  xlabel="Utilisation rate" ylabel="$/MWh" :xlim="[0,110]" :ylim="[0, 130]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-node :x="5" :y="mwh_cost_5" :drag="{mwh_cost_5: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="10" :y="mwh_cost_10" :drag="{mwh_cost_10: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="15" :y="mwh_cost_15" :drag="{mwh_cost_15: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="20" :y="mwh_cost_20" :drag="{mwh_cost_20: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="25" :y="mwh_cost_25" :drag="{mwh_cost_25: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="30" :y="mwh_cost_30" :drag="{mwh_cost_30: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="35" :y="mwh_cost_35" :drag="{mwh_cost_35: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="40" :y="mwh_cost_40" :drag="{mwh_cost_40: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="45" :y="mwh_cost_45" :drag="{mwh_cost_45: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="50" :y="mwh_cost_50" :drag="{mwh_cost_50: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="55" :y="mwh_cost_55" :drag="{mwh_cost_55: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="60" :y="mwh_cost_60" :drag="{mwh_cost_60: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="65" :y="mwh_cost_65" :drag="{mwh_cost_65: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="70" :y="mwh_cost_70" :drag="{mwh_cost_70: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="75" :y="mwh_cost_75" :drag="{mwh_cost_75: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="80" :y="mwh_cost_80" :drag="{mwh_cost_80: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="85" :y="mwh_cost_85" :drag="{mwh_cost_85: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="90" :y="mwh_cost_90" :drag="{mwh_cost_90: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="95" :y="mwh_cost_95" :drag="{mwh_cost_95: y}" fill="#e24444"></r-svg-node>
+                <r-svg-node :x="100" :y="mwh_cost_100" :drag="{mwh_cost_100: y}" fill="#e24444"></r-svg-node>
+
+
+            </r-svg-chart>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ³ You can find out more about capital recovery factors at another post of mine <a href="https://www.scalingcarbonremoval.com/amc.html">here</a>. 
+			</span> 
+
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <r-action :click="{
+                    proj_1_cost: 10000000,
+                    proj_1_capacity: 4000,
+                    proj_1_crf: 14, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 1 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 2 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 1100000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 3 </r-action>
+
+                <br><br>        
+                Cost: 
+                <br>
+                <r-input bind="proj_1_cost" label="Question?!"></r-input>
+                <br><br>
+                Capacity: 
+                <br>
+                <r-input bind="proj_1_capacity" ></r-input>
+                <br><br>
+                CRF: 
+                <br>
+                <r-input bind="proj_1_crf" label="Question?!"></r-input>
+                <br><br>
+                Power intensity: 
+                <br><r-input bind="proj_1_power_intensity" label="Question?!"></r-input>
+
+			</span> 
+
+            Next suppose we have a DAC plant that costs $<r-display bind="proj_1_cost"></r-display> to build, has an annual removal
+            capacity of <r-display bind="proj_1_capacity"></r-display> tons, requires <r-display bind="proj_1_power_intensity"></r-display> MWh
+            to remove a ton of CO₂ and has a capital recovery factor³ of <r-display bind="proj_1_crf"></r-display>%. 
+            (You can either customise these values or pick from default options to the right.) 
+            <br> <br>
+            From these values we can calculate the cost of power which we get from multiplying 
+            power intensity by the cost per MWh (at whichever utilisation rate we are looking at). 
+           <br> <br>
+           \( Power &nbsp; cost = Power&nbsp; intensity * cost&nbsp; per&nbsp; MWh \)
+            <br> <br>
+
+            We can also calculate the cost of the CRF. To do this we get the project cost, multiply it by the CRF value and then
+            divide this by the number of tons we're removing at a specific utilisation rate. 
+            <br><br>
+            \( CRF &nbsp; cost = \dfrac{Project&nbsp; cost * CRF}{Project&nbsp; capacity * utilisation&nbsp; rate} \)
+            <br><br>
+            Adding these values then gives us our total cost.
+            <br><br>
+            \( Total &nbsp; cost = Power&nbsp; cost + CRF &nbsp; cost \)
+
+            <br><br>
+            We can see these values plotted below.
+            
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                
+                
+                <r-action :click="{
+                    proj_1_cost: 10000000,
+                    proj_1_capacity: 4000,
+                    proj_1_crf: 14, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 1 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 10, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 2 </r-action>
+                <br>
+                <r-action :click="{
+                    proj_1_cost: 1100000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 3 </r-action>
+
+
+                <br><br>
+                <span style="color: #36db52">&#9473; Total cost/t</span>
+                <br>
+                <span style="color: #449be2">&#9473; CRF cost/t</span>
+                <br>
+                <span style="color: #e24444">&#9473; Power cost/t</span>
+
+			</span> 
+
+            <r-svg-chart  xlabel="Utilisation" ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-path :data="[[5,power_5 ],[10, power_10]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, power_15 ],[20, power_20]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, power_10 ],[15, power_15]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, power_20 ],[25, power_25]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, power_25 ],[30, power_30]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, power_30 ],[35, power_35]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, power_35 ],[40, power_40]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, power_40 ],[45, power_45]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, power_45 ],[50, power_50]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, power_50 ],[55, power_55]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, power_55 ],[60, power_60]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, power_60 ],[65, power_65]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, power_65 ],[70, power_70]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, power_70 ],[75, power_75]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, power_75 ],[80, power_80]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, power_80 ],[85, power_85]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, power_85 ],[90, power_90]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, power_90 ],[95, power_95]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, power_95 ],[100, power_100]]" stroke="#e24444" stroke-width="2" ></r-svg-path>
+
+                <r-svg-path :data="[[5,crf_5 ],[10, crf_10]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, crf_10 ],[15, crf_15]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, crf_15 ],[20, crf_20]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, crf_20 ],[25, crf_25]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, crf_25 ],[30, crf_30]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, crf_30 ],[35, crf_35]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, crf_35 ],[40, crf_40]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, crf_40 ],[45, crf_45]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, crf_45 ],[50, crf_50]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, crf_50 ],[55, crf_55]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, crf_55 ],[60, crf_60]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, crf_60 ],[65, crf_65]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, crf_65 ],[70, crf_70]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, crf_70 ],[75, crf_75]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, crf_75 ],[80, crf_80]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, crf_80 ],[85, crf_85]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, crf_85 ],[90, crf_90]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, crf_90 ],[95, crf_95]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, crf_95 ],[100, crf_100]]" stroke="#449be2" stroke-width="2" ></r-svg-path>
+
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart>
+            If you have kept the default power costs and are using plant 1 then you will probably see that the lowest cost per ton is very close to 100% capacity. This is basically because you have such little capacity to recover your large CAPEX expenditure from 
+            you just need to churn out tons. 
+            <br><br>
+            However, if you select plant 2 you will see that in this case the lowest levelized cost per ton is actually      around the 55%
+            utilisation mark. What does this mean? It means that if you as the seller want to be able to charge the lowest price per ton (while still
+            achieving some expected rate of return) you only want to run energy to your plant 55% of the time.
+
+        </p>
+        <h2>Theoretical consequences</h2>
+        <p>
+            This outcome has some pretty big consequences for both buyers and sellers. From the seller point of view if they want to be most 
+            competitive and be able to charge the lowest price then it would benefit them if they could lower their utilisation rate to the range 
+            with the lowest levelized DAC costs, i.e well below 100%. 
+            <br><br>
+            The consequence for the buyers though is much much more profound I think. To see why it is worth taking a moment to restate what the 
+            goal of buyers is in the CDR sector. To some it is meeting annual net-zero targets, but as a group it is to maximise the speed with which we 
+            can scale up CDR capacity. 
+            <br><br>
+
+            Despite having under-utilisation if this leads to lower costs for the buyer this might be the preferable options as it could allow the scaling of the whole sector more quickly. 
+            Consider plant 2 again. If it was operating at 50% capacity it would be selling 500,000 tons at ＄80/t, this would put the buyer
+            on the hook for ＄40,000,000 a year. If however it was operating at 100% capacity it would be selling 1,000,000 tons at ＄180/t putting the annual cost to buyers at 
+            ＄180,000,000 or 4.5x more.
+            <br><br>
+            This difference is incredibly important because in many ways that money is just wasted. You're not buying any more ability to scale capacity with that money, 
+            we've already established that from the sellers point of view these two options actually give them the exact same expected rate of return so neither one would be any more preferable. 
+            <br><br>
+            You're therefore not buying any more learning with your money either which could help the technology get cheaper in the future. While we might think about learning rates 
+            as a product of cumulative tons removed this isn't really true. Once you've built the DAC modules/plant it doesn't really matter if it runs at 50% utilisation or 100% the "learning" so to speak has been 
+            achieved already by making the thing itself. 
+            <br><br>
+            What this means is that all that extra money you're spending on the plant at 100% utilisation could instead be used to pay for 4 more plants all running at 50% utilisation. If you use your money in this way 
+            you get much much more leverage out of it in speeding up the overall increase in CDR capacity. This could be rephrased from the buyers point of view to say that what they really want to do 
+            is pay the absolute minimum amount required to allow a DAC plant to hit the needed expected rate of return to raise follow-on financing for new plants. The model above would suggest that this could be 
+            achieved with over 4x less money if a plant was able to run at lower utilisation rates vs needing to run almost all of the time. 
+
+        </p>
+        <h2>Practical consequences</h2>
+        <p>
+            What this means in practice is that companies that can take advantage of intermittent energy supply rather than running at very high utilisation rates have a huge advantage 
+            as you try to scale up the industry.
+            <br><br>
+            There's a reason we don't really care about the utilisation of any plant in any given year and that is that the output they are making until you reach any real scale doesn't really have any value except 
+            in so far as it allows the companies to learn how to make the technology cheaper. It's not like solar that would be making useful KWh all the time which we might want to harness. No, in this case all we care about
+            is getting more capacity installed and if the model above has much to say on the matter the best way to do that is to find DAC sources that can run at lower utilisation rates.
+        </p>
+
+        <h2>Taking these ideas to their extremes</h2>
+        <p>
+            Let's take another quick look at the chart from above, this time only showing the total cost per ton. What would be best from the 
+            buyer's point of view is to pick a point on this line where the area under that point is smallest. 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ⁴ Note this box is not necessarily the lowest cost to the buyer and is just illustrative of the area we are looking for.
+			</span> 
+
+            In other words we're looking for the area of the box below⁴, for each level of utilisation.
+            <r-svg-chart  xlabel="Utilisation" ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-node :x="50" :y="total_50" fill="#36db52"></r-svg-node>
+                <r-svg-path :data="[[50, 0 ],[50, total_50]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[0, total_50 ],[50, total_50]]" stroke="#333" stroke-width="1" stroke-dasharray="3" ></r-svg-path>
+
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                I've called the y axis 'normalised' because it doesn't show the actual total cost to remove tons at given utilisation levels
+                but displays the same shape of total costs you would get if you were to do that multiplication. 
+			</span> 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                <br>
+                One other consequence of this type of thinking is that even if the lowest levelized cost of DAC occurs at 100% utilisation (i.e
+                <r-action :click="{
+                    proj_1_cost: 150000000,
+                    proj_1_capacity: 1000000,
+                    proj_1_crf: 12, 
+                    proj_1_power_intensity: 1.8,
+                }">Plant 2 </r-action> & 
+                <r-action :click="{
+                    mwh_cost_5: 50, 
+                    mwh_cost_10: 50,
+                    mwh_cost_15: 50,
+                    mwh_cost_20: 50,
+                    mwh_cost_25: 50,
+                    mwh_cost_30: 50,
+                    mwh_cost_35: 50,
+                    mwh_cost_40: 50,
+                    mwh_cost_45: 50,
+                    mwh_cost_50: 50,
+                    mwh_cost_55: 50,
+                    mwh_cost_60: 50,
+                    mwh_cost_65: 50, 
+                    mwh_cost_70: 50,
+                    mwh_cost_75: 50,
+                    mwh_cost_80: 50,
+                    mwh_cost_85: 50,
+                    mwh_cost_90: 50,
+                    mwh_cost_95: 50,
+                    mwh_cost_100: 50,
+                }">Power scenario 3</r-action>
+                ) it might still be better to try to have the plant go under full utilisation as this can be much cheaper for the buyer and the seller is indifferent.
+			</span> 
+
+            One quick way to get this for all values on the chart is to multiply the levlised cost of DAC per ton by the utilisation rate which would give us 
+            this chart. 
+            <r-svg-chart  xlabel="Utilisation" ylabel="Normalised total cost of DAC" :xlim="[0,100]" :ylim="[0, total_100*100]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+                <r-svg-path :data="[[5,total_5*5 ],[10, total_10*10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10*10 ],[15, total_15*15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15*15 ],[20, total_20*20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20*20 ],[25, total_25*25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25*25 ],[30, total_30*30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30*30 ],[35, total_35*35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35*35 ],[40, total_40*40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40*40 ],[45, total_45*45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45*45 ],[50, total_50*50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50*50 ],[55, total_55*55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55*55 ],[60, total_60*60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60*60 ],[65, total_65*65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65*65 ],[70, total_70*70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70*70 ],[75, total_75*75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75*75 ],[80, total_80*80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80*80 ],[85, total_85*85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85*85 ],[90, total_90*90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90*90 ],[95, total_95*95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95*95 ],[100, total_100*100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart>
+            What you will find is that in virtually every case of pairing up plant stats with power costs this line is lowest at the lowest level of utilisation. 
+            <br><br>
+            What does this suggest? It suggests that if the buyer is primarily concerned with paying the least amount of money to a DAC plant so that it 
+            hits some needed rate of return to allow follow on scale ups then they should basically have it produce no units of carbon removal at all and just pay the fixed CAPEX costs.
+            <br><br>
+            You can kind of understand why this is the case, CDR (for voluntary markets) is basically doing something that has no economic value and also once the plant is built 
+            is providing very little in the way of learning effects. But it still seems like the above is pretty divorced from what we might have thought initially as the best path forward. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                I don't want to stretch an analogy too much but this is similar to a number of probability games where how you maximise the expected return on any given play and 
+                how you maximise the expected growth of wealth over time end up being different strategies. 
+			</span> 
+
+            It's worth asking ourselves seriously when do we actually want to be pulling CO₂ out of the atmosphere. The above would suggest that doing so now actually imposes a very large 
+            tradeoff with how quickly we can scale the sector as a whole. Of course you eventually want to turn on the taps to get things rolling but given how the entire sector will likely 
+            have very little impact at all until decades from now in terms of how much it can remove there is a case to be made that tons today is the wrong metric to be maximising.  
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+                ⁵ This point of knowing a company can pull tons out properly ends up being quite important. 
+			</span> 
+
+            If you take the ideas above to their extremes it would suggest buyers basically instantly pay the CAPEX costs for CDR plants that 
+            would be able to⁵ pull CO₂ out of the sky and then have them sit idle while the company simply makes more plants that will similarly sit idle.             
+        </p>
+        <h2>What is the best level of utilisation?</h2>
+        <p>
+            There are broadly 3 zones of utilisation we might now want to consider.
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+	        <b style="color: #36B287">Zone 1</b> is low utilisation levels. Here a buyer would be paying a very high cost per ton but the overall amount they have to actually spend per year is the lowest.
+            <br><br>
+            <b style="color: #009dff">Zone 2</b> is around whichever utilisation level leads to the cheapest cost per ton.
+            <br><br>
+            <b style="color: #e24444">Zone 3</b> is around 100% utilisation. 
+			</span> 
+
+            <r-svg-chart   ylabel="levelized cost per ton" :xlim="[0,100]" :ylim="[0, total_5]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+
+                <r-svg-path :data="[[5,total_5 ],[10, total_10]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10 ],[15, total_15]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15 ],[20, total_20]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20 ],[25, total_25]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25 ],[30, total_30]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30 ],[35, total_35]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35 ],[40, total_40]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40 ],[45, total_45]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45 ],[50, total_50]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50 ],[55, total_55]]" stroke="#000" stroke-width="2" ></r-svg-path>
+
+                <r-svg-path :data="[[35, 0 ],[35, total_35]]" stroke="#36B287" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="25" :y="total_35/2" text="Zone 1" fill="#36B287"></r-svg-text>
+
+                <r-svg-path :data="[[min_cost_utilisation, 0 ],[min_cost_utilisation, min_cost_value]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-path :data="[[min_cost_utilisation+20, 0 ],[min_cost_utilisation+20, min_cost_value_high]]" stroke="#009dff" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="min_cost_utilisation+2" :y="(min_cost_value/2)*1.2" text="Zone 2" fill="#009dff"></r-svg-text>
+
+                <r-svg-path :data="[[90, 0 ],[90, total_90]]" stroke="#e24444" stroke-width="2" stroke-dasharray="3" ></r-svg-path>
+                <r-svg-text :x="92" :y="(total_90/2)/4" text="Zone 3" fill="#e24444"></r-svg-text>
+
+                <r-svg-path :data="[[55, total_55 ],[60, total_60]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60 ],[65, total_65]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65 ],[70, total_70]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70 ],[75, total_75]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75 ],[80, total_80]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80 ],[85, total_85]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85 ],[90, total_90]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90 ],[95, total_95]]" stroke="#000" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95 ],[100, total_100]]" stroke="#000" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart> 
+            Sometimes zone 2 and 3 coincide for example if you have <r-action :click="{
+                mwh_cost_5: 39, 
+                mwh_cost_10: 39,
+                mwh_cost_15: 39,
+                mwh_cost_20: 39,
+                mwh_cost_25: 39,
+                mwh_cost_30: 39,
+                mwh_cost_35: 31,
+                mwh_cost_40: 24,
+                mwh_cost_45: 24,
+                mwh_cost_50: 24,
+                mwh_cost_55: 24,
+                mwh_cost_60: 36,
+                mwh_cost_65: 43,
+                mwh_cost_70: 43,
+                mwh_cost_75: 49,
+                mwh_cost_80: 55,
+                mwh_cost_85: 60,
+                mwh_cost_90: 65,
+                mwh_cost_95: 70,
+                mwh_cost_100: 75,
+            }">Power scenario 1</r-action>
+            
+            
+            and <r-action :click="{
+                proj_1_cost: 10000000,
+                proj_1_capacity: 4000,
+                proj_1_crf: 14, 
+                proj_1_power_intensity: 1.8,
+            }">Plant 1 </r-action>
+            
+            both of these zones will be at the very top end of utilisation. If however you stick with power scenario 1 and look at 
+            <r-action :click="{
+                proj_1_cost: 150000000,
+                proj_1_capacity: 1000000,
+                proj_1_crf: 12, 
+                proj_1_power_intensity: 1.8,
+            }">Plant 2 </r-action>
+
+            
+            you will see zone 2 is much further left at utilisation levels around 55%. If you look at 
+            <r-action :click="{
+                proj_1_cost: 1100000000,
+                proj_1_capacity: 1000000,
+                proj_1_crf: 12, 
+                proj_1_power_intensity: 1.8,
+            }">Plant 3 </r-action>
+
+            
+            zone 2 will have moved right to around 85% utilisation levels. 
+
+            <br><br>
+            Each zone has something to be said in its favour. Zone 1 allows the buyer to pay the least while still having the same benefits on scaling capacity as any other utilisation level. Zone 2 minimises the actual cost per ton buyers would be paying and allows the buyers to pay less in absolute terms than zone 3 while having the same scaling benefits. Zone 3 maximises the actual number of tons being removed in any given year, which some types of market dynamics might incentivise. 
+            <br><br>
+            There is a question to answer of why we might prefer one of these zones to the others. I’m going to start with the premise zone 1 is best. The reasoning behind this is that the logic of the above section, that the company gets the same benefit but the buyer pays far far less, is a pretty compelling starting point. If we look at the above graph again for plant 2, paying for tons at 10% utilisation is about half as expensive per year to the buyer as paying for tons at 50% utilisation and something like 8 times cheaper than 100% utilisation. These numbers seem large enough to need a convincing reason to not follow. 
+            <br><br>
+            What might make us want to be in one of the higher zones?
+            <br><br>
+            <b>Market incentives</b>
+            <br>
+            If you have lots of fragmented buyers they may care more about meeting individual targets and so not have the same optimisation as a single buyer would have. At the end of the day many companies would be buying carbon removal to count against their emissions and they might want to, you know, actually have those tons removed every year. 
+            <br><br>
+            A single buyer might be able to better internalise the approach that would scale capacity the fastest but the more buyers want annual targets hit the less we can focus on this. 
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+			<input type="checkbox" id="mn-demo" class="margin-toggle"/>
+			<span class="marginnote" id="id_option">
+            I can’t lie the tension between wanting more buying power to help accelerate capacity increases and the fact that a lot of buying power is likely to want yearly results which as we’ve seen above might be inefficient to the long run growth rate is a really tricky one… you probably want more money, but I'm not exactly sure how to balance these. 
+			</span> 
+
+            <b>This is probably going to be a really strong driving force that is difficult to deal with. If a lot of the eventual money comes from buyers buying CDR for compliance reasons, they will likely care about actually getting a certain number of tons every year. </b>
+            <br><br>
+            This would almost certainly push you well out of zone 1 type utilisation rates. One question to ask though is whether these market forces would push you out of zone 2 if it is lower than zone 3 and actually create the incentive for close to full utilisation even if that means higher prices per ton? I’m not actually sure what the answer to this is, I expect it depends on the marginal abatement costs companies face and so it is pretty difficult to predict at the moment. 
+            <br><br>
+            Another pragmatic reason pushing us towards higher utilisation levels is that being in zone 1 would look pretty weird from a PR standpoint. "US government pays weremovecarbon $100m to make some stuff DAC units and then not really use them"....not ideal. While operating in zone 1 really might make your money go furthest it’s also kind of strange and might be a hard sell. [I think one of the reasons it seems so strange is that in most other technologies that have scaled we kind of did want to be producing stuff in the interim, i.e you probably did want your solar cell to be used to produce energy. CDR has no direct economic value so you spend on it only insofar as it helps scale our ability to do it. If that means actually buying fewer tons in a given year than possible that might well be alright.]
+            <br><br>
+            You also really do probably want to consider the incentives you’re putting on companies to actually get better at making their DAC plants. Having them compete to reduce the actual cost per ton buyers are paying is a really simple, really legible thing to try to maximise (or I guess minimise). Buyers can really easily see progress companies are making, everyone can be pretty certain that if companies are selling x tons a year and that is getting cheaper they really do have the ability to remove that many tons. 
+            <br><br>
+            If we operate in zone 1 this is less true though. In this area of low utilisation you focus much more on scaling capacity vs demonstrating just how much CDR you can do in a given year. Firstly this might make it a bit more opaque for the market to know how well companies are doing. You basically have to look at CAPEX spend, capacity, and the assumed CRF of a project and work out what that would imply the cost curve is for the plant at different levels of utilisation. This is clearly more effort than just letting the plant remove the CO₂ and then sell the CO₂ at the lowest price it can. 
+            <br><br>
+            Secondly, even if you care mainly about scaling up capacity until we have the ability to remove meaningful amounts of CO₂ at some point you will want to, you know, actually start removing tons of carbon. While it’s somewhat unlikely that a company could make a plant that wouldn’t actually be able to function well at full capacity but just pretend like it might if you aren’t actually getting companies to work at higher capacities through market forces, checking this becomes more complex. 
+            <br><br>
+            Sellers of CDR also have to believe that even if they’re being paid enough at low utilisation rates at some stage when it does come time, probably a few decades away, for them to actually start pulling meaningful amounts of CO₂ out of the air there will be enough money there to do this. I’m somewhat conflicted about what this suggests. On the one hand, if you go for lower utilisation rates that allows the buyers to use their money more efficiently which might allow them to have more when the time comes to purchase serious amounts of actual removal. On the other hand, if you aren’t buying large amounts of tons then when that switch does occur as we’ve seen above buyers might be needing to spend anywhere from 2-10x more per year. By having an ecosystem that grows demand for actual tons removed alongside demand for capacity scaling I think makes it more clear if we are on track to pay for enough CDR at truly large scales.  
+            <br><br>
+            The points above would all push you away from wanting to be in zone 1 and make you more likely to want to be in something like zone 2, and quite possibly into zone 3 territory. 
+            <br><br>
+            <b>Learning effects</b>
+            <br>
+            One of the big assumptions made above is that a company will get the same level of learning at any utilisation level. If this is the case then, as we did above, there is a strong incentive to not use the plant near full capacity as this is just adding costs to the buyer without the seller getting any better at producing the DAC plant itself. Or basically once you’ve spent the minimum amount needed to get the full level of learning possible any more money is better spent on growing capacity rather than paying for actual tons removed. 
+            <br><br>
+            There is some reason to think this is mostly true, a lot of the actual “learning” so to speak does in fact tend to come from the deployment of some technology more so than the operating of that technology. This would make us favour lower utilisation ranges as it suggests the extra money really might not be helping us make CDR any cheaper. 
+            <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br>
+                ★
+               
+                Just want to draw attention to these next two paragraphs as they talk about the actual market stage we're currently in. 
+            </span>
+
+            The extent to which this is true, or matters, will depend a lot on the actual scale of CDR going on. <b>At very small levels</b> you probably could learn a lot about how to make your tech better by running it at very high utilisation levels and so you probably want to take advantage of that effect as better learning rates dwarf pretty much everything in the long run. 
+            <br><br>
+            Also, at small scales your zone 2 and zone 3 are likely to overlap. Or in other words because your CAPEX is probably really expensive vs your capacity you are better off making as many tons as you 
+            can to try to amortize this CAPEX spend. In practical terms what this means is that if we have market forces pushing for the cheapest cost per ton, at the moment at least, you won't 
+            see much of a difference in how any DAC plant should opperate, they should all be full steam ahead. It is only at larger scales this behaviour should potentially change. 
+            <br><br>
+            Similarly once your capacity gets very very large, i.e large enough to start making a noticeable difference to global  CO₂ levels you probably want to….start doing that? At a certain point we will probably care less about scaling capacity alone and start caring about actually removing CO₂ and again when we roughly get to this higher utilisation rate is probably the way to go.  
+            <br><br>
+            <b>Wider ecosystem</b>
+            <br>
+            Another reason why the above may not work so well is that it considers a DAC plant in isolation, but what if it uses a different company to actually sequester the CO₂? You would now have to pay that company money to...not sequester stuff(?), and what if they have different cost structures?
+            <br><br>
+            I think where this really comes in as an issue is with the power generation itself, things like solar, wind, and batteries. If you are operating around zone 1 then you won’t actually have much of a demand for these things because you won’t actually be removing many tons. However, we can expect that at some point you will want to start removing lots of tons and what happens then? 
+            <br><br>
+            Let’s say you get down to 1.5MWh/t for removal, if we get to the stage of having the capacity to remove 1Gt/yr this would take 1500TWh. This is about 10 times larger than the current worldwide solar capacity of 156 TWh in 2020. At certain scales if you are only deploying DAC plants but not actually drawing the energy to run them you risk not having enough supporting energy infrastructure available when you eventually do want to scale up removals. 
+            <br><br>
+            I think this is one of the biggest reasons to worry about operating in zone 1. Given the sheer amount of energy DAC will potentially need it seems much better to grow its capacity along with solar at atleast somewhat similar speeds. You don’t get much benefit if you’ve scaled the number of DAC plants to enormous levels but there isn’t enough energy to power them. 
+            <br><br>
+            <b>Different cost structures</b>
+            <br>
+            The above is all good analysis if (1) have to pay for energy and (2) can only use your CO₂ in ways that have no inherent economic value i.e shoving it underground. If either of these aren’t true then things do change a bit. 
+            <br><br>
+            If we take assumption (1), what happens if you have a DAC facility that can still operate at lower levels of utilisation, and that has a source of power that costs ≈$0? Well let’s not imagine it let’s just have a look. If you use 
+            
+            <r-action :click="{
+                mwh_cost_5: 0, 
+                mwh_cost_10: 0,
+                mwh_cost_15: 0,
+                mwh_cost_20: 0,
+                mwh_cost_25: 0,
+                mwh_cost_30: 0,
+                mwh_cost_35: 31,
+                mwh_cost_40: 24,
+                mwh_cost_45: 24,
+                mwh_cost_50: 24,
+                mwh_cost_55: 24,
+                mwh_cost_60: 36,
+                mwh_cost_65: 43,
+                mwh_cost_70: 43,
+                mwh_cost_75: 49,
+                mwh_cost_80: 55,
+                mwh_cost_85: 60,
+                mwh_cost_90: 65,
+                mwh_cost_95: 70,
+                mwh_cost_100: 75,
+            }">this power schedule</r-action>
+            you will find that it sets the cost of power at $0 all the way up to 30% utilisation, after this point it follows power schedule 1. You can see from the graph below that if you didn’t have to pay at all for power up to the 30% utilisation mark then from the buyers side they are indifferent buying any level of tons pretty much all the way up to that level. 
+            <r-svg-chart  xlabel="Utilisation" ylabel="Normalised total cost of DAC" :xlim="[0,100]" :ylim="[0, total_100*100]"  width="700" height="400"  y-axis-location="0" x-axis-location="0" >
+                <r-svg-path :data="[[5,total_5*5 ],[10, total_10*10]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[10, total_10*10 ],[15, total_15*15]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[15, total_15*15 ],[20, total_20*20]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[20, total_20*20 ],[25, total_25*25]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[25, total_25*25 ],[30, total_30*30]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[30, total_30*30 ],[35, total_35*35]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[35, total_35*35 ],[40, total_40*40]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[40, total_40*40 ],[45, total_45*45]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[45, total_45*45 ],[50, total_50*50]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[50, total_50*50 ],[55, total_55*55]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[55, total_55*55 ],[60, total_60*60]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[60, total_60*60 ],[65, total_65*65]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[65, total_65*65 ],[70, total_70*70]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[70, total_70*70 ],[75, total_75*75]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[75, total_75*75 ],[80, total_80*80]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[80, total_80*80 ],[85, total_85*85]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[85, total_85*85 ],[90, total_90*90]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[90, total_90*90 ],[95, total_95*95]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+                <r-svg-path :data="[[95, total_95*95 ],[100, total_100*100]]" stroke="#36db52" stroke-width="2" ></r-svg-path>
+
+            </r-svg-chart>
+
+            In this setting then you would probably put a hard floor in terms of utilisation at whatever level you can access basically free energy. This isn’t all just complete fantasy either. It’s hard to get good figures on this but it might be that above 5% of solar energy in the states is being curtailed. If you have DAC modules that can get going at a moment's notice this is an economical way to have instant energy demand which can actually help accelerate the grid decarbonising faster by making solar projects better investments. (You might need to compete against bitcoin mining though)
+            <br><br>
+            The second assumption we could break is that you have no economic use for your captured CO₂, if this is the case then buyers are basically just doing it for the climate benefit. As we discussed above though, if they mainly care about quickly scaling CDR infrastructure though, because of the climate benefit, they might actually want DAC plants closer to the zone 1 range. 
+            <br><br>
+            If however you are selling your CO₂ as an input and so not relying on the voluntary markets then you will probably want to churn out as much of it as possible and the buyers also don’t mind paying for as much as you can produce because, well, it’s actually useful to them right now for its own sake. This would likely push you much closer to the zone 3 type utilisation rates. 
+        
+        </p>
+        <h2>Where does this leave us?</h2>
+        <p>
+            There are two countervailing forces we've talked about above. On the one hand lower utilisation rates can lead to a much more efficient use of capital as you try to scale up DAC, on the other hand, there are lots of institutional forces that would want you closer to full utilisation. 
+        <br><br>
+            Where we end up will be determined by a number of things, firstly the actual makeup of who is buying CDR matters a lot. If you have something closer to a single buyer who can take the long view you might well see yourself closer to the lower end. If you have a whole mishmash of people trying to buy CDR they will probably want more immediate results in terms of buying actual tons removed to count towards their emission goals, which would put you at the higher end. 
+            <br><br>
+            A second reason that might push you away from the very low utilisation rates is that they are just kind of more complicated to deal with. If you are in the zone 2 kind of region it’s pretty clear that you just buy actual tons from firms at the lowest price going. If you’re in the zone 1 area you start needing to be more sophisticated in how you link your purchases with the effects you want to see. This isn’t to say it’s prohibitively difficult, just that the closer things get to an open market the more pressure there will be towards the simpler option.  
+                        <br><br>
+            <label for="mn-demo" class="margin-toggle">&#8853;</label>
+            <input type="checkbox" id="mn-demo" class="margin-toggle"/>
+            <span class="marginnote" id="cost comparison graph">
+                <br>
+                ★
+            </span>
+
+            Where I think I come out on this is that you <b>really want to try to support technologies that would be capable of operating at the utilisation rates with the lowest cost per ton </b>(zone 2). In terms of the relative pull of more efficient capital deployment at rates a bit lower than this and higher utilisation rates potentially being able to bring in more buyers I’m not fully sure where I end up… which is not super satisfying I know. 
+            <br><br>
+            A lot of this comes down to the fact these situations all seem very far away. At the moment we can kind of think of tons removed and DAC modules interchangeably as all of the volumes are so small, as volumes increase this distinction comes to matter more. 
+            <br><br>
+            At the very least I hope this challenges people to think about what it is we actually want to maximise and what the most efficient way of achieving that is. We tend to talk a lot about maximising tons removed which makes sense if you only think about 100% utilisation situations but if you go beyond those situations you may realise, to the extent we get to decide on the implementation strategy for buying CDR, that a different strategy is preferable .
+            
+        </p>
+
+        </section>
+        </article>
+    </div>
+  </body>
+</html>
